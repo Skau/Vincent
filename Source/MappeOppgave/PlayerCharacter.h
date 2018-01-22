@@ -6,6 +6,10 @@
 #include "GameFramework/Character.h"
 #include "PlayerCharacter.generated.h"
 
+// Forward declarations
+class UCameraComponent;
+class USpringArmComponent;
+
 UCLASS()
 class MAPPEOPPGAVE_API APlayerCharacter : public ACharacter
 {
@@ -26,6 +30,17 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
-	
+private:
+
+	//UPROPERTY(EditAnywhere)
+	//float InterpSpeed = 50.f;
+
+	void MoveForward(float value);
+	void MoveRight(float value);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* CameraBoom;
 };
