@@ -44,6 +44,7 @@ private:
 	void MoveForward(float value);
 	void MoveRight(float value);
 	void ToggleJump();
+	void ToggleCrouch();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
