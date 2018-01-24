@@ -34,9 +34,16 @@ private:
 
 	//UPROPERTY(EditAnywhere)
 	//float InterpSpeed = 50.f;
+	bool bHasHammer = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
+	float LowJump = 300.f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
+	float HighJump = 800.f;
 
 	void MoveForward(float value);
 	void MoveRight(float value);
+	void ToggleJump();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;

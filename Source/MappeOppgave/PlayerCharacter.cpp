@@ -7,6 +7,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/UnrealMathUtility.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/Pawn.h"
 
 
 #define OUT
@@ -24,7 +26,6 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;
-
 }
 
 // Called when the game starts or when spawned
@@ -40,32 +41,29 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	auto PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	PC->bShowMouseCursor = true;
-
 	FHitResult Hit;
+
+	PC->bShowMouseCursor = true;
 	PC->GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery1, true, OUT Hit);
 
-	FRotator ActorRotation = GetActorRotation();
 	auto NewYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Hit.Location).Yaw;
-
 	FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
-
-	//FRotator InterpedRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime,	InterpSpeed);
-
 	GetCapsuleComponent()->SetWorldRotation(TargetRotation);
 
+	//FRotator InterpedRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime,	InterpSpeed);
 }
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	//Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	check(PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::Jump);
+	PlayerInputComponent->BindAction("ToggleJump", IE_Pressed, this, &APlayerCharacter::ToggleJump);
 
 }
 
@@ -102,5 +100,15 @@ void APlayerCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+void APlayerCharacter::ToggleJump()
+{
+	bHasHammer = !bHasHammer;
+
+	if (bHasHammer)
+		GetCharacterMovement()->JumpZVelocity = LowJump;
+	else
+		GetCharacterMovement()->JumpZVelocity = HighJump;
 }
 
