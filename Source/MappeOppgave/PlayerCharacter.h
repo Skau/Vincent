@@ -9,6 +9,8 @@
 // Forward declarations
 class UCameraComponent;
 class USpringArmComponent;
+class AHammer;
+class USkeletalMeshComponent;
 
 UCLASS()
 class MAPPEOPPGAVE_API APlayerCharacter : public ACharacter
@@ -23,6 +25,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	USkeletalMeshComponent* CharacterMesh = nullptr;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -30,10 +35,11 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AHammer> HammerBP;
+
 private:
 
-	//UPROPERTY(EditAnywhere)
-	//float InterpSpeed = 50.f;
 	bool bHasHammer = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
@@ -51,4 +57,13 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
+
+	AHammer* Hammer = nullptr;
+
+	FHitResult CastHit;
+	FHitResult RayCast();
+
+	void Drop();
+
+	void Attack();
 };

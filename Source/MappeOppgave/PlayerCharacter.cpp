@@ -9,6 +9,9 @@
 #include "Math/UnrealMathUtility.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Pawn.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Hammer.h"
+#include "DrawDebugHelpers.h"
 
 
 #define OUT
@@ -22,12 +25,19 @@ APlayerCharacter::APlayerCharacter()
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 900.0f; // The camera follows at this distance behind the character	
 	CameraBoom->bUsePawnControlRotation = false; // Rotate the arm based on the controller
+	CameraBoom->bInheritYaw = false;
+	CameraBoom->SetWorldRotation(FRotator(-50.0f, 0.f, 0.f));
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;
 
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+
+	CharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh"));
+	CharacterMesh->SetupAttachment(RootComponent);
+	CharacterMesh->RelativeRotation = FRotator(0, -90, 0);
+	CharacterMesh->RelativeLocation = FVector(0, 0, -80);
 }
 
 // Called when the game starts or when spawned
@@ -35,6 +45,18 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!HammerBP)
+	{
+		UE_LOG(LogTemp, Error, TEXT("missing hammer_BP"))
+		return;
+	}
+	if (!CharacterMesh) 
+	{ 
+		UE_LOG(LogTemp, Error, TEXT("missing Character mesh"))
+		return; 
+	}
+	Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
+	Hammer->AttachToComponent(CharacterMesh, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 }
 
 // Called every frame
@@ -43,23 +65,21 @@ void APlayerCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	auto PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	FHitResult Hit;
+	FHitResult CursorHit;
 
 	PC->bShowMouseCursor = true;
-	PC->GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery1, true, OUT Hit);
+	PC->GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery1, true, OUT CursorHit);
 
-	auto NewYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Hit.Location).Yaw;
+	auto NewYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), CursorHit.Location).Yaw;
 	FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
 	GetCapsuleComponent()->SetWorldRotation(TargetRotation);
 
-	//FRotator InterpedRotation = FMath::RInterpTo(GetActorRotation(), TargetRotation, DeltaTime,	InterpSpeed);
+	CastHit = RayCast();
 }
 
 // Called to bind functionality to input
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	//Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 	check(PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
@@ -68,14 +88,11 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("ToggleJump", IE_Pressed, this, &APlayerCharacter::ToggleJump);
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &APlayerCharacter::ToggleCrouch);
-
+	PlayerInputComponent->BindAction("DropHammer", IE_Released, this, &APlayerCharacter::Drop);
 }
 
 void APlayerCharacter::MoveForward(float Value)
 {
-	//UE_LOG(LogTemp, Error, TEXT("MoveForward: %f"), Value)
-	//AddMovementInput(GetActorForwardVector(), Value);
-
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is forward
@@ -90,9 +107,6 @@ void APlayerCharacter::MoveForward(float Value)
 
 void APlayerCharacter::MoveRight(float Value)
 {
-	//UE_LOG(LogTemp, Error, TEXT("MoveRight: %f"), Value)
-	//AddMovementInput(GetActorRightVector(), Value);
-
 	if ((Controller != NULL) && (Value != 0.0f))
 	{
 		// find out which way is right
@@ -126,5 +140,41 @@ void APlayerCharacter::ToggleCrouch()
 	{
 		UnCrouch();
 	}
+}
+
+FHitResult APlayerCharacter::RayCast()
+{
+	float traceDistance = 300.f;
+	FColor traceColor = FColor::Red;
+	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+	FVector startVector = CharacterMesh->GetComponentLocation() + FVector(0.f, 0.f, 100.f);
+	FVector endVector = startVector + (CharacterMesh->GetRightVector() * traceDistance);
+
+	GetWorld()->LineTraceSingleByChannel(CastHit, startVector, endVector, ECC_Visibility, TraceParameters);
+
+	if (CastHit.bBlockingHit)
+	{
+		traceColor = FColor::Blue;
+		endVector = CastHit.Location;
+	}
+	else
+	{
+		traceColor = FColor::Red;
+	}
+
+	/* For debugging purposes */
+	DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
+
+	return CastHit;
+
+}
+
+void APlayerCharacter::Drop()
+{
+	Hammer->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld,false));
+}
+
+void APlayerCharacter::Attack()
+{
 }
 
