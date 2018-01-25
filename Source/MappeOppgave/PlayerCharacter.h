@@ -49,18 +49,17 @@ public:
 
 private:
 
-	bool bHasHammer = true;
+	//bool bHasHammer = true;
 	bool bIsCloseEnough = false;
 	bool bIsHoldingHammer = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
-	float LowJump = 300.f;
+	float LowJump = 600.f;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
-	float HighJump = 800.f;
+	float HighJump = 1000.f;
 
 	void MoveForward(float value);
 	void MoveRight(float value);
-	void ToggleJump();
 	void ToggleCrouch();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))

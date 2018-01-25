@@ -87,7 +87,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::Jump);
-	PlayerInputComponent->BindAction("ToggleJump", IE_Pressed, this, &APlayerCharacter::ToggleJump);
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &APlayerCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAction("DropHammer", IE_Released, this, &APlayerCharacter::DropHammer);
@@ -96,13 +95,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// Other Actor is the actor that triggered the event. Check that is not ourself.  
+	// Other Actor is the actor that triggered the event. Check that is not ourself. 
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		if (OtherActor->IsA(AHammer::StaticClass()))
+		if (!bIsHoldingHammer)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Now overlapping hammer"))
-			bIsCloseEnough = true;
+			if (OtherActor->IsA(AHammer::StaticClass()))
+			{
+				bIsCloseEnough = true;
+			}
 		}
 	}
 }
@@ -112,10 +113,12 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		if (OtherActor->IsA(AHammer::StaticClass()))
+		if (!bIsHoldingHammer)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("No longer overlapping hammer"))
-			bIsCloseEnough = false;
+			if (OtherActor->IsA(AHammer::StaticClass()))
+			{
+				bIsCloseEnough = false;
+			}
 		}
 	}
 }
@@ -146,20 +149,6 @@ void APlayerCharacter::MoveRight(float Value)
 		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
-	}
-}
-
-void APlayerCharacter::ToggleJump()
-{
-	bHasHammer = !bHasHammer;
-
-	if (bHasHammer)
-	{
-		GetCharacterMovement()->JumpZVelocity = LowJump;
-	}
-	else
-	{
-		GetCharacterMovement()->JumpZVelocity = HighJump;
 	}
 }
 
@@ -209,15 +198,24 @@ void APlayerCharacter::DropHammer()
 	Hammer->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld,false));
 	Hammer->SetIsDropped(true);
 	Hammer->SetPhysics(true);
+	GetCharacterMovement()->JumpZVelocity = HighJump;
 }
 
 void APlayerCharacter::PickUpHammer()
 {
 	if (!Hammer) { return; }
-	Hammer->Destroy();
-	Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
-	Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-	bIsHoldingHammer = true;
+	if (bIsCloseEnough)
+	{
+		Hammer->Destroy();
+		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
+		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+		bIsHoldingHammer = true;
+		GetCharacterMovement()->JumpZVelocity = LowJump;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Not close enough to pick up hammer!"))
+	}
 }
 
 void APlayerCharacter::Attack()
