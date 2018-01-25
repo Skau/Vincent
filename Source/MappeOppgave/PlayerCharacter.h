@@ -25,9 +25,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
-	USkeletalMeshComponent* CharacterMesh = nullptr;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -35,12 +32,26 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	UPROPERTY(EditDefaultsOnly, Category = "Hammer")
 	TSubclassOf<AHammer> HammerBP;
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable)
+	bool getIsCloseEnough() { return bIsCloseEnough; }
+
+	UFUNCTION(BlueprintCallable)
+	bool getIsHoldingHammer() { return bIsHoldingHammer; }
 
 private:
 
 	bool bHasHammer = true;
+	bool bIsCloseEnough = false;
+	bool bIsHoldingHammer = true;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
 	float LowJump = 300.f;
@@ -63,7 +74,9 @@ private:
 	FHitResult CastHit;
 	FHitResult RayCast();
 
-	void Drop();
+	void DropHammer();
+
+	void PickUpHammer();
 
 	void Attack();
 };

@@ -21,6 +21,8 @@ APlayerCharacter::APlayerCharacter()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	GetCapsuleComponent()->bGenerateOverlapEvents = true;
+
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 900.0f; // The camera follows at this distance behind the character	
@@ -33,30 +35,29 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
-
-	CharacterMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterMesh"));
-	CharacterMesh->SetupAttachment(RootComponent);
-	CharacterMesh->RelativeRotation = FRotator(0, -90, 0);
-	CharacterMesh->RelativeLocation = FVector(0, 0, -80);
 }
 
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	// set up a notification for when this component overlaps something  
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapBegin);
+	// set up a notification for when this component is no longer overlapping something  
+	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
 	if (!HammerBP)
 	{
 		UE_LOG(LogTemp, Error, TEXT("missing hammer_BP"))
 		return;
 	}
-	if (!CharacterMesh) 
-	{ 
-		UE_LOG(LogTemp, Error, TEXT("missing Character mesh"))
-		return; 
-	}
+
 	Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
-	Hammer->AttachToComponent(CharacterMesh, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+
+	if (Hammer)
+	{
+		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	}
 }
 
 // Called every frame
@@ -67,14 +68,15 @@ void APlayerCharacter::Tick(float DeltaTime)
 	auto PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	FHitResult CursorHit;
 
-	PC->bShowMouseCursor = true;
-	PC->GetHitResultUnderCursorByChannel(ETraceTypeQuery::TraceTypeQuery1, true, OUT CursorHit);
-
-	auto NewYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), CursorHit.Location).Yaw;
-	FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
-	GetCapsuleComponent()->SetWorldRotation(TargetRotation);
-
-	CastHit = RayCast();
+	if (PC != nullptr)
+	{
+		PC->bShowMouseCursor = true;
+		PC->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, OUT CursorHit);
+		auto NewYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), CursorHit.Location).Yaw;
+		FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
+		GetCapsuleComponent()->SetWorldRotation(TargetRotation);
+		CastHit = RayCast();
+	}
 }
 
 // Called to bind functionality to input
@@ -88,7 +90,34 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("ToggleJump", IE_Pressed, this, &APlayerCharacter::ToggleJump);
 	PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &APlayerCharacter::ToggleCrouch);
 	PlayerInputComponent->BindAction("Crouch", IE_Released, this, &APlayerCharacter::ToggleCrouch);
-	PlayerInputComponent->BindAction("DropHammer", IE_Released, this, &APlayerCharacter::Drop);
+	PlayerInputComponent->BindAction("DropHammer", IE_Released, this, &APlayerCharacter::DropHammer);
+	PlayerInputComponent->BindAction("PickUpHammer", IE_Released, this, &APlayerCharacter::PickUpHammer);
+}
+
+void APlayerCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// Other Actor is the actor that triggered the event. Check that is not ourself.  
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
+	{
+		if (OtherActor->IsA(AHammer::StaticClass()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Now overlapping hammer"))
+			bIsCloseEnough = true;
+		}
+	}
+}
+
+void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	// Other Actor is the actor that triggered the event. Check that is not ourself.  
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
+	{
+		if (OtherActor->IsA(AHammer::StaticClass()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("No longer overlapping hammer"))
+			bIsCloseEnough = false;
+		}
+	}
 }
 
 void APlayerCharacter::MoveForward(float Value)
@@ -125,9 +154,13 @@ void APlayerCharacter::ToggleJump()
 	bHasHammer = !bHasHammer;
 
 	if (bHasHammer)
+	{
 		GetCharacterMovement()->JumpZVelocity = LowJump;
+	}
 	else
+	{
 		GetCharacterMovement()->JumpZVelocity = HighJump;
+	}
 }
 
 void APlayerCharacter::ToggleCrouch()
@@ -147,8 +180,8 @@ FHitResult APlayerCharacter::RayCast()
 	float traceDistance = 300.f;
 	FColor traceColor = FColor::Red;
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	FVector startVector = CharacterMesh->GetComponentLocation() + FVector(0.f, 0.f, 100.f);
-	FVector endVector = startVector + (CharacterMesh->GetRightVector() * traceDistance);
+	FVector startVector = GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, 100.f);
+	FVector endVector = startVector + (GetMesh()->GetRightVector() * traceDistance);
 
 	GetWorld()->LineTraceSingleByChannel(CastHit, startVector, endVector, ECC_Visibility, TraceParameters);
 
@@ -163,15 +196,28 @@ FHitResult APlayerCharacter::RayCast()
 	}
 
 	/* For debugging purposes */
-	DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
+	//DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
 
 	return CastHit;
 
 }
 
-void APlayerCharacter::Drop()
+void APlayerCharacter::DropHammer()
 {
+	if (!Hammer) { return; }
+	bIsHoldingHammer = false;
 	Hammer->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld,false));
+	Hammer->SetIsDropped(true);
+	Hammer->SetPhysics(true);
+}
+
+void APlayerCharacter::PickUpHammer()
+{
+	if (!Hammer) { return; }
+	Hammer->Destroy();
+	Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
+	Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+	bIsHoldingHammer = true;
 }
 
 void APlayerCharacter::Attack()
