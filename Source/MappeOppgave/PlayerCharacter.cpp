@@ -45,25 +45,11 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 	// set up a notification for when this component overlaps something  
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapBegin);
 	// set up a notification for when this component is no longer overlapping something  
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
-
-	/*if (!HammerBP)
-	{
-		UE_LOG(LogTemp, Error, TEXT("missing hammer_BP"))
-			return;
-	}
-
-	if (bIsHoldingHammer)
-	{
-		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
-		if (Hammer)
-		{
-			Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-		}
-	}*/
 }
 
 // Called every frame
@@ -195,7 +181,7 @@ FHitResult APlayerCharacter::RayCast()
 	}
 
 	/* For debugging purposes */
-	DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
+	//DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
 
 	return CastHit;
 }
@@ -209,8 +195,6 @@ void APlayerCharacter::DropHammer()
 
 void APlayerCharacter::PickUpHammer()
 {
-	//if (Hammer) { return; }
-
 	if (bIsCloseEnough)
 	{
 		if (OldHammer == nullptr)
@@ -225,10 +209,6 @@ void APlayerCharacter::PickUpHammer()
 		bIsHoldingHammer = true;
 
 		Hammer->SetPhysics(false);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Not close enough to pick up hammer!"))
 	}
 }
 

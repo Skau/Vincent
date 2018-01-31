@@ -15,7 +15,6 @@ AHammer::AHammer()
 
 	HammerMesh->bGenerateOverlapEvents = true;
 
-
 	bIsDropped = true;
 }
 
@@ -24,11 +23,13 @@ void AHammer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (bIsDropped)
-		SetPhysics(true);
-
 	// set up a notification for when this component overlaps something  
 	HammerMesh->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);
+
+	if (bIsDropped)
+	{
+		SetPhysics(true);
+	}
 }
 
 // Called every frame

@@ -10,23 +10,20 @@ void ASpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (ActorToSpawn != nullptr)
+	if (bIsHammer && ActorToSpawn != nullptr)
 	{
-		Spawn();
+		auto Player = (APlayerCharacter*)UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		auto Hammer = GetWorld()->SpawnActor<AHammer>(ActorToSpawn, GetActorLocation(), GetActorRotation());
+
+		Player->SetOldHammer(Hammer);
 	}
 }
 
 void ASpawnPoint::Spawn()
 {
-	
-	if (bIsHammer)
+	if (ActorToSpawn != nullptr)
 	{
-		auto Player = (APlayerCharacter*)UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-		auto Hammer = GetWorld()->SpawnActor<AHammer>(ActorToSpawn, GetActorLocation(), GetActorRotation());
-			
-		Player->SetOldHammer(Hammer);
-	}
-	else
 		GetWorld()->SpawnActor<AActor>(ActorToSpawn, GetActorLocation(), GetActorRotation());
+	}
 }
 

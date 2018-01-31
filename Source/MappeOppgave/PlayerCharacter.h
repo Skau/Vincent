@@ -52,8 +52,6 @@ public:
 	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
 
 private:
-
-	//bool bHasHammer = true;
 	bool bIsCloseEnough = false;
 	bool bIsHoldingHammer = false;
 

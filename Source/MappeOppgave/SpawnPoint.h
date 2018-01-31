@@ -12,7 +12,8 @@ class MAPPEOPPGAVE_API ASpawnPoint : public ATargetPoint
 {
 	GENERATED_BODY()
 
-		virtual void BeginPlay() override;
+public:
+	virtual void BeginPlay() override;
 
 	void Spawn();
 
