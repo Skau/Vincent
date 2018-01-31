@@ -23,7 +23,6 @@ public:
 	
 	void OnDropped();
 	
-
 	void SetPhysics(bool Value);
 	
 	UFUNCTION()

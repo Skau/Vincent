@@ -21,18 +21,11 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
-protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void SetCorrectJumpHeight();
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Hammer")
 	TSubclassOf<AHammer> HammerBP;
@@ -51,8 +44,17 @@ public:
 
 	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
 
+	void WhenDroppingHammer();
+
+	void WhenPickingUpHammer();
+
 private:
+	void SetCorrectJumpHeight();
+
+	void Attack();
+
 	bool bIsCloseEnough = false;
+
 	bool bIsHoldingHammer = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
@@ -60,16 +62,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
 	float HighJump = 1000.f;
 
-	void MoveForward(float value);
-	void MoveRight(float value);
-	void ToggleCrouch();
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
-
 
 	UPROPERTY(VisibleAnywhere)
 	AHammer* Hammer = nullptr;
@@ -78,11 +75,6 @@ private:
 	AHammer* OldHammer = nullptr;
 
 	FHitResult CastHit;
+
 	FHitResult RayCast();
-
-	void DropHammer();
-
-	void PickUpHammer();
-
-	void Attack();
 };
