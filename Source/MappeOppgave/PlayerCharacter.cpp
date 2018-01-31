@@ -11,6 +11,7 @@
 #include "GameFramework/Pawn.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Hammer.h"
+#include "EnemyChar.h"
 #include "DrawDebugHelpers.h"
 
 
@@ -35,6 +36,9 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->bUsePawnControlRotation = false;
 
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+
+	GetMesh()->RelativeRotation = FRotator(0, -90, 0);
+	GetMesh()->RelativeLocation = FVector(0, 0, -80);
 }
 
 // Called when the game starts or when spawned
@@ -46,18 +50,20 @@ void APlayerCharacter::BeginPlay()
 	// set up a notification for when this component is no longer overlapping something  
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
-	if (!HammerBP)
+	/*if (!HammerBP)
 	{
 		UE_LOG(LogTemp, Error, TEXT("missing hammer_BP"))
-		return;
+			return;
 	}
 
-	Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
-
-	if (Hammer)
+	if (bIsHoldingHammer)
 	{
-		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-	}
+		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
+		if (Hammer)
+		{
+			Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+		}
+	}*/
 }
 
 // Called every frame
@@ -75,7 +81,21 @@ void APlayerCharacter::Tick(float DeltaTime)
 		auto NewYaw = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), CursorHit.Location).Yaw;
 		FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
 		GetCapsuleComponent()->SetWorldRotation(TargetRotation);
-		CastHit = RayCast();
+		RayCast();
+	}
+
+	SetCorrectJumpHeight();
+}
+
+void APlayerCharacter::SetCorrectJumpHeight()
+{
+	if (bIsHoldingHammer)
+	{
+		GetCharacterMovement()->JumpZVelocity = LowJump;
+	}
+	else
+	{
+		GetCharacterMovement()->JumpZVelocity = HighJump;
 	}
 }
 
@@ -152,25 +172,15 @@ void APlayerCharacter::MoveRight(float Value)
 	}
 }
 
-void APlayerCharacter::ToggleCrouch()
-{
-	if (CanCrouch())
-	{
-		Crouch();
-	}
-	else
-	{
-		UnCrouch();
-	}
-}
+
 
 FHitResult APlayerCharacter::RayCast()
 {
 	float traceDistance = 300.f;
 	FColor traceColor = FColor::Red;
 	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	FVector startVector = GetMesh()->GetComponentLocation() + FVector(0.f, 0.f, 100.f);
-	FVector endVector = startVector + (GetMesh()->GetRightVector() * traceDistance);
+	FVector startVector = GetActorLocation() + FVector(0.f, 0.f, 100.f);
+	FVector endVector = startVector + (GetActorForwardVector() * traceDistance);
 
 	GetWorld()->LineTraceSingleByChannel(CastHit, startVector, endVector, ECC_Visibility, TraceParameters);
 
@@ -185,36 +195,52 @@ FHitResult APlayerCharacter::RayCast()
 	}
 
 	/* For debugging purposes */
-	//DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
+	DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
 
 	return CastHit;
-
 }
 
 void APlayerCharacter::DropHammer()
 {
 	if (!Hammer) { return; }
 	bIsHoldingHammer = false;
-	Hammer->DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld,false));
-	Hammer->SetIsDropped(true);
-	Hammer->SetPhysics(true);
-	GetCharacterMovement()->JumpZVelocity = HighJump;
+	Hammer->OnDropped();
 }
 
 void APlayerCharacter::PickUpHammer()
 {
-	if (!Hammer) { return; }
+	//if (Hammer) { return; }
+
 	if (bIsCloseEnough)
 	{
-		Hammer->Destroy();
+		if (OldHammer == nullptr)
+		{
+			OldHammer = Hammer;
+		}
+		OldHammer->Destroy();
+		OldHammer = nullptr;
+
 		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		bIsHoldingHammer = true;
-		GetCharacterMovement()->JumpZVelocity = LowJump;
+
+		Hammer->SetPhysics(false);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Not close enough to pick up hammer!"))
+	}
+}
+
+void APlayerCharacter::ToggleCrouch()
+{
+	if (CanCrouch())
+	{
+		Crouch();
+	}
+	else
+	{
+		UnCrouch();
 	}
 }
 

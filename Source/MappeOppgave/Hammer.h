@@ -21,8 +21,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
-	void SetIsDropped(bool Value);
-	bool GetIsDroped();
+	void OnDropped();
+	
 
 	void SetPhysics(bool Value);
 	

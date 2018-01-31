@@ -16,13 +16,16 @@ AHammer::AHammer()
 	HammerMesh->bGenerateOverlapEvents = true;
 
 
-	bIsDropped = false;
+	bIsDropped = true;
 }
 
 // Called when the game starts or when spawned
 void AHammer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (bIsDropped)
+		SetPhysics(true);
 
 	// set up a notification for when this component overlaps something  
 	HammerMesh->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);
@@ -36,23 +39,16 @@ void AHammer::Tick(float DeltaTime)
 
 }
 
-void AHammer::SetIsDropped(bool Value)
+void AHammer::OnDropped()
 {
-	bIsDropped = Value;
-}
-
-bool AHammer::GetIsDroped()
-{
-	return bIsDropped;
+	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
+	SetPhysics(true);
 }
 
 void AHammer::SetPhysics(bool Value)
 {
-	if (bIsDropped)
-	{
-		HammerMesh->SetSimulatePhysics(true);
-		HammerMesh->WakeRigidBody();
-	}
+	HammerMesh->SetSimulatePhysics(Value);
+	HammerMesh->WakeRigidBody();
 }
 
 void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

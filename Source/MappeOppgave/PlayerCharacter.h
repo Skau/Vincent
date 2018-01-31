@@ -29,6 +29,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetCorrectJumpHeight();
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -47,11 +49,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool getIsHoldingHammer() { return bIsHoldingHammer; }
 
+	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
+
 private:
 
 	//bool bHasHammer = true;
 	bool bIsCloseEnough = false;
-	bool bIsHoldingHammer = true;
+	bool bIsHoldingHammer = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
 	float LowJump = 600.f;
@@ -68,7 +72,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 
+
+	UPROPERTY(VisibleAnywhere)
 	AHammer* Hammer = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
+	AHammer* OldHammer = nullptr;
 
 	FHitResult CastHit;
 	FHitResult RayCast();
