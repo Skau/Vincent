@@ -37,5 +37,7 @@ private:
 	
 	void PickUpHammer();
 
+	void RegularAttack();
+
 	class APlayerCharacter* Player;
 };

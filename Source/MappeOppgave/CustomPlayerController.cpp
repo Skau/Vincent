@@ -32,6 +32,7 @@ void ACustomPlayerController::SetupInputComponent()
 		InputComponent->BindAction("Crouch", IE_Released, this, &ACustomPlayerController::ToggleCrouch);
 		InputComponent->BindAction("DropHammer", IE_Released, this, &ACustomPlayerController::DropHammer);
 		InputComponent->BindAction("PickUpHammer", IE_Released, this, &ACustomPlayerController::PickUpHammer);
+		InputComponent->BindAction("RegularAttack", IE_Released, this, &ACustomPlayerController::RegularAttack);
 	}
 }
 
@@ -119,5 +120,13 @@ void ACustomPlayerController::PickUpHammer()
 	if (Player != nullptr)
 	{
 		Player->WhenPickingUpHammer();
+	}
+}
+
+void ACustomPlayerController::RegularAttack()
+{
+	if (Player != nullptr)
+	{
+		Player->Attack();
 	}
 }

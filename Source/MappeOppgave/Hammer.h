@@ -6,6 +6,10 @@
 #include "GameFramework/Actor.h"
 #include "Hammer.generated.h"
 
+
+class UBoxComponent;
+class APlayerCharacter;
+
 UCLASS()
 class MAPPEOPPGAVE_API AHammer : public AActor
 {
@@ -22,8 +26,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	
 	void OnDropped();
+
+	FHitResult RayCastFront();
+	FHitResult RayCastBack();
 	
 	void SetPhysics(bool Value);
+
+	void SetAttacking(bool Value) { bIsAttacking = Value; }
+	bool IfAttacking() { return bIsAttacking; }
 	
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -32,5 +42,12 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* HammerMesh = nullptr;
 
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* CollisionBox = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	APlayerCharacter* Player = nullptr;
+
 	bool bIsDropped;
+	bool bIsAttacking;
 };

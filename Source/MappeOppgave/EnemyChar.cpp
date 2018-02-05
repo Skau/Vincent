@@ -24,3 +24,9 @@ void AEnemyChar::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+float AEnemyChar::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Apekatt"))
+		return DamageAmount;
+}

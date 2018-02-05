@@ -10,6 +10,7 @@
 #include "GameFramework/Pawn.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Math/UnrealMathVectorConstants.h"
 
 #include "Hammer.h"
 #include "EnemyChar.h"
@@ -54,6 +55,8 @@ void APlayerCharacter::BeginPlay()
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapBegin);
 	// set up a notification for when this component is no longer overlapping something  
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
+
+	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
 }
 
 // Called every frame
@@ -156,6 +159,7 @@ void APlayerCharacter::WhenPickingUpHammer()
 
 		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
+		//Hammer->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),GetMesh()->GetAllSocketNames()[0]);
 		bIsHoldingHammer = true;
 
 		Hammer->SetPhysics(false);
@@ -164,5 +168,29 @@ void APlayerCharacter::WhenPickingUpHammer()
 
 void APlayerCharacter::Attack()
 {
+	if (bIsHoldingHammer)
+	{
+		if (Hammer->IfAttacking())
+		{
+			Hammer->SetAttacking(false);
+			GetCharacterMovement()->MaxWalkSpeed = NormalSpeed; 
+		}
+		else
+		{
+			Hammer->SetAttacking(true);
+			GetCharacterMovement()->MaxWalkSpeed = NormalSpeed/2;
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NOT HOLDING HAMMER"))
+	}
 }
 
+//void APlayerCharacter::InflictDamage(AActor* Actor, float Damage, FVector Direction, FHitResult Hit)
+//{
+//	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
+//	//FDamageEvent DamageEvent(ValidDamageTypeClass);
+//	UGameplayStatics::ApplyPointDamage(Actor, Damage, Direction, Hit, UGameplayStatics::GetPlayerController(GetWorld(), 0), Hammer, ValidDamageTypeClass);
+//
+//}

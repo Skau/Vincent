@@ -43,19 +43,20 @@ public:
 	bool getIsHoldingHammer() { return bIsHoldingHammer; }
 
 	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
-
 	void WhenDroppingHammer();
-
 	void WhenPickingUpHammer();
+	void Attack();
+	//void InflictDamage(AActor* Actor, float Damage, FVector Direction, FHitResult Hit);
 
 private:
 	void SetCorrectJumpHeight();
 
-	void Attack();
+	float NormalSpeed;
 
 	bool bIsCloseEnough = false;
 
 	bool bIsHoldingHammer = false;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
 	float LowJump = 600.f;
