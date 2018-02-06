@@ -33,6 +33,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	TArray<class ASpawnPoint*> Spawnpoints;
 
+	bool bHasSpawned;
+
 	
 
 

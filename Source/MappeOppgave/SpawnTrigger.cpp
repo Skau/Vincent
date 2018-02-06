@@ -17,6 +17,8 @@ ASpawnTrigger::ASpawnTrigger()
 	if (TriggerVolume == nullptr) { return; }
 
 	RootComponent = TriggerVolume;
+
+	bHasSpawned = false;
 }
 
 // Called when the game starts or when spawned
@@ -38,7 +40,11 @@ void ASpawnTrigger::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor 
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		ActivateSpawnpoints();
+		if (!bHasSpawned)
+		{
+			ActivateSpawnpoints();
+			bHasSpawned = true;
+		}
 	}
 }
 

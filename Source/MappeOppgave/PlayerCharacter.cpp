@@ -3,14 +3,12 @@
 #include "PlayerCharacter.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/GameplayStatics.h"
-#include "Math/UnrealMathUtility.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Pawn.h"
-#include "Components/SkeletalMeshComponent.h"
-#include "DrawDebugHelpers.h"
-#include "Math/UnrealMathVectorConstants.h"
+#include "Math/UnrealMathUtility.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Hammer.h"
 #include "EnemyChar.h"
@@ -64,9 +62,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Raycast to look for enemies
-	RayCast();
-
 	// Makes sure the jump height is correct depending on if the hammer is held or not
 	SetCorrectJumpHeight();
 }
@@ -113,32 +108,6 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 	}
 }
 
-FHitResult APlayerCharacter::RayCast()
-{
-	float traceDistance = 300.f;
-	FColor traceColor = FColor::Red;
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	FVector startVector = GetActorLocation() + FVector(0.f, 0.f, 100.f);
-	FVector endVector = startVector + (GetActorForwardVector() * traceDistance);
-
-	GetWorld()->LineTraceSingleByChannel(CastHit, startVector, endVector, ECC_Visibility, TraceParameters);
-
-	if (CastHit.bBlockingHit)
-	{
-		traceColor = FColor::Blue;
-		endVector = CastHit.Location;
-	}
-	else
-	{
-		traceColor = FColor::Red;
-	}
-
-	/* For debugging purposes */
-	//DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 10.f, 0, 10.f);
-
-	return CastHit;
-}
-
 void APlayerCharacter::WhenDroppingHammer()
 {
 	if (!Hammer) { return; }
@@ -148,7 +117,7 @@ void APlayerCharacter::WhenDroppingHammer()
 
 void APlayerCharacter::WhenPickingUpHammer()
 {
-	if (bIsCloseEnough)
+	if (bIsCloseEnough && !bIsHoldingHammer)
 	{
 		if (OldHammer == nullptr)
 		{
@@ -159,7 +128,6 @@ void APlayerCharacter::WhenPickingUpHammer()
 
 		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-		//Hammer->AttachToActor(this, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),GetMesh()->GetAllSocketNames()[0]);
 		bIsHoldingHammer = true;
 
 		Hammer->SetPhysics(false);
@@ -186,11 +154,3 @@ void APlayerCharacter::Attack()
 		UE_LOG(LogTemp, Warning, TEXT("NOT HOLDING HAMMER"))
 	}
 }
-
-//void APlayerCharacter::InflictDamage(AActor* Actor, float Damage, FVector Direction, FHitResult Hit)
-//{
-//	TSubclassOf<UDamageType> const ValidDamageTypeClass = TSubclassOf<UDamageType>(UDamageType::StaticClass());
-//	//FDamageEvent DamageEvent(ValidDamageTypeClass);
-//	UGameplayStatics::ApplyPointDamage(Actor, Damage, Direction, Hit, UGameplayStatics::GetPlayerController(GetWorld(), 0), Hammer, ValidDamageTypeClass);
-//
-//}

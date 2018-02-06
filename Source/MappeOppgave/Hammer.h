@@ -33,6 +33,7 @@ public:
 	void SetPhysics(bool Value);
 
 	void SetAttacking(bool Value) { bIsAttacking = Value; }
+
 	bool IfAttacking() { return bIsAttacking; }
 	
 	UFUNCTION()
@@ -45,9 +46,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* CollisionBox = nullptr;
 
-	UPROPERTY(EditAnywhere)
-	APlayerCharacter* Player = nullptr;
-
 	bool bIsDropped;
+
 	bool bIsAttacking;
 };

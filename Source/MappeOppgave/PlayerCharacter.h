@@ -43,10 +43,12 @@ public:
 	bool getIsHoldingHammer() { return bIsHoldingHammer; }
 
 	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
+
 	void WhenDroppingHammer();
+
 	void WhenPickingUpHammer();
+
 	void Attack();
-	//void InflictDamage(AActor* Actor, float Damage, FVector Direction, FHitResult Hit);
 
 private:
 	void SetCorrectJumpHeight();
@@ -74,8 +76,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	AHammer* OldHammer = nullptr;
-
-	FHitResult CastHit;
-
-	FHitResult RayCast();
 };

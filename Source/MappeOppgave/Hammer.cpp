@@ -70,7 +70,6 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Overlapping %s"), *OtherActor->GetName())
 	}
 }
 
@@ -93,11 +92,14 @@ FHitResult AHammer::RayCastFront()
 		auto Destroyable = Cast<AEnemyChar>(CastHit.GetActor());
 		if (Destroyable)
 		{
-			UGameplayStatics::ApplyPointDamage(Destroyable, 1.f, GetActorForwardVector(), CastHit,UGameplayStatics::GetPlayerController(GetWorld(),0),this,UDamageType::StaticClass());
-			if (Player)
-			{
-				//Player->InflictDamage(Destroyable, 1.f, GetActorForwardVector(), CastHit);
-			}
+			UGameplayStatics::ApplyPointDamage(
+				Destroyable, 
+				1.f, 
+				GetActorForwardVector(), 
+				CastHit,UGameplayStatics::GetPlayerController(GetWorld(), 0) ,
+				this,
+				UDamageType::StaticClass()
+			);
 		}
 	}
 	else
@@ -129,10 +131,6 @@ FHitResult AHammer::RayCastBack()
 		auto Destroyable = Cast<AEnemyChar>(CastHit.GetActor());
 		if (Destroyable)
 		{
-			if (Player)
-			{
-				//Player->InflictDamage(Destroyable, 1.f, GetActorForwardVector(),CastHit);
-			}
 		}
 	}
 	else
