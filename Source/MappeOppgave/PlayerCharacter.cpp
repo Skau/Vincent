@@ -66,6 +66,18 @@ void APlayerCharacter::Tick(float DeltaTime)
 	SetCorrectJumpHeight();
 }
 
+void APlayerCharacter::SetCorrectMovementSpeed(bool Value)
+{
+	if (Value)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed / 2;
+	}
+}
+
 void APlayerCharacter::SetCorrectJumpHeight()
 {
 	if (bIsHoldingHammer)
@@ -110,9 +122,12 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 
 void APlayerCharacter::WhenDroppingHammer()
 {
-	if (!Hammer) { return; }
-	bIsHoldingHammer = false;
-	Hammer->OnDropped();
+	if (Hammer != nullptr && !GetCharacterMovement()->IsFalling()) 
+	{ 
+		bIsHoldingHammer = false;
+		Hammer->OnDropped();
+	}
+
 }
 
 void APlayerCharacter::WhenPickingUpHammer()
@@ -138,16 +153,7 @@ void APlayerCharacter::Attack()
 {
 	if (bIsHoldingHammer)
 	{
-		if (Hammer->IfAttacking())
-		{
-			Hammer->SetAttacking(false);
-			GetCharacterMovement()->MaxWalkSpeed = NormalSpeed; 
-		}
-		else
-		{
-			Hammer->SetAttacking(true);
-			GetCharacterMovement()->MaxWalkSpeed = NormalSpeed/2;
-		}
+		Hammer->SetAttacking(true);
 	}
 	else
 	{

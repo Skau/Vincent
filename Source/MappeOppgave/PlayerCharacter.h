@@ -48,6 +48,8 @@ public:
 
 	void WhenPickingUpHammer();
 
+	void SetCorrectMovementSpeed(bool Value);
+
 	void Attack();
 
 private:

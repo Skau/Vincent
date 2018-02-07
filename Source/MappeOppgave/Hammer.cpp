@@ -42,15 +42,31 @@ void AHammer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Attack(DeltaTime);
+	
+	/***TICK IS TURNED ON***/
+
+}
+
+void AHammer::Attack(float DeltaTime)
+{
+	auto temp = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	auto Player = Cast<APlayerCharacter>(temp);
+
 	if (bIsAttacking)
 	{
 		RayCastFront();
 		RayCastBack();
 		AddActorLocalRotation(FQuat(FRotator(0.f, 0.f, -360.f)*DeltaTime));
-	}
-	
-	/***TICK IS TURNED ON***/
+		Player->SetCorrectMovementSpeed(false);
 
+	}
+
+	if (!bIsAttacking)
+	{
+		SetActorRelativeRotation(FRotator(0.f, 0.f, 0.f));
+		Player->SetCorrectMovementSpeed(true);
+	}
 }
 
 void AHammer::OnDropped()
@@ -94,12 +110,13 @@ FHitResult AHammer::RayCastFront()
 		{
 			UGameplayStatics::ApplyPointDamage(
 				Destroyable, 
-				1.f, 
+				50.f, 
 				GetActorForwardVector(), 
 				CastHit,UGameplayStatics::GetPlayerController(GetWorld(), 0) ,
 				this,
 				UDamageType::StaticClass()
 			);
+			bIsAttacking = false;
 		}
 	}
 	else

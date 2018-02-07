@@ -32,10 +32,8 @@ private:
 	void Jump();
 
 	void ToggleCrouch();
-
-	void DropHammer();
 	
-	void PickUpHammer();
+	void ToggleHammer();
 
 	void RegularAttack();
 

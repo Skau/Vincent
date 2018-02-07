@@ -26,6 +26,6 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 private:
-	float Health = 1.f;
+	float Health = 100.f;
 
 };

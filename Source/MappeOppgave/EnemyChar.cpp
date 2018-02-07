@@ -22,11 +22,16 @@ void AEnemyChar::BeginPlay()
 void AEnemyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 }
 
 float AEnemyChar::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Apekatt"))
+	Health -= DamageAmount;
+	UE_LOG(LogTemp, Warning, TEXT("Lost: %f, Current health: %f"), DamageAmount, Health)
+	if (Health <= 0)
+	{
+		Destroy();
+	}
 		return DamageAmount;
 }
