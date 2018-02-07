@@ -42,6 +42,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool getIsHoldingHammer() { return bIsHoldingHammer; }
 
+	UFUNCTION(BlueprintCallable)
+	int GetHealth() { return Health; }
+
+	void DecrementHealth() { Health--; }
+
 	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
 
 	void WhenDroppingHammer();
@@ -60,7 +65,9 @@ private:
 	bool bIsCloseEnough = false;
 
 	bool bIsHoldingHammer = false;
-
+	
+	UPROPERTY(VisibleAnywhere)
+	int Health = 3;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
 	float LowJump = 600.f;

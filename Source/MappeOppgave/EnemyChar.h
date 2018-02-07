@@ -12,20 +12,24 @@ class MAPPEOPPGAVE_API AEnemyChar : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	AEnemyChar();
 
-protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	virtual void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 private:
-	float Health = 100.f;
+	void ResetAttackTimer() { bHasAttackedRecently = false; }
+
+	float Health;
+	
+	bool bHasAttackedRecently;
+
+	FTimerHandle TH_Attack;
 
 };

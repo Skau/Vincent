@@ -29,8 +29,8 @@ public:
 	
 	void OnDropped();
 
-	FHitResult RayCastFront();
-	FHitResult RayCastBack();
+	FHitResult RayCast();
+	FHitResult CastHit;
 	
 	void SetPhysics(bool Value);
 

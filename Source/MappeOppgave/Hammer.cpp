@@ -55,8 +55,7 @@ void AHammer::Attack(float DeltaTime)
 
 	if (bIsAttacking)
 	{
-		RayCastFront();
-		RayCastBack();
+		RayCast();
 		AddActorLocalRotation(FQuat(FRotator(-360.f, 0.f, 0.f)*DeltaTime));
 		Player->SetCorrectMovementSpeed(false);
 		if (GetActorRotation().Yaw >= 170.f)
@@ -93,73 +92,45 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 }
 
 
-FHitResult AHammer::RayCastFront()
+FHitResult AHammer::RayCast()
 {
-	float traceDistance = 30.f;
-	FHitResult CastHit;
-	FColor traceColor = FColor::Red;
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	FVector startVector = HammerMesh->GetSocketLocation("FrontHammer");
-	FVector endVector = startVector + (GetActorForwardVector() * traceDistance);
+	auto SocketNameArray = HammerMesh->GetAllSocketNames();
 
-	GetWorld()->LineTraceSingleByChannel(CastHit, startVector, endVector, ECC_Visibility, TraceParameters);
-
-	if (CastHit.bBlockingHit)
+	for (auto& Name : SocketNameArray)
 	{
-		traceColor = FColor::Blue;
-		endVector = CastHit.Location;
-		auto Destroyable = Cast<AEnemyChar>(CastHit.GetActor());
-		if (Destroyable)
+		float traceDistance = 30.f;
+		FHitResult CastHit;
+		FColor traceColor = FColor::Red;
+		FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
+		FVector startVector = HammerMesh->GetSocketLocation(Name);
+		FVector endVector = startVector + (GetActorForwardVector() * traceDistance);
+
+		GetWorld()->LineTraceSingleByChannel(CastHit, startVector, endVector, ECC_Visibility, TraceParameters);
+
+		if (CastHit.bBlockingHit)
 		{
-			UGameplayStatics::ApplyPointDamage(
-				Destroyable, 
-				50.f, 
-				GetActorForwardVector(), 
-				CastHit,UGameplayStatics::GetPlayerController(GetWorld(), 0) ,
-				this,
-				UDamageType::StaticClass()
-			);
-			bIsAttacking = false;
+			traceColor = FColor::Blue;
+			endVector = CastHit.Location;
+			auto Destroyable = Cast<AEnemyChar>(CastHit.GetActor());
+			if (Destroyable)
+			{
+				UGameplayStatics::ApplyPointDamage(
+					Destroyable, 
+					50.f, 
+					GetActorForwardVector(), 
+					CastHit,UGameplayStatics::GetPlayerController(GetWorld(), 0) ,
+					this,
+					UDamageType::StaticClass()
+				);
+				bIsAttacking = false;
+			}
 		}
-	}
-	else
-	{
-		traceColor = FColor::Red;
-	}
-
-	/* For debugging purposes */
-	//DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 2.f, 0, 10.f);
-
-	return CastHit;
-}
-
-FHitResult AHammer::RayCastBack()
-{
-	float traceDistance = 30.f;
-	FHitResult CastHit;
-	FColor traceColor = FColor::Red;
-	FCollisionQueryParams TraceParameters(FName(TEXT("")), false, GetOwner());
-	FVector startVector = HammerMesh->GetSocketLocation("BackHammer");
-	FVector endVector = startVector - (GetActorForwardVector() * traceDistance);
-
-	GetWorld()->LineTraceSingleByChannel(CastHit, startVector, endVector, ECC_Visibility, TraceParameters);
-
-	if (CastHit.bBlockingHit)
-	{
-		traceColor = FColor::Blue;
-		endVector = CastHit.Location;
-		auto Destroyable = Cast<AEnemyChar>(CastHit.GetActor());
-		if (Destroyable)
+		else
 		{
+			traceColor = FColor::Red;
 		}
+		/* For debugging purposes */
+		//DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 2.f, 0, 10.f);
 	}
-	else
-	{
-		traceColor = FColor::Red;
-	}
-
-	/* For debugging purposes */
-	//DrawDebugLine(GetWorld(), CastHit.TraceStart, endVector, traceColor, false, 2.f, 0, 10.f);
-
 	return CastHit;
 }
