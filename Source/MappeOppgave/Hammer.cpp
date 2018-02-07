@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 
 #include "EnemyChar.h"
 #include "PlayerCharacter.h"
@@ -19,7 +20,7 @@ AHammer::AHammer()
 	RootComponent = HammerMesh;
 
 	HammerMesh->bGenerateOverlapEvents = true;
-
+	HammerMesh->SetSimulatePhysics(true);
 	bIsDropped = true;
 }
 
@@ -50,13 +51,12 @@ void AHammer::Tick(float DeltaTime)
 
 void AHammer::Attack(float DeltaTime)
 {
-	auto temp = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	auto Player = Cast<APlayerCharacter>(temp);
-
-	if (bIsAttacking)
+	if (bIsAttacking && GetOwner())
 	{
 		RayCast();
+
 		AddActorLocalRotation(FQuat(FRotator(-360.f, 0.f, 0.f)*DeltaTime));
+
 		Player->SetCorrectMovementSpeed(false);
 		if (GetActorRotation().Yaw >= 170.f)
 		{
@@ -64,7 +64,7 @@ void AHammer::Attack(float DeltaTime)
 		}
 	}
 
-	if (!bIsAttacking)
+	if (!bIsAttacking && GetOwner())
 	{
 		SetActorRelativeRotation(FRotator(0.f, 0.f, 0.f));
 		Player->SetCorrectMovementSpeed(true);
@@ -75,6 +75,14 @@ void AHammer::OnDropped()
 {
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 	SetPhysics(true);
+	SetOwner(nullptr);
+}
+
+void AHammer::OnPickedUp(AActor* ActorThatPickedUp)
+{
+	SetOwner(ActorThatPickedUp);
+	SetPhysics(false);
+	Player = Cast<APlayerCharacter>(ActorThatPickedUp);
 }
 
 void AHammer::SetPhysics(bool Value)
