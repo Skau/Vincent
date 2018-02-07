@@ -45,6 +45,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetHealth() { return Health; }
 
+	void IncrementHealth() { Health++; }
+
 	void DecrementHealth() { Health--; }
 
 	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
