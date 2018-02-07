@@ -57,9 +57,8 @@ void AHammer::Attack(float DeltaTime)
 	{
 		RayCastFront();
 		RayCastBack();
-		AddActorLocalRotation(FQuat(FRotator(0.f, 0.f, -360.f)*DeltaTime));
+		AddActorLocalRotation(FQuat(FRotator(-360.f, 0.f, 0.f)*DeltaTime));
 		Player->SetCorrectMovementSpeed(false);
-
 	}
 
 	if (!bIsAttacking)
