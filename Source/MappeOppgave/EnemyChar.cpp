@@ -38,7 +38,7 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 		{
 			auto Player = Cast<APlayerCharacter>(OtherActor);
 			Player->DecrementHealth();
-
+			Player->AddActorLocalOffset(FVector(-250, 0, 0));
 			bHasAttackedRecently = true;
 			GetWorld()->GetTimerManager().SetTimer(TH_Attack, this, &AEnemyChar::ResetAttackTimer, 2.f);
 		}
