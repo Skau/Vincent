@@ -1,10 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Trigger_Door.h"
-
 #include "Components/PrimitiveComponent.h"
 #include "Components/BoxComponent.h"
 
+#include "Trigger_Door.h"
 
 
 // Sets default values

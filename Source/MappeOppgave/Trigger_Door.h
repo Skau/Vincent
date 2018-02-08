@@ -15,19 +15,18 @@ public:
 	// Sets default values for this actor's properties
 	ATrigger_Door();
 
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
 	virtual void Tick(float DeltaTime) override;
-
 	void CheckActors();
-
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	//TODO make it so that this is just a door pointer?
 	UPROPERTY(EditAnywhere)
 	AActor* Door = nullptr;
+	
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 private:
 	class UBoxComponent* TriggerVolume = nullptr;
