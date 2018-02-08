@@ -130,6 +130,14 @@ FHitResult AHammer::RayCast()
 					this,
 					UDamageType::StaticClass()
 				);
+
+				FVector EnemyLocation = FVector(Destroyable->GetActorLocation().X, Destroyable->GetActorLocation().Y, 0.f);
+				FVector PlayerLocation = FVector(GetOwner()->GetActorLocation().X, GetOwner()->GetActorLocation().Y, 0.f);
+				FVector Direction = EnemyLocation - PlayerLocation;
+
+				//funker hvertfall
+				Destroyable->SetActorLocation(Destroyable->GetActorLocation() + Direction.GetClampedToMaxSize(1.f) * 250.f);
+
 				bIsAttacking = false;
 			}
 		}
