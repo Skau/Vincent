@@ -38,7 +38,15 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 		{
 			auto Player = Cast<APlayerCharacter>(OtherActor);
 			Player->DecrementHealth();
-			Player->AddActorLocalOffset(this->GetActorForwardVector()*+250);
+
+			//Espens metode for knockback
+			FVector EnemyLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0.f);
+			FVector PlayerLocation = FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, 0.f);
+			FVector Direction = PlayerLocation - EnemyLocation;
+			Player->SetActorLocation(Player->GetActorLocation() + Direction.GetClampedToMaxSize(1.f) * 250.f);
+
+			//Kristoffers metode for knockback, ser ikke ut til å funke
+			//Player->AddActorLocalOffset(this->GetActorForwardVector()*+250);
 			bHasAttackedRecently = true;
 			GetWorld()->GetTimerManager().SetTimer(TH_Attack, this, &AEnemyChar::ResetAttackTimer, 2.f);
 		}
