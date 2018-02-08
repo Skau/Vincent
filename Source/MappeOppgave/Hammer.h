@@ -26,8 +26,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void Attack(float DeltaTime);
-	
+
 	void OnDropped();
+
+	void OnPickedUp(AActor* ActorThatPickedUp);
 
 	FHitResult RayCast();
 	FHitResult CastHit;
@@ -47,6 +49,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	UBoxComponent* CollisionBox = nullptr;
+
+	APlayerCharacter* Player;
 
 	bool bIsDropped;
 

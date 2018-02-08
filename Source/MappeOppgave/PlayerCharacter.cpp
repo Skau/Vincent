@@ -143,9 +143,9 @@ void APlayerCharacter::WhenPickingUpHammer()
 
 		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-		bIsHoldingHammer = true;
+		Hammer->OnPickedUp(this);
 
-		Hammer->SetPhysics(false);
+		bIsHoldingHammer = true;
 	}
 }
 

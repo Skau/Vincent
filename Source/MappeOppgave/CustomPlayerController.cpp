@@ -48,7 +48,6 @@ void ACustomPlayerController::RotateToCursor()
 	if (Player != nullptr)
 	{
 		FHitResult CursorHit;
-
 		bShowMouseCursor = true;
 		GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, OUT CursorHit);
 		auto NewYaw = UKismetMathLibrary::FindLookAtRotation(Player->GetActorLocation(), CursorHit.Location).Yaw;
