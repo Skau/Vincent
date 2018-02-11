@@ -23,6 +23,9 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* TriggerVolume = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
 	
 };

@@ -24,13 +24,16 @@ public:
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 	UFUNCTION()
-	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	//TODO make it so that this is just a door pointer?
 	UPROPERTY(EditAnywhere)
 	class ADoor* Door = nullptr;
 
 private:
+	
+	int NumberOfOverlappingActors;
+
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume = nullptr;
 

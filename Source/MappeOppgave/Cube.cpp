@@ -2,6 +2,7 @@
 
 #include "Cube.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/BoxComponent.h"
 
 // Sets default values
 ACube::ACube()
@@ -11,6 +12,12 @@ ACube::ACube()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
 	RootComponent = StaticMesh;
+
+	TriggerVolume = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
+	TriggerVolume->bGenerateOverlapEvents = true;
+	TriggerVolume->SetupAttachment(RootComponent);
+
+
 }
 
 // Called when the game starts or when spawned

@@ -32,7 +32,7 @@ void ATrigger_Door::BeginPlay()
 {
 	Super::BeginPlay();
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ATrigger_Door::OnBeginOverlap);
-	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ATrigger_Door::OnEndOverlap);
+	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ATrigger_Door::OnEndOverlap);
 }
 
 // Called every frame
@@ -45,20 +45,22 @@ void ATrigger_Door::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor 
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()) || OtherActor->IsA(AHammer::StaticClass()) || OtherActor->IsA(ACube::StaticClass()))
 	{
-		if (Door)
+		NumberOfOverlappingActors++;
+		if (Door && NumberOfOverlappingActors > 0)
 		{
-			Door->SetActorHiddenInGame(false);
+			Door->SetActorHiddenInGame(true);
 		}
 	}
 }
 
-void ATrigger_Door::OnEndOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+void ATrigger_Door::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()) || OtherActor->IsA(AHammer::StaticClass()) || OtherActor->IsA(ACube::StaticClass()))
 	{
-		if (Door)
+		NumberOfOverlappingActors--;
+		if (Door && NumberOfOverlappingActors <= 0)
 		{
-			Door->SetActorHiddenInGame(true);
+			Door->SetActorHiddenInGame(false);
 		}
 	}
 }

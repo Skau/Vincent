@@ -92,30 +92,22 @@ void APlayerCharacter::SetCorrectJumpHeight()
 
 void APlayerCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// Other Actor is the actor that triggered the event. Check that is not ourself. 
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
+	if (OtherActor->IsA(AHammer::StaticClass()))
 	{
 		if (!bIsHoldingHammer)
 		{
-			if (OtherActor->IsA(AHammer::StaticClass()))
-			{
-				bIsCloseEnough = true;
-			}
+			bIsCloseEnough = true;
 		}
 	}
 }
 
 void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	// Other Actor is the actor that triggered the event. Check that is not ourself.  
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
+	if (OtherActor->IsA(AHammer::StaticClass()))
 	{
 		if (!bIsHoldingHammer)
 		{
-			if (OtherActor->IsA(AHammer::StaticClass()))
-			{
-				bIsCloseEnough = false;
-			}
+			bIsCloseEnough = false;
 		}
 	}
 }
