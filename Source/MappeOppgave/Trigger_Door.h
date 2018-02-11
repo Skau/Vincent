@@ -20,18 +20,21 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	void CheckActors();
-
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	//TODO make it so that this is just a door pointer?
 	UPROPERTY(EditAnywhere)
-	AActor* Door = nullptr;
+	class ADoor* Door = nullptr;
 
 private:
+	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume = nullptr;
 
-	TArray<AActor*> OverlappingActors;
-	
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* StaticMesh;
+
 };
