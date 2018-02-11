@@ -55,7 +55,9 @@ void AHammer::Attack(float DeltaTime)
 	{
 		RayCast();
 
+		//SetActorRotation(FRotator(0.f, GetActorRotation().Yaw, GetActorRotation().Roll));
 		AddActorLocalRotation(FQuat(FRotator(-360.f, 0.f, 0.f)*DeltaTime));
+	
 
 		Player->SetCorrectMovementSpeed(false);
 		if (GetActorRotation().Yaw >= 170.f)
