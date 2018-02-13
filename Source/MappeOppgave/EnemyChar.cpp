@@ -5,6 +5,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
 #include "PlayerCharacter.h"
 
 // Sets default values
@@ -59,6 +60,10 @@ float AEnemyChar::TakeDamage(float DamageAmount, struct FDamageEvent const & Dam
 	UE_LOG(LogTemp, Warning, TEXT("Lost: %f, Current health: %f"), DamageAmount, Health)
 	if (Health <= 0)
 	{
+		if (DeathParticle)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
+		}
 		Destroy();
 	}
 		return DamageAmount;
