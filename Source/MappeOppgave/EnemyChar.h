@@ -23,6 +23,9 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* DeathParticle = nullptr;
+
 private:
 	void ResetAttackTimer() { bHasAttackedRecently = false; }
 
