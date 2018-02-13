@@ -60,7 +60,8 @@ void AHammer::Attack(float DeltaTime)
 	
 
 		Player->SetCorrectMovementSpeed(false);
-		if (GetActorRotation().Yaw >= 170.f)
+
+		if(HammerMesh->GetRelativeTransform().Rotator().Yaw <= -30.f)
 		{
 			bIsAttacking = false;
 		}
@@ -68,6 +69,7 @@ void AHammer::Attack(float DeltaTime)
 
 	if (!bIsAttacking && GetOwner())
 	{
+		PlayerRotation = GetActorRotation();
 		SetActorRelativeRotation(FRotator(0.f, 0.f, 0.f));
 		Player->SetCorrectMovementSpeed(true);
 	}

@@ -52,6 +52,8 @@ private:
 
 	APlayerCharacter* Player;
 
+	FRotator PlayerRotation;
+
 	bool bIsDropped;
 
 	bool bIsAttacking;
