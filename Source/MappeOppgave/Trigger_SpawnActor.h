@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "SpawnTrigger.generated.h"
+#include "Trigger_SpawnActor.generated.h"
 
 UCLASS()
-class MAPPEOPPGAVE_API ASpawnTrigger : public AActor
+class MAPPEOPPGAVE_API ATrigger_SpawnActor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASpawnTrigger();
+	ATrigger_SpawnActor();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

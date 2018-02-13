@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "SpawnTrigger.h"
+#include "Trigger_SpawnActor.h"
 #include "Engine/World.h"
 #include "Components/BoxComponent.h"
 
@@ -8,7 +8,7 @@
 #include "PlayerCharacter.h"
 
 // Sets default values
-ASpawnTrigger::ASpawnTrigger()
+ATrigger_SpawnActor::ATrigger_SpawnActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -22,21 +22,21 @@ ASpawnTrigger::ASpawnTrigger()
 }
 
 // Called when the game starts or when spawned
-void ASpawnTrigger::BeginPlay()
+void ATrigger_SpawnActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ASpawnTrigger::OnBeginOverlap);
+	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ATrigger_SpawnActor::OnBeginOverlap);
 }
 
 // Called every frame
-void ASpawnTrigger::Tick(float DeltaTime)
+void ATrigger_SpawnActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
-void ASpawnTrigger::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+void ATrigger_SpawnActor::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
@@ -48,7 +48,7 @@ void ASpawnTrigger::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor 
 	}
 }
 
-void ASpawnTrigger::ActivateSpawnpoints()
+void ATrigger_SpawnActor::ActivateSpawnpoints()
 {
 	if (Spawnpoints.Num() > 0)
 	{
