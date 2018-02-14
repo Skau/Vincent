@@ -13,7 +13,7 @@ AEnemyChar::AEnemyChar()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	Health = 100;
+	Health = 2;
 }
 
 // Called when the game starts or when spawned
@@ -58,7 +58,6 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 float AEnemyChar::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
 	Health -= DamageAmount;
-	UE_LOG(LogTemp, Warning, TEXT("Lost: %f, Current health: %f"), DamageAmount, Health)
 	if (Health <= 0)
 	{
 		if (DeathParticle)

@@ -134,7 +134,7 @@ FHitResult AHammer::RayCast()
 			{
 				UGameplayStatics::ApplyPointDamage(
 					EnemyHit,
-					50.f, 
+					1.f, 
 					GetActorForwardVector(), 
 					CastHit,UGameplayStatics::GetPlayerController(GetWorld(), 0) ,
 					this,
