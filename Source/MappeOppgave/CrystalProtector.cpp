@@ -1,1 +1,0 @@
-	FVector PlayerLocation = Player->GetActorLocation();
