@@ -62,6 +62,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (Health <= 0)
+	{
+		Destroy();
+	}
+
 	// Makes sure the jump height is correct depending on if the hammer is held or not
 	SetCorrectJumpHeight();
 }
@@ -116,10 +121,6 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 {
 	Health -= DamageAmount;
 
-	if (Health <= 0)
-	{
-		Destroy();
-	}
 	return DamageAmount;
 }
 
