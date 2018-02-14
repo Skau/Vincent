@@ -39,9 +39,18 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
+		FHitResult CastHit;
 		if (!bHasAttackedRecently)
 		{
-			Player->DecrementHealth();
+			UGameplayStatics::ApplyPointDamage(
+				OtherActor,
+				1.f,
+				GetActorForwardVector(),
+				CastHit,GetController(),
+				this,
+				UDamageType::StaticClass()
+			);
+
 			FVector EnemyLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0.f);
 			FVector PlayerLocation = FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, 0.f);
 			Direction = (PlayerLocation - EnemyLocation).GetSafeNormal();

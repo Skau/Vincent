@@ -112,6 +112,17 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 	}
 }
 
+float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	Health -= DamageAmount;
+
+	if (Health <= 0)
+	{
+		Destroy();
+	}
+	return DamageAmount;
+}
+
 void APlayerCharacter::WhenDroppingHammer()
 {
 	if (Hammer != nullptr && !GetCharacterMovement()->IsFalling()) 
