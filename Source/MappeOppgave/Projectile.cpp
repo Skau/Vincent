@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Projectile.h"
+#include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 
@@ -12,11 +13,13 @@ AProjectile::AProjectile()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
+	CollisionSphere = CreateDefaultSubobject<USphereComponent>("SphereCollision");
+	RootComponent = CollisionSphere;
+
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
-	RootComponent = StaticMesh;
-
-
-
+	StaticMesh->SetupAttachment(RootComponent);
+	
 	InitialLifeSpan = 10.f;
 }
 
@@ -24,7 +27,7 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	StaticMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnBeginOverlap);
 }
 
 // Called every frame
@@ -38,7 +41,7 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
-void AProjectile::OnHit(UPrimitiveComponent * HitComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, FVector NormalImpulse, const FHitResult & Hit)
+void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{

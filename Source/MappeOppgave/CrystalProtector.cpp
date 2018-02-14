@@ -102,7 +102,7 @@ void ACrystalProtector::Shoot()
 	{
 		auto SpawnDirection = FVector(-1, 0, 0);
 		auto SpawnRotation = SpawnDirection.Rotation();
-		auto SpawnLocation = GetActorLocation() + FVector(-100, 0, -100);
+		auto SpawnLocation = GetActorLocation() + FVector(-100, 0, 0);
 
 		GetWorld()->SpawnActor<AProjectile>(Projectile_BP, SpawnLocation, SpawnRotation);
 
