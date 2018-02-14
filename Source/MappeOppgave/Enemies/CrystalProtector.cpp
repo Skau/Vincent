@@ -76,9 +76,9 @@ void ACrystalProtector::Move(float DeltaTime)
 		{
 			MoveDirection = FVector(0.f, -1.f, 0.f);
 		}
-			
-			FVector NewLocation = CurrentLocation + MoveDirection * MoveSpeed * DeltaTime;
-			SetActorLocation(NewLocation, true);
+		
+		FVector NewLocation = CurrentLocation + MoveDirection * MoveSpeed * DeltaTime;
+		SetActorLocation(NewLocation, true);
 	}
 }
 

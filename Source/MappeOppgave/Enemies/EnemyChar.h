@@ -29,7 +29,7 @@ public:
 private:
 	void ResetAttackTimer() { bHasAttackedRecently = false; }
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float Health;
 	
 	bool bHasAttackedRecently;

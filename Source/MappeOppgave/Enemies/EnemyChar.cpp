@@ -22,7 +22,6 @@ void AEnemyChar::BeginPlay()
 	Super::BeginPlay();
 	OnActorHit.AddDynamic(this, &AEnemyChar::OnHit);
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
 }
 
 // Called every frame
