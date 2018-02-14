@@ -23,8 +23,7 @@ ACrystalProtector::ACrystalProtector()
 	StaticMesh->SetupAttachment(RootComponent);
 
 	bCanShoot = true;
-	bCanMoveLeft = true;
-	bCanMoveRight = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -75,23 +74,15 @@ void ACrystalProtector::Move(float DeltaTime)
 		{
 			MoveDirection = FVector(0.f, 1.f, 0.f);
 			NewLocation = CurrentLocation + MoveDirection * MoveSpeed * DeltaTime;
-			SetActorLocation(NewLocation, true, &HitResult);
-			if (HitResult.bBlockingHit)
-			{
-				bCanMoveRight = false;
-				bCanMoveLeft = true;
-			}
+			SetActorLocation(NewLocation, true);
+			
 		}
 		else if (DeltaYLocation < -5)
 		{
 			MoveDirection = FVector(0.f, -1.f, 0.f);
 			NewLocation = CurrentLocation + MoveDirection * MoveSpeed * DeltaTime;
-			SetActorLocation(NewLocation, true, &HitResult);
-			if (HitResult.bBlockingHit)
-			{
-				bCanMoveRight = true;
-				bCanMoveLeft = false;
-			}
+			SetActorLocation(NewLocation, true);
+
 		}
 	}
 }

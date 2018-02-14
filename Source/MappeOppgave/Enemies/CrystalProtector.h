@@ -53,8 +53,6 @@ private:
 
 	bool bCanShoot;
 
-	bool bCanMoveRight, bCanMoveLeft;
-
 	FTimerHandle TH_ShootTimer;
 
 };
