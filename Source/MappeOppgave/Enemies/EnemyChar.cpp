@@ -6,7 +6,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 
 // Sets default values
 AEnemyChar::AEnemyChar()

@@ -4,7 +4,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 
 // Sets default values
 ATrigger_Teleporter::ATrigger_Teleporter()

@@ -3,7 +3,7 @@
 #include "PickUp_Heart.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 
 // Sets default values
 APickUp_Heart::APickUp_Heart()

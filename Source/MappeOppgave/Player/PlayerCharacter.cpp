@@ -11,7 +11,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "Hammer.h"
-#include "EnemyChar.h"
+#include "Enemies/EnemyChar.h"
 
 #define OUT
 // Sets default values

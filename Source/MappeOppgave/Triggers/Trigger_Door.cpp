@@ -6,10 +6,10 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 
-#include "Door.h"
-#include "Cube.h"
-#include "PlayerCharacter.h"
-#include "Hammer.h"
+#include "WorldActors/Door.h"
+#include "WorldActors/Cube.h"
+#include "Player/PlayerCharacter.h"
+#include "Player/Hammer.h"
 
 
 // Sets default values

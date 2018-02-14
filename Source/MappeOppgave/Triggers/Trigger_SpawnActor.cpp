@@ -5,7 +5,7 @@
 #include "Components/BoxComponent.h"
 
 #include "SpawnPoint.h"
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 
 // Sets default values
 ATrigger_SpawnActor::ATrigger_SpawnActor()

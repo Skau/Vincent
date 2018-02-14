@@ -7,7 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 
-#include "EnemyChar.h"
+#include "Enemies/EnemyChar.h"
 #include "PlayerCharacter.h"
 
 // Sets default values

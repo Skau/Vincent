@@ -2,9 +2,9 @@
 
 #include "SpawnPoint.h"
 #include "Engine/World.h"
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "Hammer.h"
+#include "Player/Hammer.h"
 
 void ASpawnPoint::BeginPlay()
 {

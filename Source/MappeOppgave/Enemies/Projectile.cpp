@@ -5,7 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 
-#include "PlayerCharacter.h"
+#include "Player/PlayerCharacter.h"
 
 // Sets default values
 AProjectile::AProjectile()
