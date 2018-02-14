@@ -21,6 +21,7 @@ void AEnemyChar::BeginPlay()
 {
 	Super::BeginPlay();
 	OnActorHit.AddDynamic(this, &AEnemyChar::OnHit);
+	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 }
 
@@ -29,6 +30,10 @@ void AEnemyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	if (bWasHit)
+	{
+		Player->SetActorLocation(Player->GetActorLocation() + Direction* 1500.f	*DeltaTime);
+	}
 }
 
 void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
@@ -37,17 +42,14 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 	{
 		if (!bHasAttackedRecently)
 		{
-			auto Player = Cast<APlayerCharacter>(OtherActor);
 			Player->DecrementHealth();
-
-			//Espens metode for knockback
 			FVector EnemyLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0.f);
 			FVector PlayerLocation = FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, 0.f);
-			FVector Direction = PlayerLocation - EnemyLocation;
-			Player->SetActorLocation(Player->GetActorLocation() + Direction.GetClampedToMaxSize(1.f) * 250.f);
+			Direction = (PlayerLocation - EnemyLocation).GetSafeNormal();
 
-			//Kristoffers metode for knockback, ser ikke ut til å funke
-			//Player->AddActorLocalOffset(this->GetActorForwardVector()*+250);
+			bWasHit = true;
+			GetWorld()->GetTimerManager().SetTimer(TH_ResetKnockback, this, &AEnemyChar::SetHit, 0.1f);
+
 			bHasAttackedRecently = true;
 			GetWorld()->GetTimerManager().SetTimer(TH_Attack, this, &AEnemyChar::ResetAttackTimer, 2.f);
 		}

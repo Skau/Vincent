@@ -29,10 +29,19 @@ public:
 private:
 	void ResetAttackTimer() { bHasAttackedRecently = false; }
 
+	UPROPERTY(EditAnywhere)
 	float Health;
 	
 	bool bHasAttackedRecently;
 
 	FTimerHandle TH_Attack;
+	FTimerHandle TH_ResetKnockback;
 
+	FVector Direction;
+
+	class APlayerCharacter* Player;
+
+	bool bWasHit = false;
+
+	void SetHit() { bWasHit = false; }
 };

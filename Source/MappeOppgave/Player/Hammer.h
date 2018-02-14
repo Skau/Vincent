@@ -54,6 +54,16 @@ private:
 
 	FRotator PlayerRotation;
 
+	FVector Direction;
+
+	FTimerHandle TH_ResetKnockback;
+
+	class AEnemyChar* EnemyHit = nullptr;
+
+	void SetHit() { bWasHit = false; }
+
+	bool bWasHit = true;
+
 	bool bIsDropped;
 
 	bool bIsAttacking;

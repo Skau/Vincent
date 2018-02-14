@@ -6,6 +6,7 @@
 #include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "TimerManager.h"
 
 #include "Enemies/EnemyChar.h"
 #include "PlayerCharacter.h"
@@ -44,6 +45,11 @@ void AHammer::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	Attack(DeltaTime);
+
+	if (bWasHit && EnemyHit)
+	{
+		EnemyHit->SetActorLocation(EnemyHit->GetActorLocation() + Direction * 1500.f	*DeltaTime);
+	}
 	
 	/***TICK IS TURNED ON***/
 
@@ -123,11 +129,11 @@ FHitResult AHammer::RayCast()
 		{
 			traceColor = FColor::Blue;
 			endVector = CastHit.Location;
-			auto Destroyable = Cast<AEnemyChar>(CastHit.GetActor());
-			if (Destroyable)
+			EnemyHit = Cast<AEnemyChar>(CastHit.GetActor());
+			if (EnemyHit)
 			{
 				UGameplayStatics::ApplyPointDamage(
-					Destroyable, 
+					EnemyHit,
 					50.f, 
 					GetActorForwardVector(), 
 					CastHit,UGameplayStatics::GetPlayerController(GetWorld(), 0) ,
@@ -135,12 +141,18 @@ FHitResult AHammer::RayCast()
 					UDamageType::StaticClass()
 				);
 
-				FVector EnemyLocation = FVector(Destroyable->GetActorLocation().X, Destroyable->GetActorLocation().Y, 0.f);
+				//Finds direction for knockback
+				FVector EnemyLocation = FVector(EnemyHit->GetActorLocation().X, EnemyHit->GetActorLocation().Y, 0.f);
 				FVector PlayerLocation = FVector(GetOwner()->GetActorLocation().X, GetOwner()->GetActorLocation().Y, 0.f);
-				FVector Direction = EnemyLocation - PlayerLocation;
+				Direction = (EnemyLocation -PlayerLocation).GetSafeNormal();
+
+
+
+				bWasHit = true;
+				GetWorld()->GetTimerManager().SetTimer(TH_ResetKnockback, this, &AHammer::SetHit, 0.1f);
 
 				//funker hvertfall
-				Destroyable->SetActorLocation(Destroyable->GetActorLocation() + Direction.GetClampedToMaxSize(1.f) * 250.f);
+				//EnemyHit->SetActorLocation(EnemyHit->GetActorLocation() + Direction.GetClampedToMaxSize(1.f) * 250.f);
 
 				bIsAttacking = false;
 			}
