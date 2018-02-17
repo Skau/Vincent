@@ -29,7 +29,12 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float Velocity = 30.f;
+
+	void SetActive(bool Value) { bIsActive = Value; };
+
 private:
+	UPROPERTY(EditAnywhere)
+	bool bIsActive = true;
 
 	void Move(float DeltaTime);
 

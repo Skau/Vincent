@@ -28,8 +28,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume = nullptr;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Setup")
 	TArray<class ASpawnPoint*> Spawnpoints;
+
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	class AMovingPlatform* Platform;
 
 	bool bHasSpawned;
 

@@ -26,7 +26,10 @@ void AMovingPlatform::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Move(DeltaTime);
+	if (bIsActive)
+	{
+		Move(DeltaTime);
+	}
 }
 
 void AMovingPlatform::Move(float DeltaTime)

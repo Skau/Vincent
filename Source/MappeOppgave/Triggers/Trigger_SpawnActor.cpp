@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "Components/BoxComponent.h"
 
+#include "WorldActors/MovingPlatform.h"
 #include "SpawnPoint.h"
 #include "Player/PlayerCharacter.h"
 
@@ -44,6 +45,10 @@ void ATrigger_SpawnActor::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 		{
 			ActivateSpawnpoints();
 			bHasSpawned = true;
+		}
+		if (Platform)
+		{
+			Platform->SetActive(true);
 		}
 	}
 }
