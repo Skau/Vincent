@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "MovingPlatform.h"
+#include "TimerManager.h"
 
 
 // Sets default values
@@ -39,13 +40,28 @@ void AMovingPlatform::Move(float DeltaTime)
 
 	if (FVector::DotProduct((GlobalTargetLocation - Location), Direction) < 0.0f)
 	{
-		FVector Swap = GlobalStartLocation;
-		GlobalStartLocation = GlobalTargetLocation;
-		GlobalTargetLocation = Swap;
+		if (!bTimerSet)
+		{
+			GetWorld()->GetTimerManager().SetTimer(TH_SwapDelay, this, &AMovingPlatform::SwapDirection, ReturnDelay);
+			bTimerSet = true;
+		}
 	}
+	else
+	{
+		Location += Velocity * DeltaTime * Direction;
+		SetActorLocation(Location, true);
+	}
+}
 
-	Location += Velocity * DeltaTime * Direction;
-	SetActorLocation(Location, true);
+void AMovingPlatform::SwapDirection()
+{
+	FVector Location = GetActorLocation();
+	FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
 
+	FVector Swap = GlobalStartLocation;
+	GlobalStartLocation = GlobalTargetLocation;
+	GlobalTargetLocation = Swap;
+
+	bTimerSet = false;
 }
 

@@ -28,17 +28,28 @@ public:
 	FVector TargetLocation;
 
 	UPROPERTY(EditAnywhere)
-		float Velocity = 30.f;
+	float Velocity = 100.f;
 
 	void SetActive(bool Value) { bIsActive = Value; };
 
-private:
+
+private: 
+
+	UPROPERTY(EditAnywhere)
+	float ReturnDelay = 1.f;
+
 	UPROPERTY(EditAnywhere)
 	bool bIsActive = true;
 
+	bool bTimerSet = false;
+
 	void Move(float DeltaTime);
+
+	void SwapDirection();
 
 	FVector GlobalStartLocation;
 	FVector GlobalTargetLocation;
+
+	FTimerHandle TH_SwapDelay;
 	
 };
