@@ -7,6 +7,7 @@
 #include "TimerManager.h"
 #include "Engine/World.h"
 
+#include "GameModes/MappeOppgaveGameModeBase.h"
 #include "Player/PlayerCharacter.h"
 #include "Projectile.h"
 
@@ -34,6 +35,13 @@ void ACrystalProtector::BeginPlay()
 	auto temp = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	Player = Cast<APlayerCharacter>(temp);
 
+	auto temp2 = GetWorld()->GetAuthGameMode();
+	GameMode = Cast<AMappeOppgaveGameModeBase>(temp2);
+
+	if (GameMode)
+	{
+		VariableMultiplier = (GameMode->GetCrystalsDestroyed() + 1);
+	}
 }
 
 // Called every frame
@@ -57,6 +65,19 @@ void ACrystalProtector::Tick(float DeltaTime)
 		Move(DeltaTime);
 		Shoot();
 	}
+
+	if (GameMode)
+	{
+		if (VariableMultiplier != (GameMode->GetCrystalsDestroyed() + 1))
+		{
+			VariableMultiplier = (GameMode->GetCrystalsDestroyed() + 1);
+
+			MoveSpeed = StartMoveSpeed * VariableMultiplier;
+
+			ShootRate = StartShootRate / VariableMultiplier;
+		}
+	}
+
 }
 
 void ACrystalProtector::Move(float DeltaTime)
