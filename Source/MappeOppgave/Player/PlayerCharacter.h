@@ -61,6 +61,8 @@ public:
 
 	void Attack();
 
+	void SetSpawnLocation(FVector Location) { SpawnLocation = Location; }
+
 private:
 	void SetCorrectJumpHeight();
 
@@ -89,4 +91,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	AHammer* OldHammer = nullptr;
+
+	FVector SpawnLocation = FVector(0);
 };

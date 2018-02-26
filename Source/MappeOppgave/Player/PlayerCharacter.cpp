@@ -55,6 +55,8 @@ void APlayerCharacter::BeginPlay()
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
 	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
+
+	SpawnLocation = GetActorLocation();
 }
 
 // Called every frame
@@ -64,7 +66,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (Health <= 0)
 	{
-		Destroy();
+		SetActorLocation(SpawnLocation);
+		Health = 3;
+	}
+
+	if (GetActorLocation().Z < -2000)
+	{
+		SetActorLocation(SpawnLocation);
 	}
 
 	// Makes sure the jump height is correct depending on if the hammer is held or not
