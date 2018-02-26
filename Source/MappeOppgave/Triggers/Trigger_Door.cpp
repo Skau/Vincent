@@ -49,6 +49,7 @@ void ATrigger_Door::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor 
 		if (Door && NumberOfOverlappingActors > 0)
 		{
 			Door->SetActorHiddenInGame(true);
+			Door->SetActorEnableCollision(false);
 		}
 	}
 }
@@ -61,6 +62,7 @@ void ATrigger_Door::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Ot
 		if (Door && NumberOfOverlappingActors <= 0)
 		{
 			Door->SetActorHiddenInGame(false);
+			Door->SetActorEnableCollision(true);
 		}
 	}
 }

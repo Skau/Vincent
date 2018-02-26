@@ -14,7 +14,13 @@ class MAPPEOPPGAVE_API AMappeOppgaveGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-	
+public:
+
+	void IncreaseCrystalsDestroyed() { CrystalsDestroyed++; }
+	int GetCrystalsDestroyed() { return CrystalsDestroyed; }
+private:
+	int CrystalsDestroyed = 0;
+
 	
 	
 };

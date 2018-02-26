@@ -33,10 +33,13 @@ private:
 	void ResetShootTimer();
 
 	UPROPERTY(EditAnywhere)
-	float MoveSpeed = 100.f;
+	float StartMoveSpeed = 100.f;
 
 	UPROPERTY(EditAnywhere)
-	float ShootRate = 2.f;
+	float StartShootRate = 2.f;
+
+	float MoveSpeed = StartMoveSpeed;
+	float ShootRate = StartShootRate;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AProjectile> Projectile_BP;
@@ -54,5 +57,9 @@ private:
 	bool bCanShoot;
 
 	FTimerHandle TH_ShootTimer;
+
+	class AMappeOppgaveGameModeBase* GameMode = nullptr;
+
+	int VariableMultiplier = 0;
 
 };

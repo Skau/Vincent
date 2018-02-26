@@ -3,6 +3,10 @@
 #include "Crystal.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
+
+#include "Player/PlayerCharacter.h"
+#include "GameModes/MappeOppgaveGameModeBase.h"
 
 // Sets default values
 ACrystal::ACrystal()
@@ -21,7 +25,7 @@ ACrystal::ACrystal()
 void ACrystal::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ACrystal::OnBeginOverlap);
 }
 
 // Called every frame
@@ -33,3 +37,21 @@ void ACrystal::Tick(float DeltaTime)
 
 }
 
+void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	auto Player = Cast<APlayerCharacter>(OtherActor);
+	if (Player)
+	{
+		if (DeathParticle)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(),DeathParticle,GetTargetLocation());
+		}
+		auto temp = GetWorld()->GetAuthGameMode();
+		AMappeOppgaveGameModeBase* GameMode = Cast<AMappeOppgaveGameModeBase>(temp);
+		if (GameMode)
+		{
+			GameMode->IncreaseCrystalsDestroyed();
+		}
+		Destroy();
+	}
+}
