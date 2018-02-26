@@ -51,7 +51,7 @@ void ACrystalProtector::Tick(float DeltaTime)
 
 	FVector CurrentLocation = GetActorLocation();
 	FVector PlayerLocation = Player->GetActorLocation();
-	if (CurrentLocation.Y - PlayerLocation.Y < 2000 && CurrentLocation.X - PlayerLocation.X < 2000)
+	if (CurrentLocation.Y - PlayerLocation.Y < ShootRange && CurrentLocation.X - PlayerLocation.X < ShootRange)
 	{
 		bIsActive = true;
 	}
