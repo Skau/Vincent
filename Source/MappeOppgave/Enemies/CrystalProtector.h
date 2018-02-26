@@ -38,6 +38,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float StartShootRate = 2.f;
 
+	UPROPERTY(EditAnywhere)
+	float ShootRange = 2000.f;
+
 	float MoveSpeed = StartMoveSpeed;
 	float ShootRate = StartShootRate;
 
@@ -55,6 +58,7 @@ private:
 	bool bIsActive;
 
 	bool bCanShoot;
+
 
 	FTimerHandle TH_ShootTimer;
 
