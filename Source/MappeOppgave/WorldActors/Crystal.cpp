@@ -7,6 +7,7 @@
 
 #include "Player/PlayerCharacter.h"
 #include "GameModes/MappeOppgaveGameModeBase.h"
+#include "CrystalIndicator.h"
 
 // Sets default values
 ACrystal::ACrystal()
@@ -26,6 +27,11 @@ void ACrystal::BeginPlay()
 {
 	Super::BeginPlay();
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ACrystal::OnBeginOverlap);
+
+	if (Indicator)
+	{
+		Indicator->SetIsCrystalActive(true);
+	}
 }
 
 // Called every frame
@@ -51,6 +57,10 @@ void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 		if (GameMode)
 		{
 			GameMode->IncreaseCrystalsDestroyed();
+		}
+		if (Indicator)
+		{
+			Indicator->SetIsCrystalActive(false);
 		}
 		Destroy();
 	}
