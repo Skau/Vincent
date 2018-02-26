@@ -85,19 +85,19 @@ void ACrystalProtector::Move(float DeltaTime)
 	if (Player)
 	{
 		FVector CurrentLocation = GetActorLocation();
-		FVector MoveDirection;
+		FVector MoveDirection = FVector(0);
 
-		auto DeltaYLocation = Player->GetActorLocation().Y - CurrentLocation.Y;
+		float DeltaYLocation = Player->GetActorLocation().Y - CurrentLocation.Y;
 
-		if (DeltaYLocation > 5)
+		if (DeltaYLocation > 5.f)
 		{
 			MoveDirection = FVector(0.f, 1.f, 0.f);
 		}
-		else if (DeltaYLocation < -5)
+		else if (DeltaYLocation < -5.f)
 		{
 			MoveDirection = FVector(0.f, -1.f, 0.f);
 		}
-		
+
 		FVector NewLocation = CurrentLocation + MoveDirection * MoveSpeed * DeltaTime;
 		SetActorLocation(NewLocation, true);
 	}
