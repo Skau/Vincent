@@ -62,7 +62,7 @@ private:
 
 	void SetHit() { bWasHit = false; }
 
-	bool bWasHit = true;
+	bool bWasHit = false;
 
 	bool bIsDropped;
 
