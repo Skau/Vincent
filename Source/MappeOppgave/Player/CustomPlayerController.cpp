@@ -40,7 +40,7 @@ void ACustomPlayerController::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	RotateToCursor();
-	
+
 }
 
 void ACustomPlayerController::RotateToCursor()
@@ -60,13 +60,7 @@ void ACustomPlayerController::MoveForward(float Value)
 {
 	if (Player != nullptr && Value != 0.0f)
 	{
-		// find out which way is forward
-		const FRotator Rotation = GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get forward vector
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		Player->AddMovementInput(Direction, Value);
+		Player->AddMovementInput(GetActorForwardVector(), Value);
 	}
 }
 
@@ -74,14 +68,7 @@ void ACustomPlayerController::MoveRight(float Value)
 {
 	if (Player != nullptr && Value != 0.0f)
 	{
-		// find out which way is right
-		const FRotator Rotation = GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		// get right vector 
-		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-		// add movement in that direction
-		Player->AddMovementInput(Direction, Value);
+		Player->AddMovementInput(GetActorRightVector(), Value);
 	}
 }
 
