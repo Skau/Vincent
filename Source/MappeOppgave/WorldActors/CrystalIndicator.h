@@ -25,7 +25,7 @@ public:
 	
 private:	
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	class UMeshComponent* MeshComponent;
 
 	UPROPERTY(EditAnywhere)

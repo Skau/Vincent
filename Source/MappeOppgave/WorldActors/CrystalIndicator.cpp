@@ -32,16 +32,13 @@ void ACrystalIndicator::Tick(float DeltaTime)
 
 	//MeshComponent->SetMaterialByName("Materials/M_Hammer", MaterialWhenInactive);
 
-	MeshComponent->SetMaterial(0, MaterialWhenInactive);
 	if (bIsCrystalActive)
 	{
 		MeshComponent->SetMaterial(0, MaterialWhenActive);
-		UE_LOG(LogTemp, Warning, TEXT("This Crystal Exists"))
-
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("This Crystal Does Not Exists"))
+		MeshComponent->SetMaterial(0, MaterialWhenInactive);
 	}
 }
 
