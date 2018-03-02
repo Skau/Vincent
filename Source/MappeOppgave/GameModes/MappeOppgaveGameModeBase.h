@@ -16,7 +16,10 @@ class MAPPEOPPGAVE_API AMappeOppgaveGameModeBase : public AGameModeBase
 	
 public:
 
+
 	void IncreaseCrystalsDestroyed() { CrystalsDestroyed++; }
+	
+	UFUNCTION(BlueprintCallable)
 	int GetCrystalsDestroyed() { return CrystalsDestroyed; }
 private:
 	int CrystalsDestroyed = 0;
