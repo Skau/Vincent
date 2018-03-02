@@ -37,5 +37,7 @@ private:
 
 	void RegularAttack();
 
+	void PauseGame();
+
 	class APlayerCharacter* Player;
 };

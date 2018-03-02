@@ -4,6 +4,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/UnrealMathUtility.h"
+#include "Kismet/GameplayStatics.h"
 #include "PlayerCharacter.h"
 
 ACustomPlayerController::ACustomPlayerController(const FObjectInitializer & ObjectInitializer)
@@ -33,6 +34,7 @@ void ACustomPlayerController::SetupInputComponent()
 		InputComponent->BindAction("Crouch", IE_Released, this, &ACustomPlayerController::ToggleCrouch);
 		InputComponent->BindAction("ToggleHammer", IE_Released, this, &ACustomPlayerController::ToggleHammer);
 		InputComponent->BindAction("RegularAttack", IE_Released, this, &ACustomPlayerController::RegularAttack);
+		InputComponent->BindAction("Pause", IE_Released, this, &ACustomPlayerController::PauseGame);
 	}
 }
 
@@ -56,16 +58,6 @@ void ACustomPlayerController::RotateToCursor()
 		auto NewYaw = UKismetMathLibrary::FindLookAtRotation(Player->GetActorLocation(), Intersection).Yaw;
 		FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
 		Player->GetCapsuleComponent()->SetWorldRotation(TargetRotation);
-
-		//FHitResult CursorHit;
-		//bShowMouseCursor = true;
-		//GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, OUT CursorHit);
-		//if (CursorHit.bBlockingHit)
-		//{
-		//	auto NewYaw = UKismetMathLibrary::FindLookAtRotation(Player->GetActorLocation(), CursorHit.Location).Yaw;
-		//	FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
-		//	Player->GetCapsuleComponent()->SetWorldRotation(TargetRotation);
-		//}
 	}
 }
 
@@ -126,4 +118,9 @@ void ACustomPlayerController::RegularAttack()
 	{
 		Player->Attack();
 	}
+}
+
+void ACustomPlayerController::PauseGame()
+{
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
 }
