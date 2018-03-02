@@ -3,7 +3,7 @@
 #include "CustomPlayerController.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetMathLibrary.h"
-
+#include "Math/UnrealMathUtility.h"
 #include "PlayerCharacter.h"
 
 ACustomPlayerController::ACustomPlayerController(const FObjectInitializer & ObjectInitializer)
@@ -14,6 +14,7 @@ ACustomPlayerController::ACustomPlayerController(const FObjectInitializer & Obje
 void ACustomPlayerController::BeginPlay()
 {
 	Player = Cast<APlayerCharacter>(GetCharacter());
+	bShowMouseCursor = true;
 }
 
 void ACustomPlayerController::SetupInputComponent()
@@ -47,12 +48,23 @@ void ACustomPlayerController::RotateToCursor()
 {
 	if (Player != nullptr)
 	{
-		FHitResult CursorHit;
-		bShowMouseCursor = true;
-		GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, OUT CursorHit);
-		auto NewYaw = UKismetMathLibrary::FindLookAtRotation(Player->GetActorLocation(), CursorHit.Location).Yaw;
+		FVector WorldLocation;
+		FVector WorldDirection;
+		DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
+		auto Intersection = FMath::LinePlaneIntersection(WorldLocation, WorldLocation + (WorldDirection*50000), Player->GetActorLocation(), FVector(0,0,1));
+		auto NewYaw = UKismetMathLibrary::FindLookAtRotation(Player->GetActorLocation(), Intersection).Yaw;
 		FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
 		Player->GetCapsuleComponent()->SetWorldRotation(TargetRotation);
+
+		//FHitResult CursorHit;
+		//bShowMouseCursor = true;
+		//GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, OUT CursorHit);
+		//if (CursorHit.bBlockingHit)
+		//{
+		//	auto NewYaw = UKismetMathLibrary::FindLookAtRotation(Player->GetActorLocation(), CursorHit.Location).Yaw;
+		//	FRotator TargetRotation = FRotator(0.f, NewYaw, 0.f);
+		//	Player->GetCapsuleComponent()->SetWorldRotation(TargetRotation);
+		//}
 	}
 }
 
