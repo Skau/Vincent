@@ -40,7 +40,8 @@ void ACustomPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	RotateToCursor();
+	if(APlayerController::IsPaused() == false)
+		RotateToCursor();
 
 }
 
