@@ -86,11 +86,11 @@ void AHammer::OnDropped()
 	SetOwner(nullptr);
 }
 
-void AHammer::OnPickedUp(AActor* ActorThatPickedUp)
+void AHammer::OnPickedUp(APlayerCharacter* PlayerCharacter)
 {
-	SetOwner(ActorThatPickedUp);
+	SetOwner(PlayerCharacter);
 	SetPhysics(false);
-	Player = Cast<APlayerCharacter>(ActorThatPickedUp);
+	Player = PlayerCharacter;
 }
 
 void AHammer::SetPhysics(bool Value)
@@ -107,9 +107,10 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		if(!bWasHit && bIsAttacking)
 		{
 			EnemyHit = Cast<AEnemyChar>(OtherActor);
-			UE_LOG(LogTemp, Warning, TEXT("Found other actor: %s"), *OtherActor->GetName());
 			if (EnemyHit)
 			{
+				FHitResult CastHit;
+
 				UGameplayStatics::ApplyPointDamage(
 					EnemyHit,
 					1.f,

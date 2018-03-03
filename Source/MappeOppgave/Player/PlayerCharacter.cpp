@@ -150,6 +150,7 @@ void APlayerCharacter::WhenPickingUpHammer()
 		{
 			OldHammer = Hammer;
 		}
+
 		OldHammer->Destroy();
 		OldHammer = nullptr;
 
@@ -165,7 +166,7 @@ void APlayerCharacter::Attack()
 {
 	if (bIsHoldingHammer)
 	{
-		Hammer->SetAttacking(true);
+		Hammer->SetIsAttacking(true);
 	}
 	else
 	{

@@ -15,12 +15,11 @@ class MAPPEOPPGAVE_API AMappeOppgaveGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
-
-
-	void IncreaseCrystalsDestroyed() { CrystalsDestroyed++; }
-	
 	UFUNCTION(BlueprintCallable)
 	int GetCrystalsDestroyed() { return CrystalsDestroyed; }
+
+	void IncreaseCrystalsDestroyed() { CrystalsDestroyed++; }
+
 private:
 	int CrystalsDestroyed = 0;
 

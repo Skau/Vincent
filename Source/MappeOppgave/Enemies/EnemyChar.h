@@ -23,15 +23,15 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* DeathParticle = nullptr;
-
 private:
 	void ResetAttackTimer() { bHasAttackedRecently = false; }
 
 	UPROPERTY(EditDefaultsOnly)
 	float Health;
 	
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* DeathParticle = nullptr;
+
 	bool bHasAttackedRecently;
 
 	FTimerHandle TH_Attack;

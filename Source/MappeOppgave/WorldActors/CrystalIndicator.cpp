@@ -21,16 +21,12 @@ void ACrystalIndicator::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//MeshComponent->SetMaterialByName("Materials/M_Hammer", MaterialWhenActive);
-
 }
 
 // Called every frame
 void ACrystalIndicator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//MeshComponent->SetMaterialByName("Materials/M_Hammer", MaterialWhenInactive);
 
 	if (bIsCrystalActive)
 	{

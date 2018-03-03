@@ -21,10 +21,10 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+private:
 	UFUNCTION(BlueprintCallable)
 	void Explode();
 
-private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class URadialForceComponent* ExplosionForce = nullptr;
 	

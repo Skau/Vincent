@@ -15,31 +15,26 @@ public:
 	// Sets default values for this actor's properties
 	AMovingPlatform();
 
-protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
-	FVector TargetLocation;
-
-	UPROPERTY(EditAnywhere)
-	float Velocity = 100.f;
-
 	void SetActive(bool Value) { bIsActive = Value; };
 
-
 private: 
+	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
+	FVector TargetLocation;
 
 	UPROPERTY(EditAnywhere)
 	float ReturnDelay = 1.f;
 
 	UPROPERTY(EditAnywhere)
 	bool bIsActive = true;
+
+	UPROPERTY(EditAnywhere)
+	float Velocity = 100.f;
 
 	bool bTimerSet = false;
 

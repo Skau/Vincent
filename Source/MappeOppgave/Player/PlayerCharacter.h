@@ -27,8 +27,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Hammer")
-	TSubclassOf<AHammer> HammerBP;
+
 
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -49,35 +48,30 @@ public:
 
 	void DecrementHealth() { Health--; }
 
+	void SetCorrectMovementSpeed(bool Value);
+
+	// SpawnPoint is using this. Maybe rework to stop that
+	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
-	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
+private:
+	void SetCorrectJumpHeight();
 
 	void WhenDroppingHammer();
 
 	void WhenPickingUpHammer();
 
-	void SetCorrectMovementSpeed(bool Value);
-
 	void Attack();
 
 	void SetSpawnLocation(FVector Location) { SpawnLocation = Location; }
 
-private:
-	void SetCorrectJumpHeight();
-
-	float NormalSpeed;
-
-	bool bIsCloseEnough = false;
-
-	bool bIsHoldingHammer = false;
-	
 	UPROPERTY(VisibleAnywhere)
 	int Health = 3;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
 	float LowJump = 600.f;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
 	float HighJump = 1000.f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -86,11 +80,22 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Hammer")
+	TSubclassOf<AHammer> HammerBP;
+
 	UPROPERTY(VisibleAnywhere)
 	AHammer* Hammer = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
 	AHammer* OldHammer = nullptr;
 
+	float NormalSpeed;
+
+	bool bIsCloseEnough = false;
+
+	bool bIsHoldingHammer = false;
+	
 	FVector SpawnLocation = FVector(0);
+
+	friend class ACustomPlayerController;
 };

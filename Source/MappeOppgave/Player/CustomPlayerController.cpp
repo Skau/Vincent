@@ -14,7 +14,9 @@ ACustomPlayerController::ACustomPlayerController(const FObjectInitializer & Obje
 
 void ACustomPlayerController::BeginPlay()
 {
-	Player = Cast<APlayerCharacter>(GetCharacter());
+	Super::BeginPlay();
+
+	Player = Cast<APlayerCharacter>(GetPawn());
 	bShowMouseCursor = true;
 }
 
@@ -42,9 +44,10 @@ void ACustomPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(APlayerController::IsPaused() == false)
+	if (!APlayerController::IsPaused())
+	{
 		RotateToCursor();
-
+	}
 }
 
 void ACustomPlayerController::RotateToCursor()
@@ -87,6 +90,8 @@ void ACustomPlayerController::Jump()
 
 void ACustomPlayerController::ToggleCrouch()
 {
+	if (Player == nullptr) { return; }
+
 	if (Player->CanCrouch())
 	{
 		Player->Crouch();
@@ -99,7 +104,6 @@ void ACustomPlayerController::ToggleCrouch()
 
 void ACustomPlayerController::ToggleHammer()
 {
-
 	if (Player == nullptr) { return; }
 
 	if (Player->getIsHoldingHammer())

@@ -22,7 +22,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void SetIsCrystalActive(bool Value) { bIsCrystalActive = Value; }
-	
+
 private:	
 	
 	UPROPERTY(VisibleAnywhere)

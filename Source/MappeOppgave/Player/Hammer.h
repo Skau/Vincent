@@ -6,8 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Hammer.generated.h"
 
-
-class UBoxComponent;
 class APlayerCharacter;
 
 UCLASS()
@@ -24,31 +22,28 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void Attack(float DeltaTime);
-
-	void OnDropped();
-
-	void OnPickedUp(AActor* ActorThatPickedUp);
-
-	FHitResult RayCast();
-	FHitResult CastHit;
-	
-	void SetPhysics(bool Value);
-
-	void SetAttacking(bool Value) { bIsAttacking = Value; }
-
-	bool IfAttacking() { return bIsAttacking; }
 	
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
+	void Attack(float DeltaTime);
+
+	void OnDropped();
+
+	void OnPickedUp(APlayerCharacter* PlayerCharacter);
+
+	void SetPhysics(bool Value);
+
+	void SetIsAttacking(bool Value) { bIsAttacking = Value; }
+
+	bool GetIsAttacking() { return bIsAttacking; }
+	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* HammerMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* CollisionBox = nullptr;
+	class UBoxComponent* CollisionBox = nullptr;
 
 	APlayerCharacter* Player;
 
@@ -67,4 +62,6 @@ private:
 	bool bIsDropped;
 
 	bool bIsAttacking;
+
+	friend class APlayerCharacter;
 };

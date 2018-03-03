@@ -24,13 +24,18 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
 private:
 	void Move(float DeltaTime);
 
 	void Shoot();
 
 	void ResetShootTimer();
+
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* TriggerVolume;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(EditAnywhere)
 	float StartMoveSpeed = 100.f;
@@ -41,29 +46,21 @@ private:
 	UPROPERTY(EditAnywhere)
 	float ShootRange = 2000.f;
 
-	float MoveSpeed = StartMoveSpeed;
-	float ShootRate = StartShootRate;
-
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AProjectile> Projectile_BP;
 
-	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerVolume;
+	float MoveSpeed = StartMoveSpeed;
+	float ShootRate = StartShootRate;
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh;
-	
 	class APlayerCharacter* Player;
 
 	bool bIsActive;
 
 	bool bCanShoot;
 
-
 	FTimerHandle TH_ShootTimer;
 
 	class AMappeOppgaveGameModeBase* GameMode = nullptr;
 
 	int VariableMultiplier = 0;
-
 };

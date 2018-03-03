@@ -12,11 +12,12 @@ APickUp_Heart::APickUp_Heart()
 	PrimaryActorTick.bCanEverTick = true;
 
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(FName("TriggerVolume"));
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMesh"));
 	RootComponent = TriggerVolume;
-	StaticMesh->SetupAttachment(RootComponent);
 
 	TriggerVolume->bGenerateOverlapEvents = true;
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMesh"));
+	StaticMesh->SetupAttachment(RootComponent);
 
 }
 

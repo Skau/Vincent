@@ -27,6 +27,7 @@ AProjectile::AProjectile()
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnBeginOverlap);
 }
 
@@ -38,7 +39,6 @@ void AProjectile::Tick(float DeltaTime)
 	auto MoveDirection = FVector(-1.f, 0.f, 0.f);
 	auto NewLocation = GetActorLocation() + MoveDirection * 500 * DeltaTime;
 	SetActorLocation(NewLocation);
-
 }
 
 void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
