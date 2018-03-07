@@ -24,8 +24,8 @@ AHammer::AHammer()
 	CollisionBox->bGenerateOverlapEvents = true;
 
 	HammerMesh->bGenerateOverlapEvents = false;
+	HammerMesh->WakeRigidBody();
 	HammerMesh->SetSimulatePhysics(true);
-	bIsDropped = true;
 }
 
 // Called when the game starts or when spawned
@@ -36,10 +36,7 @@ void AHammer::BeginPlay()
 	// set up a notification for when this component overlaps something  
 	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);		
 
-	if (bIsDropped)
-	{
-		SetPhysics(true);
-	}
+	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
 // Called every frame
@@ -59,7 +56,7 @@ void AHammer::Tick(float DeltaTime)
 
 void AHammer::Attack(float DeltaTime)
 {
-	if (bIsAttacking && GetOwner())
+	if (bIsAttacking && Player)
 	{
 		AddActorLocalRotation(FQuat(FRotator(-360.f, 0.f, 0.f)*DeltaTime));
 	
@@ -71,7 +68,7 @@ void AHammer::Attack(float DeltaTime)
 		}
 	}
 
-	if (!bIsAttacking && GetOwner())
+	if (!bIsAttacking && Player->getIsHoldingHammer())
 	{
 		PlayerRotation = GetActorRotation();
 		SetActorRelativeRotation(FRotator(0.f, 0.f, 0.f));
@@ -83,20 +80,16 @@ void AHammer::OnDropped()
 {
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 	SetPhysics(true);
-	SetOwner(nullptr);
 }
 
-void AHammer::OnPickedUp(APlayerCharacter* PlayerCharacter)
+void AHammer::OnPickedUp()
 {
-	SetOwner(PlayerCharacter);
 	SetPhysics(false);
-	Player = PlayerCharacter;
 }
 
 void AHammer::SetPhysics(bool Value)
 {
 	HammerMesh->SetSimulatePhysics(Value);
-	HammerMesh->WakeRigidBody();
 }
 
 void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

@@ -120,7 +120,7 @@ void ACustomPlayerController::RegularAttack()
 {
 	if (Player != nullptr)
 	{
-		Player->Attack();
+		Player->Attack();	
 	}
 }
 

@@ -31,7 +31,7 @@ private:
 
 	void OnDropped();
 
-	void OnPickedUp(APlayerCharacter* PlayerCharacter);
+	void OnPickedUp();
 
 	void SetPhysics(bool Value);
 

@@ -27,8 +27,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
-
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
@@ -49,9 +47,6 @@ public:
 	void DecrementHealth() { Health--; }
 
 	void SetCorrectMovementSpeed(bool Value);
-
-	// SpawnPoint is using this. Maybe rework to stop that
-	void SetOldHammer(AHammer* Hammer) { OldHammer = Hammer; }
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
@@ -80,14 +75,8 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Hammer")
-	TSubclassOf<AHammer> HammerBP;
-
 	UPROPERTY(VisibleAnywhere)
 	AHammer* Hammer = nullptr;
-
-	UPROPERTY(VisibleAnywhere)
-	AHammer* OldHammer = nullptr;
 
 	float NormalSpeed;
 

@@ -110,6 +110,7 @@ void APlayerCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 		if (!bIsHoldingHammer)
 		{
 			bIsCloseEnough = true;
+			Hammer = Cast<AHammer>(OtherActor);
 		}
 	}
 }
@@ -121,6 +122,7 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 		if (!bIsHoldingHammer)
 		{
 			bIsCloseEnough = false;
+			Hammer = nullptr;
 		}
 	}
 }
@@ -134,36 +136,32 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 
 void APlayerCharacter::WhenDroppingHammer()
 {
-	if (Hammer != nullptr && !GetCharacterMovement()->IsFalling()) 
-	{ 
-		bIsHoldingHammer = false;
-		Hammer->OnDropped();
-	}
+	if (!Hammer) { return; }
 
+
+	if (bIsHoldingHammer && !GetCharacterMovement()->IsFalling()) 
+	{ 
+		Hammer->OnDropped();
+		bIsHoldingHammer = false;
+	}
 }
 
 void APlayerCharacter::WhenPickingUpHammer()
 {
+	if (!Hammer) { return; }
+
 	if (bIsCloseEnough && !bIsHoldingHammer)
 	{
-		if (OldHammer == nullptr)
-		{
-			OldHammer = Hammer;
-		}
-
-		OldHammer->Destroy();
-		OldHammer = nullptr;
-
-		Hammer = GetWorld()->SpawnActor<AHammer>(HammerBP);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
-		Hammer->OnPickedUp(this);
-
+		Hammer->OnPickedUp();
 		bIsHoldingHammer = true;
 	}
 }
 
 void APlayerCharacter::Attack()
 {
+	if (!Hammer) { return; }
+
 	if (bIsHoldingHammer)
 	{
 		Hammer->SetIsAttacking(true);
