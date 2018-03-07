@@ -84,7 +84,10 @@ void ACustomPlayerController::Jump()
 {
 	if (Player != nullptr)
 	{
-		Player->Jump();
+		if (!(Player->bIsHoldingHammer))
+		{
+			Player->Jump();
+		}
 	}
 }
 

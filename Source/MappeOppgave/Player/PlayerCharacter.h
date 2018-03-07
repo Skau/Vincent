@@ -11,6 +11,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class AHammer;
 class USkeletalMeshComponent;
+class UDecalComponent;
 
 UCLASS()
 class MAPPEOPPGAVE_API APlayerCharacter : public ACharacter
@@ -43,6 +44,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetHealth() { return Health; }
+
+	bool GetIsBeingTeleported(){ return bIsBeingTeleported; }
+
+	void SetIsBeingTeleported(bool Value) { bIsBeingTeleported = Value; }
 
 	void IncrementHealth() { Health++; }
 
@@ -89,11 +94,19 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	AHammer* OldHammer = nullptr;
 
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup", meta = (AllowPrivateAccess = "true"))
+	UDecalComponent* ShadowDecal = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	class UMaterialInterface* ShadowMaterial;*/
+
 	float NormalSpeed;
 
 	bool bIsCloseEnough = false;
 
 	bool bIsHoldingHammer = false;
+
+	bool bIsBeingTeleported = false;
 	
 	FVector SpawnLocation = FVector(0);
 

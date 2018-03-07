@@ -21,8 +21,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void SetDoorOpen();
+
+	void CloseDoor();
+
+	void OpenDoor();
+
+	void SetIsDoorOpen(bool Value) { bIsDoorOpen = Value; }
+
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -31,7 +42,18 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
 
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* DoorMesh;
+
 	UPROPERTY(EditAnywhere)
 	ATrigger_Teleporter* ConnectedTeleporter;
+
+	FTimerHandle TH_TeleportTimer;
+
+	class APlayerCharacter* Player = nullptr;
+
+	void TeleportPlayer();
+
+	bool bIsDoorOpen = true;
 	
 };
