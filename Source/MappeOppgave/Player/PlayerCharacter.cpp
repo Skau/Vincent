@@ -4,11 +4,13 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/DecalComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Pawn.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
 
 #include "Hammer.h"
 #include "Enemies/EnemyChar.h"
@@ -36,7 +38,25 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;
 
-	// Enables crouching
+
+	//Sets up a shadow decal
+	/*ShadowDecal = CreateDefaultSubobject<UDecalComponent>("ShadowDecal");
+	ShadowDecal->SetupAttachment(RootComponent);
+	ShadowDecal->SetMaterial(0, ShadowMaterial);
+	ShadowDecal->SetDecalMaterial(ShadowMaterial);
+
+	static ConstructorHelpers::FObjectFinder<UMaterial>DecalMaterialAsset(TEXT("Material'/Game/Materials/ShadowDecal.ShadowDecal'"));
+	if (DecalMaterialAsset.Succeeded())
+	{
+		ShadowDecal->SetDecalMaterial(DecalMaterialAsset.Object);
+	}*/
+	//ShadowDecal->DecalSize = FVector(16.0f, 32.0f, 32.0f);
+	//ShadowDecal->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
+
+
+	//ShadowDecal->DecalSize = FVector(20, 20, 20);
+
+	// Crouching Is Disabled!
 	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
 
 	// Properly alignes mesh with capsule component
@@ -77,6 +97,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	// Makes sure the jump height is correct depending on if the hammer is held or not
 	SetCorrectJumpHeight();
+
+	//ShadowDecal->AddRelativeLocation(FVector(0,0,-1),false);
 }
 
 void APlayerCharacter::SetCorrectMovementSpeed(bool Value)
