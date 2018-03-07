@@ -48,7 +48,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATrigger_Teleporter* ConnectedTeleporter;
 
+	void ResetPlayerTeleportTimer();
+
 	FTimerHandle TH_TeleportTimer;
+
+	FTimerHandle TH_PlayerTeleportTimer;
 
 	class APlayerCharacter* Player = nullptr;
 

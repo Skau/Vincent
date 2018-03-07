@@ -33,7 +33,7 @@ void ATrigger_Teleporter::BeginPlay()
 	Super::BeginPlay();
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
+	Player->SetIsBeingTeleported(true);
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ATrigger_Teleporter::OnBeginOverlap);
 	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ATrigger_Teleporter::OnEndOverlap);
 }
@@ -84,14 +84,13 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 			if (!Player->GetIsBeingTeleported())
 			{
 				bIsDoorOpen = true;
-				Player->SetIsBeingTeleported(true);
-				ConnectedTeleporter->SetIsDoorOpen(false);
-				UE_LOG(LogTemp, Warning, TEXT("Starting Timer!"));
-				GetWorld()->GetTimerManager().SetTimer(TH_TeleportTimer, this, &ATrigger_Teleporter::TeleportPlayer, 1.5f);
 			}
 			else
 			{
 				bIsDoorOpen = false;
+				ConnectedTeleporter->SetIsDoorOpen(false);
+				UE_LOG(LogTemp, Warning, TEXT("Starting Timer!"));
+				GetWorld()->GetTimerManager().SetTimer(TH_TeleportTimer, this, &ATrigger_Teleporter::TeleportPlayer, 1.5f);
 			}
 		}
 	}
@@ -99,8 +98,6 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 
 void ATrigger_Teleporter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap End!"));
-	Player->SetIsBeingTeleported(false);
 
 }
 
@@ -109,7 +106,16 @@ void ATrigger_Teleporter::TeleportPlayer()
 	if (Player->GetIsBeingTeleported())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Doing Teleport!"));
-		Player->TeleportTo(ConnectedTeleporter->GetActorLocation() + FVector(0,0,30), GetActorRotation(), false, true);
 		Player->SetIsBeingTeleported(false);
+		Player->TeleportTo(ConnectedTeleporter->GetActorLocation() + FVector(0, 0, 30), GetActorRotation(), false, true);
+
+		UE_LOG(LogTemp, Warning, TEXT("Starting Player Teleport Timer!"));
+		GetWorld()->GetTimerManager().SetTimer(TH_PlayerTeleportTimer, this, &ATrigger_Teleporter::ResetPlayerTeleportTimer, 5.f);
 	}
+}
+
+void ATrigger_Teleporter::ResetPlayerTeleportTimer()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Reset Player Teleport Timer"))
+	Player->SetIsBeingTeleported(true);
 }
