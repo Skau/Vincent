@@ -174,6 +174,7 @@ void APlayerCharacter::WhenPickingUpHammer()
 
 	if (bIsCloseEnough && !bIsHoldingHammer)
 	{
+		//Hammer->SetPhysics(false);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		Hammer->OnPickedUp();
 		bIsHoldingHammer = true;

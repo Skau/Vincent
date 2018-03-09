@@ -42,9 +42,6 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* HammerMesh = nullptr;
 
-	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* CollisionBox = nullptr;
-
 	APlayerCharacter* Player;
 
 	FRotator PlayerRotation;

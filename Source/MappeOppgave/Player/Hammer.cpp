@@ -19,10 +19,6 @@ AHammer::AHammer()
 	HammerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HammerMesh"));
 	RootComponent = HammerMesh;
 
-	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionBox"));
-	CollisionBox->SetupAttachment(RootComponent);
-	CollisionBox->bGenerateOverlapEvents = true;
-
 	HammerMesh->bGenerateOverlapEvents = false;
 	HammerMesh->WakeRigidBody();
 	HammerMesh->SetSimulatePhysics(true);
@@ -34,7 +30,7 @@ void AHammer::BeginPlay()
 	Super::BeginPlay();
 
 	// set up a notification for when this component overlaps something  
-	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);		
+	HammerMesh->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);		
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
@@ -115,7 +111,7 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 
 				//Finds direction for knockback
 				FVector EnemyLocation = FVector(EnemyHit->GetActorLocation().X, EnemyHit->GetActorLocation().Y, 0.f);
-				FVector PlayerLocation = FVector(GetOwner()->GetActorLocation().X, GetOwner()->GetActorLocation().Y, 0.f);
+				FVector PlayerLocation = FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, 0.f);
 				Direction = (EnemyLocation - PlayerLocation).GetSafeNormal();
 
 				bWasHit = true;
