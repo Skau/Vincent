@@ -13,7 +13,14 @@ UCLASS()
 class MAPPEOPPGAVE_API ACustomPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	UFUNCTION(BlueprintCallable)
+	bool GetIsSequencePlaying() { return bIsSequencePlaying; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsSequencePlaying(bool Value) { bIsSequencePlaying = Value; }
+
 private:
 	ACustomPlayerController(const FObjectInitializer& ObjectInitializer);
 
@@ -40,4 +47,6 @@ private:
 	void PauseGame();
 
 	class APlayerCharacter* Player;
+
+	bool bIsSequencePlaying;
 };

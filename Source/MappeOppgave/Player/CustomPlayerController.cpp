@@ -44,7 +44,7 @@ void ACustomPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!APlayerController::IsPaused())
+	if (!APlayerController::IsPaused() && !bIsSequencePlaying)
 	{
 		RotateToCursor();
 	}
@@ -84,7 +84,7 @@ void ACustomPlayerController::Jump()
 {
 	if (Player != nullptr)
 	{
-		if (!(Player->bIsHoldingHammer))
+		if (!(Player->bIsHoldingHammer) && !bIsSequencePlaying)
 		{
 			Player->Jump();
 		}
@@ -94,6 +94,7 @@ void ACustomPlayerController::Jump()
 void ACustomPlayerController::ToggleCrouch()
 {
 	if (Player == nullptr) { return; }
+	if (bIsSequencePlaying) { return; }
 
 	if (Player->CanCrouch())
 	{
@@ -108,6 +109,7 @@ void ACustomPlayerController::ToggleCrouch()
 void ACustomPlayerController::ToggleHammer()
 {
 	if (Player == nullptr) { return; }
+	if (bIsSequencePlaying) { return; }
 
 	if (Player->getIsHoldingHammer())
 	{
@@ -121,6 +123,7 @@ void ACustomPlayerController::ToggleHammer()
 
 void ACustomPlayerController::RegularAttack()
 {
+	if (bIsSequencePlaying) { return; }
 	if (Player != nullptr)
 	{
 		Player->Attack();	
