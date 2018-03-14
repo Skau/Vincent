@@ -76,10 +76,13 @@ void AHammer::OnDropped()
 {
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 	SetPhysics(true);
+	//HammerMesh->SetWorldScale3D(FVector(1));
 }
 
 void AHammer::OnPickedUp()
 {
+	HammerMesh->SetWorldScale3D(FVector(1));
+	SetActorRotation(FRotator(0,90,0));
 	SetPhysics(false);
 }
 
@@ -117,7 +120,8 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 				bWasHit = true;
 				GetWorld()->GetTimerManager().SetTimer(TH_ResetKnockback, this, &AHammer::SetHit, 0.1f);
 
-				bIsAttacking = false;
+				// Commented out for AOE
+				//bIsAttacking = false;
 			}
 		}
 	}

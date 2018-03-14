@@ -37,7 +37,7 @@ void AProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	auto MoveDirection = FVector(-1.f, 0.f, 0.f);
-	auto NewLocation = GetActorLocation() + MoveDirection * 500 * DeltaTime;
+	auto NewLocation = GetActorLocation() + MoveDirection * Speed * DeltaTime;
 	SetActorLocation(NewLocation);
 }
 
@@ -49,8 +49,8 @@ void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * 
 		if (Player)
 		{
 			Player->DecrementHealth();
-			Destroy();
 		}
 	}
+	Destroy();
 }
 
