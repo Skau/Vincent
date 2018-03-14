@@ -66,7 +66,7 @@ void ACustomPlayerController::RotateToCursor()
 
 void ACustomPlayerController::MoveForward(float Value)
 {
-	if (Player != nullptr && Value != 0.0f)
+	if (Player != nullptr && Value != 0.0f && !bIsSequencePlaying)
 	{
 		Player->AddMovementInput(GetActorForwardVector(), Value);
 	}
@@ -74,7 +74,7 @@ void ACustomPlayerController::MoveForward(float Value)
 
 void ACustomPlayerController::MoveRight(float Value)
 {
-	if (Player != nullptr && Value != 0.0f)
+	if (Player != nullptr && Value != 0.0f && !bIsSequencePlaying)
 	{
 		Player->AddMovementInput(GetActorRightVector(), Value);
 	}
