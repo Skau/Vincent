@@ -82,19 +82,14 @@ void ACustomPlayerController::MoveRight(float Value)
 
 void ACustomPlayerController::Jump()
 {
-	if (Player != nullptr)
-	{
-		if (!(Player->bIsHoldingHammer) && !bIsSequencePlaying)
-		{
-			Player->Jump();
-		}
-	}
+	if (bIsSequencePlaying || !Player) { return; }
+
+	Player->Jump();
 }
 
 void ACustomPlayerController::ToggleCrouch()
 {
-	if (Player == nullptr) { return; }
-	if (bIsSequencePlaying) { return; }
+	if (bIsSequencePlaying || !Player) { return; }
 
 	if (Player->CanCrouch())
 	{
@@ -108,8 +103,7 @@ void ACustomPlayerController::ToggleCrouch()
 
 void ACustomPlayerController::ToggleHammer()
 {
-	if (Player == nullptr) { return; }
-	if (bIsSequencePlaying) { return; }
+	if (bIsSequencePlaying || !Player) { return; }
 
 	if (Player->getIsHoldingHammer())
 	{
@@ -123,14 +117,15 @@ void ACustomPlayerController::ToggleHammer()
 
 void ACustomPlayerController::RegularAttack()
 {
-	if (bIsSequencePlaying) { return; }
-	if (Player != nullptr)
-	{
-		Player->Attack();	
-	}
+	if (bIsSequencePlaying || !Player) { return; }
+
+	Player->Attack();	
 }
 
 void ACustomPlayerController::PauseGame()
 {
-	UGameplayStatics::SetGamePaused(GetWorld(), true);
+	if (!bIsSequencePlaying)
+	{
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+	}
 }
