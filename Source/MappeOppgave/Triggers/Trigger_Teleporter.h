@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite)
 	bool bIsTeleporter;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bPlayerIsInside;
+
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume;
 

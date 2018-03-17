@@ -50,6 +50,8 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 	{
 		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 		{
+			bPlayerIsInside = true;
+
 			if (Player->GetIsBeingTeleported())
 			{
 				bIsTeleporter = true;
@@ -57,6 +59,7 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 			else if (!Player->GetIsBeingTeleported())
 			{
 				OpenDoor();
+				bIsTeleporter = false;
 			}
 
 			if (bIsTeleporter)
@@ -64,7 +67,6 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 				CloseDoor();
 
 				ConnectedTeleporter->CloseDoor();
-
 			}
 		}
 	}
@@ -72,19 +74,27 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 
 void ATrigger_Teleporter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	if (Player->GetIsBeingTeleported())
+	if (ConnectedTeleporter)
 	{
-		bIsTeleporter = false;
+		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
+		{
+			bPlayerIsInside = false;
 
-		Player->SetIsBeingTeleported(false);
-	}
-	else if (!Player->GetIsBeingTeleported())
-	{
-		bIsTeleporter = false;
+			if (Player->GetIsBeingTeleported())
+			{
+				bIsTeleporter = false;
 
-		Player->SetIsBeingTeleported(true);
+				Player->SetIsBeingTeleported(false);
+			}
+			else if (!Player->GetIsBeingTeleported())
+			{
+				bIsTeleporter = false;
 
-		ConnectedTeleporter->OpenDoor();
+				Player->SetIsBeingTeleported(true);
+
+				ConnectedTeleporter->OpenDoor();
+			}
+		}
 	}
 }
 
