@@ -50,6 +50,7 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 	{
 		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 		{
+
 			bPlayerIsInside = true;
 
 			if (Player->GetIsBeingTeleported())
@@ -78,6 +79,12 @@ void ATrigger_Teleporter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AAct
 	{
 		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 		{
+			// FOR DEBUGGING PURPOSES
+			// UE_LOG(LogTemp, Warning,
+			// TEXT("bIsTeleporter = %s, Player->IsBeingTeleported = %s"),
+			// bIsTeleporter ? TEXT("true") : TEXT("false"),
+			// Player->GetIsBeingTeleported() ? TEXT("true") : TEXT("false"))
+
 			bPlayerIsInside = false;
 
 			if (Player->GetIsBeingTeleported())
