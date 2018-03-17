@@ -33,7 +33,6 @@ void ATrigger_Teleporter::BeginPlay()
 	Super::BeginPlay();
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	Player->SetIsBeingTeleported(true);
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ATrigger_Teleporter::OnBeginOverlap);
 	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ATrigger_Teleporter::OnEndOverlap);
 }
@@ -43,54 +42,29 @@ void ATrigger_Teleporter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	SetDoorOpen();
-}
-
-void ATrigger_Teleporter::SetDoorOpen()
-{
-	if (!bIsDoorOpen)
-	{
-		if (DoorMesh->RelativeRotation.Yaw > 0)
-		{
-			CloseDoor();
-		}
-	}
-	else
-	{
-		if (DoorMesh->RelativeRotation.Yaw < 170.f)
-		{
-			OpenDoor();
-		}
-	}
-}
-
-void ATrigger_Teleporter::CloseDoor()
-{
-	DoorMesh->AddRelativeRotation(FRotator(0, -3.5f, 0));
-}
-
-void ATrigger_Teleporter::OpenDoor()
-{
-	DoorMesh->AddRelativeRotation(FRotator(0, 3.5f, 0));
 }
 
 void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Overlap Begin!"));
 	if (ConnectedTeleporter)
 	{
 		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 		{
-			if (!Player->GetIsBeingTeleported())
+			if (Player->GetIsBeingTeleported())
 			{
-				bIsDoorOpen = true;
+				bIsTeleporter = true;
 			}
-			else
+			else if (!Player->GetIsBeingTeleported())
 			{
-				bIsDoorOpen = false;
-				ConnectedTeleporter->SetIsDoorOpen(false);
-				UE_LOG(LogTemp, Warning, TEXT("Starting Timer!"));
-				GetWorld()->GetTimerManager().SetTimer(TH_TeleportTimer, this, &ATrigger_Teleporter::TeleportPlayer, 1.5f);
+				OpenDoor();
+			}
+
+			if (bIsTeleporter)
+			{
+				CloseDoor();
+
+				ConnectedTeleporter->CloseDoor();
+
 			}
 		}
 	}
@@ -98,24 +72,26 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 
 void ATrigger_Teleporter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (Player->GetIsBeingTeleported())
+	{
+		bIsTeleporter = false;
 
+		Player->SetIsBeingTeleported(false);
+	}
+	else if (!Player->GetIsBeingTeleported())
+	{
+		bIsTeleporter = false;
+
+		Player->SetIsBeingTeleported(true);
+
+		ConnectedTeleporter->OpenDoor();
+	}
 }
 
 void ATrigger_Teleporter::TeleportPlayer()
 {
-	if (Player->GetIsBeingTeleported())
+	if (Player->GetIsBeingTeleported() && bIsTeleporter)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Doing Teleport!"));
-		Player->SetIsBeingTeleported(false);
 		Player->TeleportTo(ConnectedTeleporter->GetActorLocation() + FVector(0, 0, 30), GetActorRotation(), false, true);
-
-		UE_LOG(LogTemp, Warning, TEXT("Starting Player Teleport Timer!"));
-		GetWorld()->GetTimerManager().SetTimer(TH_PlayerTeleportTimer, this, &ATrigger_Teleporter::ResetPlayerTeleportTimer, 5.f);
 	}
-}
-
-void ATrigger_Teleporter::ResetPlayerTeleportTimer()
-{
-	UE_LOG(LogTemp, Warning, TEXT("Reset Player Teleport Timer"))
-	Player->SetIsBeingTeleported(true);
 }

@@ -21,21 +21,28 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetDoorOpen();
-
-	void CloseDoor();
-
-	void OpenDoor();
-
-	void SetIsDoorOpen(bool Value) { bIsDoorOpen = Value; }
-
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-private:
+protected:
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	UStaticMeshComponent* GetDoorMesh() { return DoorMesh; }
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OpenDoor();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void CloseDoor();
+
+	UFUNCTION(BlueprintCallable)
+	void TeleportPlayer();
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsTeleporter;
+
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume;
 
@@ -48,16 +55,5 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATrigger_Teleporter* ConnectedTeleporter;
 
-	void ResetPlayerTeleportTimer();
-
-	FTimerHandle TH_TeleportTimer;
-
-	FTimerHandle TH_PlayerTeleportTimer;
-
 	class APlayerCharacter* Player = nullptr;
-
-	void TeleportPlayer();
-
-	bool bIsDoorOpen = true;
-	
 };

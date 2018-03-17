@@ -95,7 +95,7 @@ private:
 
 	bool bIsHoldingHammer = false;
 
-	bool bIsBeingTeleported = false;
+	bool bIsBeingTeleported = true;
 	
 	FVector SpawnLocation = FVector(0);
 
