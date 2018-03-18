@@ -56,7 +56,7 @@ void AHammer::Attack(float DeltaTime)
 	{
 		AddActorLocalRotation(FQuat(FRotator(-360.f, 0.f, 0.f)*DeltaTime));
 	
-		Player->SetCorrectMovementSpeed(false);
+		//Player->SetCorrectMovementSpeed(false);
 
 		if(HammerMesh->GetRelativeTransform().Rotator().Yaw <= -30.f)
 		{
@@ -68,7 +68,7 @@ void AHammer::Attack(float DeltaTime)
 	{
 		PlayerRotation = GetActorRotation();
 		SetActorRelativeRotation(FRotator(0.f, 0.f, 0.f));
-		Player->SetCorrectMovementSpeed(true);
+		//Player->SetCorrectMovementSpeed(true);
 	}
 }
 
