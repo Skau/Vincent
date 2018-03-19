@@ -33,10 +33,12 @@ void ACustomPlayerController::SetupInputComponent()
 		// Action bindings
 		InputComponent->BindAction("Jump", IE_Pressed, this, &ACustomPlayerController::Jump);
 		InputComponent->BindAction("Crouch", IE_Pressed, this, &ACustomPlayerController::ToggleCrouch);
-		InputComponent->BindAction("Crouch", IE_Released, this, &ACustomPlayerController::ToggleCrouch);
-		InputComponent->BindAction("ToggleHammer", IE_Released, this, &ACustomPlayerController::ToggleHammer);
-		InputComponent->BindAction("RegularAttack", IE_Released, this, &ACustomPlayerController::RegularAttack);
-		InputComponent->BindAction("Pause", IE_Released, this, &ACustomPlayerController::PauseGame);
+		InputComponent->BindAction("Crouch", IE_Pressed, this, &ACustomPlayerController::ToggleCrouch);
+		InputComponent->BindAction("ToggleHammer", IE_Pressed, this, &ACustomPlayerController::ToggleHammer);
+		InputComponent->BindAction("RegularAttack", IE_Pressed, this, &ACustomPlayerController::RegularAttack);
+		InputComponent->BindAction("Pause", IE_Pressed, this, &ACustomPlayerController::PauseGame);
+		InputComponent->BindAction("Sprint", IE_Pressed, this, &ACustomPlayerController::SprintOn);
+		InputComponent->BindAction("Sprint", IE_Released, this, &ACustomPlayerController::SprintOff);
 	}
 }
 
@@ -84,7 +86,33 @@ void ACustomPlayerController::Jump()
 {
 	if (bIsSequencePlaying || !Player) { return; }
 
-	Player->Jump();
+	if (!Player->bIsHoldingHammer)
+	{
+		Player->Jump();
+	}
+}
+
+void ACustomPlayerController::SprintOn()
+{
+	if (bIsSequencePlaying || !Player) { return; }
+
+
+	if (!Player->GetIsSprinting())
+	{
+		if (!Player->getIsHoldingHammer())
+		{
+			Player->SetMovementSpeed(800);
+			Player->bIsSprinting = true;
+		}
+	}
+}
+
+void ACustomPlayerController::SprintOff()
+{
+	if (bIsSequencePlaying || !Player) { return; }
+
+	Player->SetMovementSpeed(400);
+	Player->bIsSprinting = false;
 }
 
 void ACustomPlayerController::ToggleCrouch()

@@ -95,22 +95,25 @@ void APlayerCharacter::Tick(float DeltaTime)
 		SetActorLocation(SpawnLocation);
 	}
 
+	// If sprinting and the player picks up hammer, stop sprinting
+	if (bIsSprinting)
+	{
+		if (bIsHoldingHammer)
+		{
+			bIsSprinting = false;
+			SetMovementSpeed(400);
+		}
+	}
+
 	// Makes sure the jump height is correct depending on if the hammer is held or not
 	SetCorrectJumpHeight();
 
 	//ShadowDecal->AddRelativeLocation(FVector(0,0,-1),false);
 }
 
-void APlayerCharacter::SetCorrectMovementSpeed(bool Value)
+void APlayerCharacter::SetMovementSpeed(int Value)
 {
-	if (Value)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed;
-	}
-	else
-	{
-		GetCharacterMovement()->MaxWalkSpeed = NormalSpeed / 2;
-	}
+	GetCharacterMovement()->MaxWalkSpeed = Value;
 }
 
 void APlayerCharacter::SetCorrectJumpHeight()

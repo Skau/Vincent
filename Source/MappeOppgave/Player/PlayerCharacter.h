@@ -43,6 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	int GetHealth() { return Health; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetIsSprinting() { return bIsSprinting; }
+
 	bool GetIsBeingTeleported(){ return bIsBeingTeleported; }
 
 	void SetIsBeingTeleported(bool Value) { bIsBeingTeleported = Value; }
@@ -51,7 +54,7 @@ public:
 
 	void DecrementHealth() { Health--; }
 
-	void SetCorrectMovementSpeed(bool Value);
+	void SetMovementSpeed(int Value);
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
@@ -94,6 +97,8 @@ private:
 	bool bIsCloseEnough = false;
 
 	bool bIsHoldingHammer = false;
+
+	bool bIsSprinting;
 
 	bool bIsBeingTeleported = true;
 	

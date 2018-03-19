@@ -38,6 +38,9 @@ private:
 
 	void Jump();
 
+	void SprintOn();
+	void SprintOff();
+
 	void ToggleCrouch();
 	
 	void ToggleHammer();
