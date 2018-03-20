@@ -104,5 +104,5 @@ private:
 	
 	FVector SpawnLocation = FVector(0);
 
-	friend class ACustomPlayerController;
+	friend class ACharacterPlayerController;
 };

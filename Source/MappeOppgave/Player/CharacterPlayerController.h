@@ -4,25 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "CustomPlayerController.generated.h"
+#include "CharacterPlayerController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class MAPPEOPPGAVE_API ACustomPlayerController : public APlayerController
+class MAPPEOPPGAVE_API ACharacterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
-public:
-	UFUNCTION(BlueprintCallable)
-	bool GetIsSequencePlaying() { return bIsSequencePlaying; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetIsSequencePlaying(bool Value) { bIsSequencePlaying = Value; }
-
 private:
-	ACustomPlayerController(const FObjectInitializer& ObjectInitializer);
+	ACharacterPlayerController(const FObjectInitializer& ObjectInitializer);
 
 	virtual void BeginPlay() override;
 
@@ -43,7 +36,7 @@ private:
 	void SprintOff();
 
 	void ToggleCrouch();
-	
+
 	void ToggleHammer();
 
 	void RegularAttack();
@@ -53,4 +46,12 @@ private:
 	class APlayerCharacter* Player;
 
 	bool bIsSequencePlaying;
+	
+public:
+	UFUNCTION(BlueprintCallable)
+	bool GetIsSequencePlaying() { return bIsSequencePlaying; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsSequencePlaying(bool Value) { bIsSequencePlaying = Value; }
+	
 };
