@@ -3,6 +3,7 @@
 #include "EnemyChar.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "ProceduralMeshComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -13,6 +14,10 @@ AEnemyChar::AEnemyChar()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	ProcMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("ProceduralMesh"));
+	ProcMesh->SetupAttachment(RootComponent);
+
 	Health = 2;
 }
 
@@ -29,7 +34,7 @@ void AEnemyChar::BeginPlay()
 void AEnemyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	if (bWasHit)
 	{
 		Player->SetActorLocation(Player->GetActorLocation() + Direction* 1500.f	*DeltaTime);
