@@ -5,6 +5,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/World.h"
 #include "PlayerCharacter.h"
 
 ACharacterPlayerController::ACharacterPlayerController(const FObjectInitializer & ObjectInitializer)
@@ -17,6 +18,7 @@ void ACharacterPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	Player = Cast<APlayerCharacter>(GetPawn());
+	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = true;
 }
 
@@ -70,7 +72,14 @@ void ACharacterPlayerController::MoveForward(float Value)
 {
 	if (Player != nullptr && Value != 0.0f && !bIsSequencePlaying)
 	{
-		Player->AddMovementInput(GetActorForwardVector(), Value);
+		// find out which way is forward
+		const FRotator Rotation = GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get forward vector
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+
+		Player->AddMovementInput(Direction, Value);
 	}
 }
 
@@ -78,7 +87,14 @@ void ACharacterPlayerController::MoveRight(float Value)
 {
 	if (Player != nullptr && Value != 0.0f && !bIsSequencePlaying)
 	{
-		Player->AddMovementInput(GetActorRightVector(), Value);
+		// find out which way is right
+		const FRotator Rotation = GetControlRotation();
+		const FRotator YawRotation(0, Rotation.Yaw, 0);
+
+		// get right vector 
+		const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+
+		Player->AddMovementInput(Direction, Value);
 	}
 }
 
