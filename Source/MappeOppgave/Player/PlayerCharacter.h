@@ -37,7 +37,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool getIsCloseEnough() { return bIsCloseEnough; }
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool getIsHoldingHammer() { return bIsHoldingHammer; }
 
 	UFUNCTION(BlueprintCallable)
