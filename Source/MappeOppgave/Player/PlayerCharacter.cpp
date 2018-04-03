@@ -147,7 +147,7 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 		if (!bIsHoldingHammer)
 		{
 			bIsCloseEnough = false;
-			Hammer = nullptr;
+			//Hammer = nullptr;
 		}
 	}
 }
