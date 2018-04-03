@@ -74,6 +74,11 @@ void APlayerCharacter::BeginPlay()
 	// set up a notification for when this component is no longer overlapping something  
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
+	//finds the hammer in map so the player can pick it up
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHammer::StaticClass(), FoundActors);
+	Hammer = Cast<AHammer>(FoundActors[0]);
+
 	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
 	SpawnLocation = GetActorLocation();
@@ -135,7 +140,6 @@ void APlayerCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 		if (!bIsHoldingHammer)
 		{
 			bIsCloseEnough = true;
-			Hammer = Cast<AHammer>(OtherActor);
 		}
 	}
 }
@@ -147,7 +151,6 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 		if (!bIsHoldingHammer)
 		{
 			bIsCloseEnough = false;
-			//Hammer = nullptr;
 		}
 	}
 }
