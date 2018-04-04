@@ -77,7 +77,15 @@ void APlayerCharacter::BeginPlay()
 	//finds the hammer in map so the player can pick it up
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHammer::StaticClass(), FoundActors);
-	Hammer = Cast<AHammer>(FoundActors[0]);
+
+	if (FoundActors.Num())
+	{
+		Hammer = Cast<AHammer>(FoundActors[0]);
+	}
+	else
+	{
+		Hammer = nullptr;
+	}
 
 	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
