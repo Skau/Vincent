@@ -45,6 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetBIsCloseEnough(bool Value) { bIsCloseEnough = Value; }
+
+	UFUNCTION(BlueprintCallable)
+		void SetNewSpawnPoint(FVector NewSpawn) { SpawnLocation = NewSpawn; }
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool GetIsSprinting() { return bIsSprinting; }

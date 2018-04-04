@@ -106,6 +106,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	if (GetActorLocation().Z < -2000)
 	{
 		SetActorLocation(SpawnLocation);
+		//Health--;
 	}
 
 	// If sprinting and the player picks up hammer, stop sprinting
