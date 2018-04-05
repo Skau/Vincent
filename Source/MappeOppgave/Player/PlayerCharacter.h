@@ -47,11 +47,10 @@ public:
 	void SetBIsCloseEnough(bool Value) { bIsCloseEnough = Value; }
 
 	UFUNCTION(BlueprintCallable)
-		void SetNewSpawnPoint(FVector NewSpawn) { SpawnLocation = NewSpawn; }
+	void SetNewSpawnPoint(FVector NewSpawn) { SpawnLocation = NewSpawn; }
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool GetIsSprinting() { return bIsSprinting; }
-
 	
 	bool GetIsBeingTeleported(){ return bIsBeingTeleported; }
 
@@ -63,6 +62,11 @@ public:
 
 	void SetMovementSpeed(int Value);
 
+	UFUNCTION(BlueprintCallable)
+	void SetIsAttacking(bool Value) { bIsAttacking = Value; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetIsAttacking() { return bIsAttacking; }
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
@@ -72,8 +76,6 @@ private:
 	void WhenDroppingHammer();
 
 	void WhenPickingUpHammer();
-
-	void Attack();
 
 	void SetSpawnLocation(FVector Location) { SpawnLocation = Location; }
 
@@ -111,6 +113,8 @@ private:
 	bool bIsBeingTeleported = true;
 	
 	FVector SpawnLocation = FVector(0);
+
+	bool bIsAttacking = false;
 
 	friend class ACharacterPlayerController;
 };

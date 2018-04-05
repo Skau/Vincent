@@ -3,7 +3,6 @@
 #include "Hammer.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/BoxComponent.h"
-#include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
@@ -22,6 +21,9 @@ AHammer::AHammer()
 	HammerMesh->bGenerateOverlapEvents = false;
 	HammerMesh->WakeRigidBody();
 	HammerMesh->SetSimulatePhysics(true);
+
+	CollisionCapsule = CreateDefaultSubobject<UBoxComponent>(TEXT("CollisionCapsule"));
+	CollisionCapsule->SetupAttachment(HammerMesh);
 }
 
 // Called when the game starts or when spawned
@@ -29,7 +31,7 @@ void AHammer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// set up a notification for when this component overlaps something  
+	// set up a notification for when this component overlaps something with the mesh 
 	HammerMesh->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);		
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
@@ -40,33 +42,12 @@ void AHammer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	Attack(DeltaTime);
-
 	if (bWasHit && EnemyHit)
 	{
 		EnemyHit->SetActorLocation(EnemyHit->GetActorLocation() + Direction * 1500.f	*DeltaTime);
 	}
 	/***TICK IS TURNED ON***/
 
-}
-
-void AHammer::Attack(float DeltaTime)
-{
-	if (bIsAttacking && Player)
-	{
-		AddActorLocalRotation(FQuat(FRotator(-360.f, 0.f, 0.f)*DeltaTime));
-
-		if(HammerMesh->GetRelativeTransform().Rotator().Yaw <= -30.f)
-		{
-			bIsAttacking = false;
-		}
-	}
-
-	if (!bIsAttacking && Player->getIsHoldingHammer())
-	{
-		PlayerRotation = GetActorRotation();
-		SetActorRelativeRotation(FRotator(0.f, 0.f, 0.f));
-	}
 }
 
 void AHammer::OnDropped()
@@ -93,7 +74,7 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		if(!bWasHit && bIsAttacking)
+		if(!bWasHit && Player->GetIsAttacking())
 		{
 			EnemyHit = Cast<AEnemyChar>(OtherActor);
 			if (EnemyHit)

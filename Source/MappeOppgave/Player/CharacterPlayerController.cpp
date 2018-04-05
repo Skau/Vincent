@@ -163,7 +163,10 @@ void ACharacterPlayerController::RegularAttack()
 {
 	if (bIsSequencePlaying || !Player) { return; }
 
-	Player->Attack();
+	if(Player->getIsHoldingHammer())
+	{
+		Player->SetIsAttacking(true);
+	}
 }
 
 void ACharacterPlayerController::PauseGame()

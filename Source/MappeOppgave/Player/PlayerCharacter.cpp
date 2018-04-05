@@ -194,20 +194,7 @@ void APlayerCharacter::WhenPickingUpHammer()
 		//Hammer->SetPhysics(false);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		Hammer->OnPickedUp();
+		Hammer->SetActorRelativeRotation(FRotator(0));
 		bIsHoldingHammer = true;
-	}
-}
-
-void APlayerCharacter::Attack()
-{
-	if (!Hammer) { return; }
-
-	if (bIsHoldingHammer)
-	{
-		Hammer->SetIsAttacking(true);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NOT HOLDING HAMMER"))
 	}
 }

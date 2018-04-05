@@ -7,6 +7,7 @@
 #include "Hammer.generated.h"
 
 class APlayerCharacter;
+class UBoxComponent;
 
 UCLASS()
 class MAPPEOPPGAVE_API AHammer : public AActor
@@ -27,18 +28,15 @@ public:
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private:
-	void Attack(float DeltaTime);
-
 	void OnDropped();
 
 	void OnPickedUp();
 
 	void SetPhysics(bool Value);
 
-	void SetIsAttacking(bool Value) { bIsAttacking = Value; }
+	UPROPERTY(VisibleAnywhere)
+	UBoxComponent* CollisionCapsule;
 
-	bool GetIsAttacking() { return bIsAttacking; }
-	
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* HammerMesh = nullptr;
 
@@ -57,8 +55,6 @@ private:
 	bool bWasHit = false;
 
 	bool bIsDropped;
-
-	bool bIsAttacking;
 
 	friend class APlayerCharacter;
 };
