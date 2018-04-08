@@ -28,15 +28,10 @@ private:
 	FVector TargetLocation;
 
 	UPROPERTY(EditAnywhere)
-	float ReturnDelay = 2.f;
-
-	UPROPERTY(EditAnywhere)
 	bool bIsActive = true;
 
-	UPROPERTY(EditAnywhere)
-	float Velocity = 500.f;
-
-	bool bTimerSet = false;
+	UPROPERTY(EditAnywhere, meta = (ClampMin = "0.1", ClampMax = "1.0"))
+	float SpeedConstant = 0.5;
 
 	void Move(float DeltaTime);
 
@@ -45,6 +40,6 @@ private:
 	FVector GlobalStartLocation;
 	FVector GlobalTargetLocation;
 
-	FTimerHandle TH_SwapDelay;
+	float TotalDistanceToTravel;
 	
 };

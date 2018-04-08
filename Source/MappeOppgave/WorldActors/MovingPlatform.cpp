@@ -3,7 +3,8 @@
 #include "MovingPlatform.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
-
+#include "Kismet/KismetMathLibrary.h"
+#include "Math/UnrealMath.h"
 
 // Sets default values
 AMovingPlatform::AMovingPlatform()
@@ -19,6 +20,7 @@ void AMovingPlatform::BeginPlay()
 	
 	GlobalStartLocation = GetActorLocation();
 	GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);
+	TotalDistanceToTravel = FVector::DotProduct((GlobalTargetLocation - GetActorLocation()), (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal());
 }
 
 // Called every frame
@@ -37,18 +39,15 @@ void AMovingPlatform::Move(float DeltaTime)
 	FVector Location = GetActorLocation();
 	FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
 
-	if (FVector::DotProduct((GlobalTargetLocation - Location), Direction) < 0.0f)
+	auto DistanceLeftToTravel = FVector::DotProduct((GlobalTargetLocation - Location), Direction);
+	auto DistanceFromStartLocation = TotalDistanceToTravel - DistanceLeftToTravel;
+	auto alpha = UKismetMathLibrary::NormalizeToRange(DistanceFromStartLocation, 0, TotalDistanceToTravel);
+
+	SetActorLocation(FMath::VInterpTo(Location, GlobalTargetLocation, DeltaTime, alpha + SpeedConstant), true);
+
+	if (DistanceLeftToTravel < 0.3f)
 	{
-		if (!bTimerSet)
-		{
-			GetWorld()->GetTimerManager().SetTimer(TH_SwapDelay, this, &AMovingPlatform::SwapDirection, ReturnDelay);
-			bTimerSet = true;
-		}
-	}
-	else
-	{
-		Location += Velocity * DeltaTime * Direction;
-		SetActorLocation(Location, true);
+		SwapDirection();
 	}
 }
 
@@ -61,6 +60,6 @@ void AMovingPlatform::SwapDirection()
 	GlobalStartLocation = GlobalTargetLocation;
 	GlobalTargetLocation = Swap;
 
-	bTimerSet = false;
+	TotalDistanceToTravel = FVector::DotProduct((GlobalTargetLocation - GetActorLocation()), (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal());
 }
 
