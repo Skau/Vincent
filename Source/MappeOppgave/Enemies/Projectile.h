@@ -24,6 +24,8 @@ public:
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	void SetMoveDirection(FVector Direction) { MoveDirection = Direction; }
+
 private:
 
 	UPROPERTY(EditAnywhere)
@@ -35,4 +37,5 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
 	
+	FVector MoveDirection = FVector(0);
 };

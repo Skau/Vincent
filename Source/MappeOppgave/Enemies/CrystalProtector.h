@@ -25,7 +25,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	void Move(float DeltaTime);
+	void Move(float DeltaTime, float DotProduct);
 
 	void Shoot();
 
@@ -37,24 +37,19 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
 
-	UPROPERTY(EditAnywhere)
-	float StartMoveSpeed = 100.f;
+	UPROPERTY(EditAnywhere, Category ="Setup")
+	float ActiveRange = 5000.f;
 
-	UPROPERTY(EditAnywhere)
-	float StartShootRate = 2.f;
+	UPROPERTY(EditAnywhere, Category="Setup")
+	float MoveSpeed = 100.f;
 
-	UPROPERTY(EditAnywhere)
-	float ShootRange = 2000.f;
+	UPROPERTY(EditAnywhere, Category = "Setup")
+	float ShootRate = 2.f;
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AProjectile> Projectile_BP;
 
-	float MoveSpeed = StartMoveSpeed;
-	float ShootRate = StartShootRate;
-
 	class APlayerCharacter* Player;
-
-	bool bIsActive;
 
 	bool bCanShoot;
 

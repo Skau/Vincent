@@ -13,16 +13,14 @@ UCLASS()
 class MAPPEOPPGAVE_API AMappeOppgaveGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+
 public:
 	UFUNCTION(BlueprintCallable)
 	int GetCrystalsDestroyed() { return CrystalsDestroyed; }
-
 	void IncreaseCrystalsDestroyed() { CrystalsDestroyed++; }
 
 private:
 	int CrystalsDestroyed = 0;
 
-	
-	
 };

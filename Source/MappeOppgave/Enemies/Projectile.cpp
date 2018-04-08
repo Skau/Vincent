@@ -36,7 +36,6 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto MoveDirection = FVector(-1.f, 0.f, 0.f);
 	auto NewLocation = GetActorLocation() + MoveDirection * Speed * DeltaTime;
 	SetActorLocation(NewLocation);
 }

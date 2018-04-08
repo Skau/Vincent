@@ -5,7 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-#include "Player/PlayerCharacter.h"
+#include "Player/Hammer.h"
 #include "GameModes/MappeOppgaveGameModeBase.h"
 #include "CrystalIndicator.h"
 
@@ -45,8 +45,8 @@ void ACrystal::Tick(float DeltaTime)
 
 void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	auto Player = Cast<APlayerCharacter>(OtherActor);
-	if (Player)
+	auto Hammer = Cast<AHammer>(OtherActor);
+	if (Hammer)
 	{
 		if (DeathParticle)
 		{

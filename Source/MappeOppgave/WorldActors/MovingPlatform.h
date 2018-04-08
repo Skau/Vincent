@@ -28,13 +28,13 @@ private:
 	FVector TargetLocation;
 
 	UPROPERTY(EditAnywhere)
-	float ReturnDelay = 1.f;
+	float ReturnDelay = 2.f;
 
 	UPROPERTY(EditAnywhere)
 	bool bIsActive = true;
 
 	UPROPERTY(EditAnywhere)
-	float Velocity = 100.f;
+	float Velocity = 500.f;
 
 	bool bTimerSet = false;
 

@@ -11,7 +11,8 @@
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
-
+#include "Engine/World.h"
+#include "TimerManager.h"
 #include "Hammer.h"
 #include "Enemies/EnemyChar.h"
 
@@ -74,6 +75,19 @@ void APlayerCharacter::BeginPlay()
 	// set up a notification for when this component is no longer overlapping something  
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
+	//finds the hammer in map so the player can pick it up
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHammer::StaticClass(), FoundActors);
+
+	if (FoundActors.Num())
+	{
+		Hammer = Cast<AHammer>(FoundActors[0]);
+	}
+	else
+	{
+		Hammer = nullptr;
+	}
+
 	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
 	SpawnLocation = GetActorLocation();
@@ -84,15 +98,10 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Health <= 0)
-	{
-		SetActorLocation(SpawnLocation);
-		Health = 3;
-	}
-
 	if (GetActorLocation().Z < -2000)
 	{
 		SetActorLocation(SpawnLocation);
+		//Health--;
 	}
 
 	// If sprinting and the player picks up hammer, stop sprinting
@@ -104,7 +113,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 			SetMovementSpeed(400);
 		}
 	}
-
 	// Makes sure the jump height is correct depending on if the hammer is held or not
 	SetCorrectJumpHeight();
 
@@ -135,7 +143,6 @@ void APlayerCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActo
 		if (!bIsHoldingHammer)
 		{
 			bIsCloseEnough = true;
-			Hammer = Cast<AHammer>(OtherActor);
 		}
 	}
 }
@@ -147,17 +154,33 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 		if (!bIsHoldingHammer)
 		{
 			bIsCloseEnough = false;
-			Hammer = nullptr;
 		}
 	}
 }
 
 float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (!bHasBeenHitRecently)
+	{
+		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	Health -= DamageAmount;
+		Health -= DamageAmount;
 
+		if (Health > 0)
+		{
+			// Runs BP timeline
+			Knockback(DamageCauser);
+
+			bHasBeenHitRecently = true;
+			GetWorld()->GetTimerManager().SetTimer(TH_HasBeenHitRecentlyTimer, this, &APlayerCharacter::ResetHasBeenHitTimer, 1.f);
+
+		}
+		else if (Health <= 0)
+		{
+			SetActorLocation(SpawnLocation);
+			Health = 3;
+		}
+	}
 	return DamageAmount;
 }
 
@@ -182,20 +205,7 @@ void APlayerCharacter::WhenPickingUpHammer()
 		//Hammer->SetPhysics(false);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		Hammer->OnPickedUp();
+		Hammer->SetActorRelativeRotation(FRotator(0));
 		bIsHoldingHammer = true;
-	}
-}
-
-void APlayerCharacter::Attack()
-{
-	if (!Hammer) { return; }
-
-	if (bIsHoldingHammer)
-	{
-		Hammer->SetIsAttacking(true);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NOT HOLDING HAMMER"))
 	}
 }

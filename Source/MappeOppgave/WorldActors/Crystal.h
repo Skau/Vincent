@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Enemies/EnemyChar.h"
 #include "Crystal.generated.h"
 
 UCLASS()

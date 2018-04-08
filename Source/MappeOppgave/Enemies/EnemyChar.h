@@ -24,28 +24,25 @@ public:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	class UProceduralMeshComponent* ProcMesh;
+	UFUNCTION(BlueprintImplementableEvent)
+	void Knockback(AActor* DamageCauser);
+
+	UFUNCTION(BlueprintCallable)
+	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
 
 private:
-	void ResetAttackTimer() { bHasAttackedRecently = false; }
-
 	UPROPERTY(EditDefaultsOnly)
 	float Health;
 	
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* DeathParticle = nullptr;
 
-	bool bHasAttackedRecently;
-
-	FTimerHandle TH_Attack;
-	FTimerHandle TH_ResetKnockback;
-
-	FVector Direction;
-
 	class APlayerCharacter* Player;
 
-	bool bWasHit = false;
+	FTimerHandle TH_HasTakenDamageTimer;
 
-	void SetHit() { bWasHit = false; }
+	bool bHasTakenDamageRecently = false;
+	bool bHasBeenKnockedbackRecently = false;
+
+	void ResetHasTakenDamageTimer() { bHasTakenDamageRecently = false; }
 };
