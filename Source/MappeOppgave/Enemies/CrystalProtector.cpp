@@ -6,7 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "Engine/World.h"
-
+#include "PhysicsEngine/RadialForceComponent.h"
 #include "GameModes/MappeOppgaveGameModeBase.h"
 #include "Player/PlayerCharacter.h"
 #include "Projectile.h"
@@ -51,18 +51,11 @@ void ACrystalProtector::Tick(float DeltaTime)
 
 	FVector CurrentLocation = GetActorLocation();
 	FVector PlayerLocation = Player->GetActorLocation();
-	if (CurrentLocation.Y - PlayerLocation.Y < ShootRange && CurrentLocation.X - PlayerLocation.X < ShootRange)
-	{
-		bIsActive = true;
-	}
-	else
-	{
-		bIsActive = false;
-	}
 
-	if (bIsActive)
+	if (GetDistanceTo(Player) < ActiveRange)
 	{
-		Move(DeltaTime);
+		auto DotProduct = FVector::DotProduct((PlayerLocation - CurrentLocation).GetSafeNormal(), GetActorRightVector());
+		Move(DeltaTime, DotProduct);
 		Shoot();
 	}
 
@@ -77,41 +70,36 @@ void ACrystalProtector::Tick(float DeltaTime)
 			ShootRate = StartShootRate / VariableMultiplier;
 		}
 	}
-
 }
 
-void ACrystalProtector::Move(float DeltaTime)
+void ACrystalProtector::Move(float DeltaTime, float DotProduct)
 {
-	if (Player)
+	FVector CurrentLocation = GetActorLocation();
+	FVector MoveDirection = FVector(0);
+
+	if (DotProduct < 0)
 	{
-		FVector CurrentLocation = GetActorLocation();
-		FVector MoveDirection = FVector(0);
-
-		float DeltaYLocation = Player->GetActorLocation().Y - CurrentLocation.Y;
-
-		if (DeltaYLocation > 5.f)
-		{
-			MoveDirection = FVector(0.f, 1.f, 0.f);
-		}
-		else if (DeltaYLocation < -5.f)
-		{
-			MoveDirection = FVector(0.f, -1.f, 0.f);
-		}
-
-		FVector NewLocation = CurrentLocation + MoveDirection * MoveSpeed * DeltaTime;
-		SetActorLocation(NewLocation, true);
+		MoveDirection = -GetActorRightVector();
 	}
+	else
+	{
+		MoveDirection = GetActorRightVector();
+	}
+
+	FVector NewLocation = CurrentLocation + MoveDirection * MoveSpeed * DeltaTime;
+	SetActorLocation(NewLocation, true);
 }
 
 void ACrystalProtector::Shoot()
 {
 	if (bCanShoot && Projectile_BP)
 	{
-		auto SpawnDirection = FVector(-1, 0, 0);
+		auto SpawnDirection = GetActorForwardVector();
 		auto SpawnRotation = SpawnDirection.Rotation();
-		auto SpawnLocation = GetActorLocation() + FVector(-100, 0, 0);
+		auto SpawnLocation = GetActorLocation() + SpawnDirection * 100;
 
-		GetWorld()->SpawnActor<AProjectile>(Projectile_BP, SpawnLocation, SpawnRotation);
+		auto proj = GetWorld()->SpawnActor<AProjectile>(Projectile_BP, SpawnLocation, SpawnRotation);
+		proj->SetMoveDirection(SpawnDirection);
 
 		GetWorld()->GetTimerManager().SetTimer(TH_ShootTimer, this, &ACrystalProtector::ResetShootTimer, ShootRate);
 		bCanShoot = false;
