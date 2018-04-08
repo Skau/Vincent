@@ -11,7 +11,8 @@
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
-
+#include "Engine/World.h"
+#include "TimerManager.h"
 #include "Hammer.h"
 #include "Enemies/EnemyChar.h"
 
@@ -97,12 +98,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Health <= 0)
-	{
-		SetActorLocation(SpawnLocation);
-		Health = 3;
-	}
-
 	if (GetActorLocation().Z < -2000)
 	{
 		SetActorLocation(SpawnLocation);
@@ -118,7 +113,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 			SetMovementSpeed(400);
 		}
 	}
-
 	// Makes sure the jump height is correct depending on if the hammer is held or not
 	SetCorrectJumpHeight();
 
@@ -166,10 +160,27 @@ void APlayerCharacter::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor*
 
 float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
 {
-	Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	if (!bHasBeenHitRecently)
+	{
+		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	Health -= DamageAmount;
+		Health -= DamageAmount;
 
+		if (Health > 0)
+		{
+			// Runs BP timeline
+			Knockback(DamageCauser);
+
+			bHasBeenHitRecently = true;
+			GetWorld()->GetTimerManager().SetTimer(TH_HasBeenHitRecentlyTimer, this, &APlayerCharacter::ResetHasBeenHitTimer, 1.f);
+
+		}
+		else if (Health <= 0)
+		{
+			SetActorLocation(SpawnLocation);
+			Health = 3;
+		}
+	}
 	return DamageAmount;
 }
 

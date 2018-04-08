@@ -70,6 +70,9 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void Knockback(AActor* EnemyCauser);
+
 private:
 	void SetCorrectJumpHeight();
 
@@ -111,10 +114,16 @@ private:
 	bool bIsSprinting;
 
 	bool bIsBeingTeleported = true;
-	
+
 	FVector SpawnLocation = FVector(0);
 
 	bool bIsAttacking = false;
+
+	bool bHasBeenHitRecently = false;
+
+	void ResetHasBeenHitTimer() { bHasBeenHitRecently = false; }
+
+	FTimerHandle TH_HasBeenHitRecentlyTimer;
 
 	friend class ACharacterPlayerController;
 };

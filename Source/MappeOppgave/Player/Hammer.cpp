@@ -41,13 +41,6 @@ void AHammer::BeginPlay()
 void AHammer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bWasHit && EnemyHit)
-	{
-		EnemyHit->SetActorLocation(EnemyHit->GetActorLocation() + Direction * 1500.f	*DeltaTime);
-	}
-	/***TICK IS TURNED ON***/
-
 }
 
 void AHammer::OnDropped()
@@ -74,9 +67,9 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		if(!bWasHit && Player->GetIsAttacking())
+		if (Player->GetIsAttacking())
 		{
-			EnemyHit = Cast<AEnemyChar>(OtherActor);
+			auto EnemyHit = Cast<AEnemyChar>(OtherActor);
 			if (EnemyHit)
 			{
 				FHitResult CastHit;
@@ -86,20 +79,9 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 					1.f,
 					GetActorForwardVector(),
 					CastHit, UGameplayStatics::GetPlayerController(GetWorld(), 0),
-					this,
+					Player,
 					UDamageType::StaticClass()
 				);
-
-				//Finds direction for knockback
-				FVector EnemyLocation = FVector(EnemyHit->GetActorLocation().X, EnemyHit->GetActorLocation().Y, 0.f);
-				FVector PlayerLocation = FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, 0.f);
-				Direction = (EnemyLocation - PlayerLocation).GetSafeNormal();
-
-				bWasHit = true;
-				GetWorld()->GetTimerManager().SetTimer(TH_ResetKnockback, this, &AHammer::SetHit, 0.1f);
-
-				// Commented out for AOE
-				//bIsAttacking = false;
 			}
 		}
 	}

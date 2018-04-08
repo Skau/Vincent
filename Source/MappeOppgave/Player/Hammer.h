@@ -42,18 +42,6 @@ private:
 
 	APlayerCharacter* Player;
 
-	FRotator PlayerRotation;
-
-	FVector Direction;
-
-	FTimerHandle TH_ResetKnockback;
-
-	class AEnemyChar* EnemyHit = nullptr;
-
-	void SetHit() { bWasHit = false; }
-
-	bool bWasHit = false;
-
 	bool bIsDropped;
 
 	friend class APlayerCharacter;

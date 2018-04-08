@@ -3,7 +3,6 @@
 #include "EnemyChar.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "ProceduralMeshComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -14,9 +13,6 @@ AEnemyChar::AEnemyChar()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	ProcMesh = CreateDefaultSubobject<UProceduralMeshComponent>(TEXT("ProceduralMesh"));
-	ProcMesh->SetupAttachment(RootComponent);
 
 	Health = 2;
 }
@@ -34,11 +30,6 @@ void AEnemyChar::BeginPlay()
 void AEnemyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bWasHit)
-	{
-		Player->SetActorLocation(Player->GetActorLocation() + Direction* 1500.f	*DeltaTime);
-	}
 }
 
 void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
@@ -46,40 +37,43 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
 		FHitResult CastHit;
-		if (!bHasAttackedRecently)
+		UGameplayStatics::ApplyPointDamage(
+			OtherActor,
+			1.f,
+			GetActorForwardVector(),
+			CastHit, GetController(),
+			this,
+			UDamageType::StaticClass()
+		);
+
+		if (!bHasBeenKnockedbackRecently)
 		{
-			UGameplayStatics::ApplyPointDamage(
-				OtherActor,
-				1.f,
-				GetActorForwardVector(),
-				CastHit,GetController(),
-				this,
-				UDamageType::StaticClass()
-			);
-
-			FVector EnemyLocation = FVector(GetActorLocation().X, GetActorLocation().Y, 0.f);
-			FVector PlayerLocation = FVector(Player->GetActorLocation().X, Player->GetActorLocation().Y, 0.f);
-			Direction = (PlayerLocation - EnemyLocation).GetSafeNormal();
-
-			bWasHit = true;
-			GetWorld()->GetTimerManager().SetTimer(TH_ResetKnockback, this, &AEnemyChar::SetHit, 0.1f);
-
-			bHasAttackedRecently = true;
-			GetWorld()->GetTimerManager().SetTimer(TH_Attack, this, &AEnemyChar::ResetAttackTimer, 2.f);
+			Knockback(this);
+			bHasBeenKnockedbackRecently = true;
 		}
 	}
 }
 
 float AEnemyChar::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
-	Health -= DamageAmount;
-	if (Health <= 0)
+	if (!bHasTakenDamageRecently)
 	{
-		if (DeathParticle)
+		Health -= DamageAmount;
+		
+		if (Health <= 0)
 		{
-			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
+			if (DeathParticle)
+			{
+				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
+			}
+			Destroy();
+			return DamageAmount;
 		}
-		Destroy();
+
+		Knockback(DamageCauser);
+
+		bHasTakenDamageRecently = true;
+		GetWorld()->GetTimerManager().SetTimer(TH_HasTakenDamageTimer, this, &AEnemyChar::ResetHasTakenDamageTimer, 0.1f);
 	}
-		return DamageAmount;
+	return DamageAmount;
 }
