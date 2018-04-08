@@ -30,12 +30,26 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool bIsActive = true;
 
+	UPROPERTY(EditAnywhere)
+	bool bLerpMove = true;
+
+	UPROPERTY(EditAnywhere)
+	float ReturnDelay = 2.f;
+
+	UPROPERTY(EditAnywhere)
+	float Velocity = 500.f;
+
+	bool bTimerSet = false;
+
 	UPROPERTY(EditAnywhere, meta = (ClampMin = "0.1", ClampMax = "1.0"))
 	float SpeedConstant = 0.5;
 
+	void LerpMove(float DeltaTime);
 	void Move(float DeltaTime);
 
 	void SwapDirection();
+
+	FTimerHandle TH_SwapDelay;
 
 	FVector GlobalStartLocation;
 	FVector GlobalTargetLocation;

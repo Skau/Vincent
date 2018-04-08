@@ -30,11 +30,18 @@ void AMovingPlatform::Tick(float DeltaTime)
 
 	if (bIsActive)
 	{
-		Move(DeltaTime);
+		if (bLerpMove)
+		{
+			LerpMove(DeltaTime);
+		}
+		else
+		{
+			Move(DeltaTime);
+		}
 	}
 }
 
-void AMovingPlatform::Move(float DeltaTime)
+void AMovingPlatform::LerpMove(float DeltaTime)
 {
 	FVector Location = GetActorLocation();
 	FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
@@ -48,6 +55,26 @@ void AMovingPlatform::Move(float DeltaTime)
 	if (DistanceLeftToTravel < 0.3f)
 	{
 		SwapDirection();
+	}
+}
+
+void AMovingPlatform::Move(float DeltaTime)
+{
+	FVector Location = GetActorLocation();
+	FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
+
+	if (FVector::DotProduct((GlobalTargetLocation - Location), Direction) < 0.0f)
+	{
+		if (!bTimerSet)
+		{
+			GetWorld()->GetTimerManager().SetTimer(TH_SwapDelay, this, &AMovingPlatform::SwapDirection, ReturnDelay);
+			bTimerSet = true;
+		}
+	}
+	else
+	{
+		Location += Velocity * DeltaTime * Direction;
+		SetActorLocation(Location, true);
 	}
 }
 
