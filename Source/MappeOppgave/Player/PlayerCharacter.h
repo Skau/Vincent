@@ -34,6 +34,9 @@ public:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetIsDead() { return bIsDead; }
+
 	UFUNCTION(BlueprintCallable)
 	bool getIsCloseEnough() { return bIsCloseEnough; }
 
@@ -42,6 +45,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int GetHealth() { return Health; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetFullHealth() { Health = 3; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetToAlive() { bIsDead = false; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetBIsCloseEnough(bool Value) { bIsCloseEnough = Value; }
@@ -72,6 +81,9 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Knockback(AActor* EnemyCauser);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FVector GetSpawnLocation() { return SpawnLocation; }
 
 private:
 	void SetCorrectJumpHeight();
@@ -105,7 +117,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UMaterialInterface* ShadowMaterial;*/
 
+	FVector SpawnLocation = FVector(0);
+
 	float NormalSpeed;
+
+	bool bIsDead;
 
 	bool bIsCloseEnough = false;
 
@@ -114,8 +130,6 @@ private:
 	bool bIsSprinting;
 
 	bool bIsBeingTeleported = true;
-
-	FVector SpawnLocation = FVector(0);
 
 	bool bIsAttacking = false;
 

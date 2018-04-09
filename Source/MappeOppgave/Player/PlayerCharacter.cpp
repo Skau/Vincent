@@ -177,8 +177,10 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 		}
 		else if (Health <= 0)
 		{
-			SetActorLocation(SpawnLocation);
-			Health = 3;
+			bIsDead = true;
+			WhenDroppingHammer();
+			//SetActorLocation(SpawnLocation);
+			//Health = 3;
 		}
 	}
 	return DamageAmount;

@@ -56,7 +56,7 @@ void ACharacterPlayerController::Tick(float DeltaTime)
 
 void ACharacterPlayerController::RotateToCursor()
 {
-	if (Player != nullptr)
+	if (!Player->GetIsDead())
 	{
 		FVector WorldLocation;
 		FVector WorldDirection;
@@ -70,7 +70,7 @@ void ACharacterPlayerController::RotateToCursor()
 
 void ACharacterPlayerController::MoveForward(float Value)
 {
-	if (Player != nullptr && Value != 0.0f && !bIsSequencePlaying)
+	if (!Player->GetIsDead() && Value != 0.0f && !bIsSequencePlaying)
 	{
 		// find out which way is forward
 		const FRotator Rotation = GetControlRotation();
@@ -85,7 +85,7 @@ void ACharacterPlayerController::MoveForward(float Value)
 
 void ACharacterPlayerController::MoveRight(float Value)
 {
-	if (Player != nullptr && Value != 0.0f && !bIsSequencePlaying)
+	if (!Player->GetIsDead() && Value != 0.0f && !bIsSequencePlaying)
 	{
 		// find out which way is right
 		const FRotator Rotation = GetControlRotation();
@@ -100,7 +100,7 @@ void ACharacterPlayerController::MoveRight(float Value)
 
 void ACharacterPlayerController::Jump()
 {
-	if (bIsSequencePlaying || !Player) { return; }
+	if (bIsSequencePlaying || !Player->GetIsDead()) { return; }
 
 	if (!Player->bIsHoldingHammer)
 	{
@@ -110,8 +110,7 @@ void ACharacterPlayerController::Jump()
 
 void ACharacterPlayerController::SprintOn()
 {
-	if (bIsSequencePlaying || !Player) { return; }
-
+	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
 
 	if (!Player->GetIsSprinting())
 	{
@@ -125,7 +124,7 @@ void ACharacterPlayerController::SprintOn()
 
 void ACharacterPlayerController::SprintOff()
 {
-	if (bIsSequencePlaying || !Player) { return; }
+	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
 
 	Player->SetMovementSpeed(400);
 	Player->bIsSprinting = false;
@@ -133,7 +132,7 @@ void ACharacterPlayerController::SprintOff()
 
 void ACharacterPlayerController::ToggleCrouch()
 {
-	if (bIsSequencePlaying || !Player) { return; }
+	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
 
 	if (Player->CanCrouch())
 	{
@@ -147,7 +146,7 @@ void ACharacterPlayerController::ToggleCrouch()
 
 void ACharacterPlayerController::ToggleHammer()
 {
-	if (bIsSequencePlaying || !Player) { return; }
+	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
 
 	if (Player->getIsHoldingHammer())
 	{
@@ -161,7 +160,7 @@ void ACharacterPlayerController::ToggleHammer()
 
 void ACharacterPlayerController::RegularAttack()
 {
-	if (bIsSequencePlaying || !Player) { return; }
+	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
 
 	if(Player->getIsHoldingHammer())
 	{
@@ -171,7 +170,7 @@ void ACharacterPlayerController::RegularAttack()
 
 void ACharacterPlayerController::PauseGame()
 {
-	if (!bIsSequencePlaying)
+	if (!bIsSequencePlaying && !Player->GetIsDead())
 	{
 		UGameplayStatics::SetGamePaused(GetWorld(), true);
 	}
