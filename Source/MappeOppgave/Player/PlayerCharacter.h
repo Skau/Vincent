@@ -37,6 +37,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool GetIsDead() { return bIsDead; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetIsJumpButtonPressed() { return bJumpButtonPressed; }
+
 	UFUNCTION(BlueprintCallable)
 	bool getIsCloseEnough() { return bIsCloseEnough; }
 
@@ -86,6 +89,8 @@ public:
 	FVector GetSpawnLocation() { return SpawnLocation; }
 
 private:
+	void SetIsJumpButtonPressed(bool Value) { bJumpButtonPressed = Value; }
+
 	void SetCorrectJumpHeight();
 
 	void WhenDroppingHammer();
@@ -120,6 +125,8 @@ private:
 	FVector SpawnLocation = FVector(0);
 
 	float NormalSpeed;
+
+	bool bJumpButtonPressed;
 
 	bool bIsDead;
 

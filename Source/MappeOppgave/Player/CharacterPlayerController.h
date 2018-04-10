@@ -29,7 +29,9 @@ private:
 
 	void MoveRight(float Value);
 
-	void Jump();
+	void JumpButtonPressed();
+
+	void JumpButtonReleased();
 
 	void SprintOn();
 

@@ -33,7 +33,8 @@ void ACharacterPlayerController::SetupInputComponent()
 		InputComponent->BindAxis("MoveRight", this, &ACharacterPlayerController::MoveRight);
 
 		// Action bindings
-		InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacterPlayerController::Jump);
+		InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacterPlayerController::JumpButtonPressed);
+		InputComponent->BindAction("Jump", IE_Released, this, &ACharacterPlayerController::JumpButtonReleased);
 		InputComponent->BindAction("Crouch", IE_Pressed, this, &ACharacterPlayerController::ToggleCrouch);
 		InputComponent->BindAction("Crouch", IE_Pressed, this, &ACharacterPlayerController::ToggleCrouch);
 		InputComponent->BindAction("ToggleHammer", IE_Pressed, this, &ACharacterPlayerController::ToggleHammer);
@@ -98,13 +99,23 @@ void ACharacterPlayerController::MoveRight(float Value)
 	}
 }
 
-void ACharacterPlayerController::Jump()
+void ACharacterPlayerController::JumpButtonPressed()
 {
-	if (bIsSequencePlaying || !Player->GetIsDead()) { return; }
+	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
 
 	if (!Player->bIsHoldingHammer)
 	{
-		Player->Jump();
+		Player->SetIsJumpButtonPressed(true);
+	}
+}
+
+void ACharacterPlayerController::JumpButtonReleased()
+{
+	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
+
+	if (!Player->bIsHoldingHammer)
+	{
+		Player->SetIsJumpButtonPressed(false);
 	}
 }
 
