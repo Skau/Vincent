@@ -95,7 +95,7 @@ private:
 
 	void SetSpawnLocation(FVector Location) { SpawnLocation = Location; }
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	int Health = 3;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))

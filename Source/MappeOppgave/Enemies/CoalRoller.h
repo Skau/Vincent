@@ -21,6 +21,19 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
+
 private:
-	
+	UFUNCTION(BlueprintCallable)
+	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
+
+	UPROPERTY(EditDefaultsOnly)
+	UParticleSystem * DeathParticle;
+
+	FTimerHandle TH_HasTakenDamageTimer;
+
+	bool bHasTakenDamageRecently = false;
+	bool bHasBeenKnockedbackRecently = false;
+
+	void ResetHasTakenDamageTimer() { bHasTakenDamageRecently = false; }
 };

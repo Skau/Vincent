@@ -21,28 +21,14 @@ public:
 	UFUNCTION()
 	virtual void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
-
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Knockback(AActor* DamageCauser);
 
-	UFUNCTION(BlueprintCallable)
-	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
-
 	class APlayerCharacter* Player;
 
-private:
 	UPROPERTY(EditDefaultsOnly)
 	float Health;
-	
-	UPROPERTY(EditAnywhere)
-	UParticleSystem* DeathParticle = nullptr;
 
-	FTimerHandle TH_HasTakenDamageTimer;
-
-	bool bHasTakenDamageRecently = false;
 	bool bHasBeenKnockedbackRecently = false;
-
-	void ResetHasTakenDamageTimer() { bHasTakenDamageRecently = false; }
 };

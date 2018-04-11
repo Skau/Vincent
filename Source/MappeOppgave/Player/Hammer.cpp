@@ -32,7 +32,7 @@ void AHammer::BeginPlay()
 	Super::BeginPlay();
 
 	// set up a notification for when this component overlaps something with the mesh 
-	HammerMesh->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);		
+	CollisionCapsule->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);		
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }

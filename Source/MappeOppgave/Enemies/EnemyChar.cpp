@@ -13,8 +13,6 @@ AEnemyChar::AEnemyChar()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	Health = 2;
 }
 
 // Called when the game starts or when spawned
@@ -52,28 +50,4 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 			bHasBeenKnockedbackRecently = true;
 		}
 	}
-}
-
-float AEnemyChar::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
-{
-	if (!bHasTakenDamageRecently)
-	{
-		Health -= DamageAmount;
-		
-		if (Health <= 0)
-		{
-			if (DeathParticle)
-			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
-			}
-			Destroy();
-			return DamageAmount;
-		}
-
-		Knockback(DamageCauser);
-
-		bHasTakenDamageRecently = true;
-		GetWorld()->GetTimerManager().SetTimer(TH_HasTakenDamageTimer, this, &AEnemyChar::ResetHasTakenDamageTimer, 0.1f);
-	}
-	return DamageAmount;
 }
