@@ -18,7 +18,6 @@ class MAPPEOPPGAVE_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool GetIsJumpButtonPressed() { return bJumpButtonPressed; }
@@ -33,7 +32,7 @@ public:
 	bool GetIsAttacking() { return bIsAttacking; }
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void Knockback(AActor* EnemyCauser);
+	void Knockback(AActor* EnemyCauser, FVector ActorForwardVector);
 
 	bool GetIsBeingTeleported() { return bIsBeingTeleported; }
 	void SetIsBeingTeleported(bool Value) { bIsBeingTeleported = Value; }
@@ -62,6 +61,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetSpawnLocation() { return SpawnLocation; }
+
+	void SetEnemyHitForwardVector(FVector ForwardVector) { EnemyHitForwardVector = ForwardVector; }
 
 private:
 	APlayerCharacter();
@@ -107,6 +108,8 @@ private:
 	AHammer* Hammer = nullptr;
 
 	FVector SpawnLocation = FVector(0);
+
+	FVector EnemyHitForwardVector = FVector(0);
 
 	float NormalSpeed;
 

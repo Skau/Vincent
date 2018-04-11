@@ -48,6 +48,7 @@ void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * 
 		auto Player = Cast<APlayerCharacter>(OtherActor);
 		if (Player)
 		{
+			Player->SetEnemyHitForwardVector(GetActorForwardVector());
 			FHitResult CastHit;
 			UGameplayStatics::ApplyPointDamage(
 				OtherActor,

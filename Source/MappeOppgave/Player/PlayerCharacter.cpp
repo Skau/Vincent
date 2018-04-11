@@ -132,9 +132,7 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 		if (Health > 0)
 		{
 			// Runs BP timeline
-			auto temp = Cast<ACoalRoller>(DamageCauser);
-			if (temp)
-				Knockback(DamageCauser);
+			Knockback(DamageCauser, EnemyHitForwardVector);
 
 			bHasBeenHitRecently = true;
 			GetWorld()->GetTimerManager().SetTimer(TH_HasBeenHitRecentlyTimer, this, &APlayerCharacter::ResetHasBeenHitTimer, 1.f);

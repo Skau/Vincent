@@ -3,6 +3,7 @@
 #include "BombRoller.h"
 #include "Kismet/GameplayStatics.h"
 #include "PhysicsEngine/RadialForceComponent.h"
+#include "Engine/World.h"
 
 ABombRoller::ABombRoller()
 {

@@ -30,14 +30,14 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
 
+	class APlayerCharacter* Player;
+
 private:
 	UPROPERTY(EditDefaultsOnly)
 	float Health;
 	
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* DeathParticle = nullptr;
-
-	class APlayerCharacter* Player;
 
 	FTimerHandle TH_HasTakenDamageTimer;
 

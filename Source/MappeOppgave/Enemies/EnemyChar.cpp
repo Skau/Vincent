@@ -36,6 +36,7 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
+		Player->SetEnemyHitForwardVector(GetActorForwardVector());
 		FHitResult CastHit;
 		UGameplayStatics::ApplyPointDamage(
 			OtherActor,
@@ -45,7 +46,6 @@ void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpu
 			this,
 			UDamageType::StaticClass()
 		);
-
 		if (!bHasBeenKnockedbackRecently)
 		{
 			Knockback(this);
