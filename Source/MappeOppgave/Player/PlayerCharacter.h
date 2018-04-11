@@ -18,25 +18,8 @@ class MAPPEOPPGAVE_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+
 public:
-	// Sets default values for this character's properties
-	APlayerCharacter();
-
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	UFUNCTION()
-	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	
-	UFUNCTION()
-	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	bool GetIsDead() { return bIsDead; }
-
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool GetIsJumpButtonPressed() { return bJumpButtonPressed; }
 
@@ -45,6 +28,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool getIsHoldingHammer() { return bIsHoldingHammer; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetIsAttacking() { return bIsAttacking; }
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void Knockback(AActor* EnemyCauser);
+
+	bool GetIsBeingTeleported() { return bIsBeingTeleported; }
+	void SetIsBeingTeleported(bool Value) { bIsBeingTeleported = Value; }
+	void IncrementHealth() { Health++; }
 
 	UFUNCTION(BlueprintCallable)
 	int GetHealth() { return Health; }
@@ -60,38 +53,40 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetNewSpawnPoint(FVector NewSpawn) { SpawnLocation = NewSpawn; }
-	
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool GetIsSprinting() { return bIsSprinting; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool GetIsDead() { return bIsDead; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FVector GetSpawnLocation() { return SpawnLocation; }
+
+private:
+	APlayerCharacter();
+	// Sets default values for this character's properties
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
-	bool GetIsBeingTeleported(){ return bIsBeingTeleported; }
-
-	void SetIsBeingTeleported(bool Value) { bIsBeingTeleported = Value; }
-
-	void IncrementHealth() { Health++; }
-
-	void DecrementHealth() { Health--; }
+	UFUNCTION()
+	void OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	void SetMovementSpeed(int Value);
 
 	UFUNCTION(BlueprintCallable)
 	void SetIsAttacking(bool Value) { bIsAttacking = Value; }
 
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	bool GetIsAttacking() { return bIsAttacking; }
-
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
 
-	UFUNCTION(BlueprintImplementableEvent)
-	void Knockback(AActor* EnemyCauser);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	FVector GetSpawnLocation() { return SpawnLocation; }
-
-private:
 	void SetIsJumpButtonPressed(bool Value) { bJumpButtonPressed = Value; }
-
-	void SetCorrectJumpHeight();
 
 	void WhenDroppingHammer();
 
@@ -102,11 +97,6 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int Health = 3;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
-	float LowJump = 600.f;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Jump, meta = (AllowPrivateAccess = "true"))
-	float HighJump = 1000.f;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* CameraComponent;
 
@@ -116,15 +106,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	AHammer* Hammer = nullptr;
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Setup", meta = (AllowPrivateAccess = "true"))
-	UDecalComponent* ShadowDecal = nullptr;
-
-	UPROPERTY(EditAnywhere)
-	class UMaterialInterface* ShadowMaterial;*/
-
 	FVector SpawnLocation = FVector(0);
 
 	float NormalSpeed;
+
+	float SprintSpeed;
 
 	bool bJumpButtonPressed;
 

@@ -14,6 +14,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Hammer.h"
+#include "Enemies/CoalRoller.h"
 #include "Enemies/EnemyChar.h"
 
 #define OUT
@@ -38,27 +39,6 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	CameraComponent->bUsePawnControlRotation = false;
-
-
-	//Sets up a shadow decal
-	/*ShadowDecal = CreateDefaultSubobject<UDecalComponent>("ShadowDecal");
-	ShadowDecal->SetupAttachment(RootComponent);
-	ShadowDecal->SetMaterial(0, ShadowMaterial);
-	ShadowDecal->SetDecalMaterial(ShadowMaterial);
-
-	static ConstructorHelpers::FObjectFinder<UMaterial>DecalMaterialAsset(TEXT("Material'/Game/Materials/ShadowDecal.ShadowDecal'"));
-	if (DecalMaterialAsset.Succeeded())
-	{
-		ShadowDecal->SetDecalMaterial(DecalMaterialAsset.Object);
-	}*/
-	//ShadowDecal->DecalSize = FVector(16.0f, 32.0f, 32.0f);
-	//ShadowDecal->SetRelativeRotation(FRotator(90.0f, 0.0f, 0.0f).Quaternion());
-
-
-	//ShadowDecal->DecalSize = FVector(20, 20, 20);
-
-	// Crouching Is Disabled!
-	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
 
 	// Properly alignes mesh with capsule component
 	GetMesh()->RelativeRotation = FRotator(0, -90, 0);
@@ -89,6 +69,7 @@ void APlayerCharacter::BeginPlay()
 	}
 
 	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	SprintSpeed = GetCharacterMovement()->MaxCustomMovementSpeed;
 
 	SpawnLocation = GetActorLocation();
 }
@@ -101,39 +82,21 @@ void APlayerCharacter::Tick(float DeltaTime)
 	if (GetActorLocation().Z < -2000)
 	{
 		SetActorLocation(SpawnLocation);
-		//Health--;
 	}
-
 	// If sprinting and the player picks up hammer, stop sprinting
 	if (bIsSprinting)
 	{
 		if (bIsHoldingHammer)
 		{
 			bIsSprinting = false;
-			SetMovementSpeed(400);
+			SetMovementSpeed(NormalSpeed);
 		}
 	}
-	// Makes sure the jump height is correct depending on if the hammer is held or not
-	SetCorrectJumpHeight();
-
-	//ShadowDecal->AddRelativeLocation(FVector(0,0,-1),false);
 }
 
 void APlayerCharacter::SetMovementSpeed(int Value)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Value;
-}
-
-void APlayerCharacter::SetCorrectJumpHeight()
-{
-	if (bIsHoldingHammer)
-	{
-		GetCharacterMovement()->JumpZVelocity = LowJump;
-	}
-	else
-	{
-		GetCharacterMovement()->JumpZVelocity = HighJump;
-	}
 }
 
 void APlayerCharacter::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -169,7 +132,9 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 		if (Health > 0)
 		{
 			// Runs BP timeline
-			Knockback(DamageCauser);
+			auto temp = Cast<ACoalRoller>(DamageCauser);
+			if (temp)
+				Knockback(DamageCauser);
 
 			bHasBeenHitRecently = true;
 			GetWorld()->GetTimerManager().SetTimer(TH_HasBeenHitRecentlyTimer, this, &APlayerCharacter::ResetHasBeenHitTimer, 1.f);
@@ -179,8 +144,6 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 		{
 			bIsDead = true;
 			WhenDroppingHammer();
-			//SetActorLocation(SpawnLocation);
-			//Health = 3;
 		}
 	}
 	return DamageAmount;
@@ -204,7 +167,6 @@ void APlayerCharacter::WhenPickingUpHammer()
 
 	if (bIsCloseEnough && !bIsHoldingHammer)
 	{
-		//Hammer->SetPhysics(false);
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		Hammer->OnPickedUp();
 		Hammer->SetActorRelativeRotation(FRotator(0));

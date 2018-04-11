@@ -31,6 +31,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	float Speed = 700;
 
+	UPROPERTY(EditAnywhere)
+	float Damage = 1.f;
+
 	UPROPERTY(VisibleAnywhere)
 	class USphereComponent* CollisionSphere;
 

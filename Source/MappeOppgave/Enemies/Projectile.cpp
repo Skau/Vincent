@@ -4,6 +4,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Player/PlayerCharacter.h"
 
@@ -47,7 +48,15 @@ void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * 
 		auto Player = Cast<APlayerCharacter>(OtherActor);
 		if (Player)
 		{
-			Player->DecrementHealth();
+			FHitResult CastHit;
+			UGameplayStatics::ApplyPointDamage(
+				OtherActor,
+				Damage,
+				GetActorForwardVector(),
+				CastHit, Player->GetController(),
+				this,
+				UDamageType::StaticClass()
+			);
 		}
 	}
 	Destroy();

@@ -127,7 +127,7 @@ void ACharacterPlayerController::SprintOn()
 	{
 		if (!Player->getIsHoldingHammer())
 		{
-			Player->SetMovementSpeed(800);
+			Player->SetMovementSpeed(Player->SprintSpeed);
 			Player->bIsSprinting = true;
 		}
 	}
@@ -137,7 +137,7 @@ void ACharacterPlayerController::SprintOff()
 {
 	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
 
-	Player->SetMovementSpeed(400);
+	Player->SetMovementSpeed(Player->NormalSpeed);
 	Player->bIsSprinting = false;
 }
 
