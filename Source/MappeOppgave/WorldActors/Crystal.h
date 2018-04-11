@@ -30,7 +30,7 @@ private:
 	class UBoxComponent* TriggerVolume;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	UStaticMeshComponent* CrystalMesh;
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* DeathParticle;

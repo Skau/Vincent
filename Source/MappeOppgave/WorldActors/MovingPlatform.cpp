@@ -50,7 +50,7 @@ void AMovingPlatform::LerpMove(float DeltaTime)
 	auto DistanceFromStartLocation = TotalDistanceToTravel - DistanceLeftToTravel;
 	auto alpha = UKismetMathLibrary::NormalizeToRange(DistanceFromStartLocation, 0, TotalDistanceToTravel);
 
-	SetActorLocation(FMath::VInterpTo(Location, GlobalTargetLocation, DeltaTime, alpha + SpeedConstant), true);
+	SetActorLocation(FMath::VInterpTo(Location, GlobalTargetLocation, DeltaTime, alpha + SpeedConstant));
 
 	if (DistanceLeftToTravel < 0.3f)
 	{
