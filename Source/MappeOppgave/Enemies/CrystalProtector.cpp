@@ -20,8 +20,8 @@ ACrystalProtector::ACrystalProtector()
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>("BoxCollision");
 	RootComponent = TriggerVolume;
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
-	StaticMesh->SetupAttachment(RootComponent);
+	CanonStaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Canon"));
+	CanonStaticMesh->SetupAttachment(RootComponent);
 
 	bCanShoot = true;
 
@@ -80,6 +80,11 @@ void ACrystalProtector::Shoot()
 
 		auto proj = GetWorld()->SpawnActor<AProjectile>(Projectile_BP, SpawnLocation, SpawnRotation);
 		proj->SetMoveDirection(SpawnDirection);
+
+		if (bUseRecoilEffect)
+		{
+			RecoilEffect();
+		}
 
 		GetWorld()->GetTimerManager().SetTimer(TH_ShootTimer, this, &ACrystalProtector::ResetShootTimer, ShootRate);
 		bCanShoot = false;

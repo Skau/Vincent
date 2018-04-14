@@ -24,18 +24,25 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	UFUNCTION(BlueprintImplementableEvent)
+	void RecoilEffect();
+
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* TriggerVolume;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* CanonStaticMesh;
+
+	UPROPERTY(EditAnywhere)
+	bool bUseRecoilEffect = true;
+
 private:
 	void Move(float DeltaTime, float DotProduct);
 
 	void Shoot();
 
 	void ResetShootTimer();
-
-	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerVolume;
-
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	float ActiveRange = 5000.f;
