@@ -79,6 +79,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (Health <= 0)
+	{
+		bIsDead = true;
+		WhenDroppingHammer();
+	}
+
 	if (GetActorLocation().Z < -2000)
 	{
 		SetActorLocation(SpawnLocation);
@@ -138,12 +144,14 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 			GetWorld()->GetTimerManager().SetTimer(TH_HasBeenHitRecentlyTimer, this, &APlayerCharacter::ResetHasBeenHitTimer, 1.f);
 
 		}
-		else if (Health <= 0)
-		{
-			bIsDead = true;
-			WhenDroppingHammer();
-		}
 	}
+
+	if (Health <= 0)
+	{
+		bIsDead = true;
+		WhenDroppingHammer();
+	}
+
 	return DamageAmount;
 }
 

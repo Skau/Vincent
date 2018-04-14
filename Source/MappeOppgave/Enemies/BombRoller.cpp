@@ -30,7 +30,7 @@ void ABombRoller::Tick(float DeltaTime)
 
 void ABombRoller::Explode()
 {
-	UGameplayStatics::ApplyRadialDamage(GetWorld(), 2, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(),TArray<AActor*>());
+	UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(),TArray<AActor*>());
 
 	if (ExplosionParticle)
 	{

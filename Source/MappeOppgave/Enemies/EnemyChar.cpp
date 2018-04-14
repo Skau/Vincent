@@ -20,7 +20,6 @@ void AEnemyChar::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnActorHit.AddDynamic(this, &AEnemyChar::OnHit);
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
@@ -28,26 +27,4 @@ void AEnemyChar::BeginPlay()
 void AEnemyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-
-void AEnemyChar::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
-{
-	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
-	{
-		Player->SetEnemyHitForwardVector(GetActorForwardVector());
-		FHitResult CastHit;
-		UGameplayStatics::ApplyPointDamage(
-			OtherActor,
-			1.f,
-			GetActorForwardVector(),
-			CastHit, GetController(),
-			this,
-			UDamageType::StaticClass()
-		);
-		if (!bHasBeenKnockedbackRecently)
-		{
-			Knockback(this);
-			bHasBeenKnockedbackRecently = true;
-		}
-	}
 }

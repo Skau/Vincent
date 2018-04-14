@@ -4,6 +4,7 @@
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
+#include "Player/PlayerCharacter.h"
 
 ACoalRoller::ACoalRoller()
 {
@@ -15,7 +16,7 @@ ACoalRoller::ACoalRoller()
 void ACoalRoller::BeginPlay()
 {
 	Super::BeginPlay();
-
+	OnActorHit.AddDynamic(this, &ACoalRoller::OnHit);
 }
 
 void ACoalRoller::Tick(float DeltaTime)
@@ -23,6 +24,28 @@ void ACoalRoller::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 
+}
+
+void ACoalRoller::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
+	{
+		Player->SetEnemyHitForwardVector(GetActorForwardVector());
+		FHitResult CastHit;
+		UGameplayStatics::ApplyPointDamage(
+			OtherActor,
+			Damage,
+			GetActorForwardVector(),
+			CastHit, GetController(),
+			this,
+			UDamageType::StaticClass()
+		);
+		if (!bHasBeenKnockedbackRecently)
+		{
+			Knockback(this);
+			bHasBeenKnockedbackRecently = true;
+		}
+	}
 }
 
 float ACoalRoller::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)

@@ -18,9 +18,6 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION()
-	virtual void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
-
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Knockback(AActor* DamageCauser);

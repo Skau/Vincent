@@ -38,6 +38,9 @@ private:
 
 	FTimerHandle TH_HasTakenDamageTimer;
 
+	UPROPERTY(EditDefaultsOnly)
+	int Damage = 2;
+
 	bool bHasTakenDamageRecently = false;
 
 	void ResetHasTakenDamageTimer() { bHasTakenDamageRecently = false; }

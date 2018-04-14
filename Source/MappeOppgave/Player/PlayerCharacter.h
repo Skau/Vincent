@@ -35,7 +35,9 @@ public:
 	void Knockback(AActor* EnemyCauser, FVector ActorForwardVector);
 
 	bool GetIsBeingTeleported() { return bIsBeingTeleported; }
+
 	void SetIsBeingTeleported(bool Value) { bIsBeingTeleported = Value; }
+
 	void IncrementHealth() { Health++; }
 
 	UFUNCTION(BlueprintCallable)
@@ -115,15 +117,15 @@ private:
 
 	float SprintSpeed;
 
-	bool bJumpButtonPressed;
+	bool bJumpButtonPressed = false;
 
-	bool bIsDead;
+	bool bIsDead = false;
 
 	bool bIsCloseEnough = false;
 
 	bool bIsHoldingHammer = false;
 
-	bool bIsSprinting;
+	bool bIsSprinting = false;
 
 	bool bIsBeingTeleported = true;
 
