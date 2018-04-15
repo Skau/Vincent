@@ -27,19 +27,14 @@ public:
 	virtual void OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
 private:
-	UFUNCTION(BlueprintCallable)
-	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
-
 	UPROPERTY(EditDefaultsOnly)
 	UParticleSystem * DeathParticle;
-
-	FTimerHandle TH_HasTakenDamageTimer;
 
 	UPROPERTY(EditDefaultsOnly)
 	int Damage = 1;
 
-	bool bHasTakenDamageRecently = false;
 	bool bHasBeenKnockedbackRecently = false;
 
-	void ResetHasTakenDamageTimer() { bHasTakenDamageRecently = false; }
+	UFUNCTION(BlueprintCallable)
+	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
 };

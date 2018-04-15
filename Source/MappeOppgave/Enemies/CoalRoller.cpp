@@ -50,23 +50,16 @@ void ACoalRoller::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImp
 
 float ACoalRoller::TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser)
 {
-	if (!bHasTakenDamageRecently)
+	Health -= DamageAmount;
+
+	if (Health <= 0)
 	{
-		Health -= DamageAmount;
-
-		if (Health <= 0)
+		if (DeathParticle)
 		{
-			if (DeathParticle)
-			{
-				UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
-			}
-			Destroy();
+			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
 		}
-
-		Knockback(DamageCauser);
-
-		bHasTakenDamageRecently = true;
-		GetWorld()->GetTimerManager().SetTimer(TH_HasTakenDamageTimer, this, &ACoalRoller::ResetHasTakenDamageTimer, 0.1f);
+		Destroy();
 	}
+	
 	return DamageAmount;
 }

@@ -141,8 +141,7 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 			Knockback(DamageCauser, EnemyHitForwardVector);
 
 			bHasBeenHitRecently = true;
-			GetWorld()->GetTimerManager().SetTimer(TH_HasBeenHitRecentlyTimer, this, &APlayerCharacter::ResetHasBeenHitTimer, 1.f);
-
+			GetWorld()->GetTimerManager().SetTimer(TH_HasBeenHitRecentlyTimer, this, &APlayerCharacter::ResetHasBeenHitTimer, 0.5f);
 		}
 	}
 

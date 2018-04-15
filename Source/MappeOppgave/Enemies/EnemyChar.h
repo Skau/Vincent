@@ -26,6 +26,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float Health;
-
-	bool bHasBeenKnockedbackRecently = false;
 };

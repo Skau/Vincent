@@ -46,7 +46,11 @@ float ABombRoller::TakeDamage(float DamageAmount, struct FDamageEvent const & Da
 	{
 		Health -= DamageAmount;
 
-		Knockback(DamageCauser);
+		if (!bHasBeenKnockedbackRecently)
+		{
+			Knockback(DamageCauser);
+			bHasBeenKnockedbackRecently = true;
+		}
 
 		bHasTakenDamageRecently = true;
 		GetWorld()->GetTimerManager().SetTimer(TH_HasTakenDamageTimer, this, &ABombRoller::ResetHasTakenDamageTimer, 0.1f);

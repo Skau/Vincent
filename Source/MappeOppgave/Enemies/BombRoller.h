@@ -27,9 +27,6 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void Explode();
 
-	UFUNCTION(BlueprintCallable)
-	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
-
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	class URadialForceComponent* ExplosionForce = nullptr;
 
@@ -37,6 +34,11 @@ private:
 	UParticleSystem * ExplosionParticle;
 
 	FTimerHandle TH_HasTakenDamageTimer;
+
+	bool bHasBeenKnockedbackRecently = false;
+
+	UFUNCTION(BlueprintCallable)
+	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
 
 	UPROPERTY(EditDefaultsOnly)
 	int Damage = 2;
