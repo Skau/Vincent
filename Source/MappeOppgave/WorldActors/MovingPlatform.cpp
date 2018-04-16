@@ -5,12 +5,20 @@
 #include "TimerManager.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Math/UnrealMath.h"
+#include "Components/BoxComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 // Sets default values
 AMovingPlatform::AMovingPlatform()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(FName("TriggerVolume"));
+	RootComponent = TriggerVolume;
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("PlatformMesh"));
+	Mesh->SetupAttachment(RootComponent);
+
 }
 
 // Called when the game starts or when spawned
@@ -21,6 +29,8 @@ void AMovingPlatform::BeginPlay()
 	GlobalStartLocation = GetActorLocation();
 	GlobalTargetLocation = GetTransform().TransformPosition(TargetLocation);
 	TotalDistanceToTravel = FVector::DotProduct((GlobalTargetLocation - GetActorLocation()), (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal());
+
+	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &AMovingPlatform::OnBeginOverlap);
 }
 
 // Called every frame
@@ -90,3 +100,7 @@ void AMovingPlatform::SwapDirection()
 	TotalDistanceToTravel = FVector::DotProduct((GlobalTargetLocation - GetActorLocation()), (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal());
 }
 
+void AMovingPlatform::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
+{
+	bIsActive = true;
+}

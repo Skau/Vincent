@@ -31,9 +31,6 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	TArray<class ASpawnPoint*> Spawnpoints;
 
-	UPROPERTY(EditAnywhere, Category = "Setup")
-	class AMovingPlatform* Platform;
-
 	bool bHasSpawned;
 
 	void ActivateSpawnpoints();

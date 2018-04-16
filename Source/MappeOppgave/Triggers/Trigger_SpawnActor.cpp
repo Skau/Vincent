@@ -46,10 +46,6 @@ void ATrigger_SpawnActor::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 			ActivateSpawnpoints();
 			bHasSpawned = true;
 		}
-		if (Platform)
-		{
-			Platform->SetActive(true);
-		}
 	}
 }
 

@@ -21,9 +21,16 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void SetActive(bool Value) { bIsActive = Value; };
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 private: 
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* TriggerVolume;
+
+	UPROPERTY(VisibleAnywhere)
+	class UStaticMeshComponent* Mesh;
+
 	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
 	FVector TargetLocation;
 
