@@ -15,12 +15,24 @@ class MAPPEOPPGAVE_API ASpawnPoint : public ATargetPoint
 public:
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaTime) override;
+
 	void Spawn();
+
 
 	UPROPERTY(EditAnywhere)
 	UClass* ActorToSpawn;
-	
+
+private:
+	UPROPERTY(EditAnywhere)
+	AActor* SpawnUntillDestroyed = nullptr;
+
 	UPROPERTY(EditAnywhere)
 	bool bIsHammer;
+
+	bool bIsTimerStarted;
 	
+	FTimerHandle SpawnAgain;
+
+	AActor* SpawnedActor = nullptr;
 };
