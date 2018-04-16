@@ -13,22 +13,28 @@ class MAPPEOPPGAVE_API ASpawnPoint : public ATargetPoint
 	GENERATED_BODY()
 
 public:
+	ASpawnPoint();
+
 	virtual void BeginPlay() override;
 
 	virtual void Tick(float DeltaTime) override;
 
 	void Spawn();
 
+	UFUNCTION(BlueprintCallable)
+	void SetWallIsFractured() { bWallIsFractured = true; }
 
+private:
+	bool bWallIsFractured = false;
+	
 	UPROPERTY(EditAnywhere)
 	UClass* ActorToSpawn;
 
-private:
-	UPROPERTY(EditAnywhere)
-	AActor* SpawnUntillDestroyed = nullptr;
-
 	UPROPERTY(EditAnywhere)
 	bool bIsHammer;
+
+	UPROPERTY(EditAnywhere)
+	bool bSpawnUntilFracturedWall;
 
 	bool bIsTimerStarted;
 	

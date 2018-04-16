@@ -5,17 +5,21 @@
 #include "Player/PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/Hammer.h"
+#include "TimerManager.h"
+
+ASpawnPoint::ASpawnPoint()
+{
+	PrimaryActorTick.bCanEverTick = true;
+
+}
 
 void ASpawnPoint::BeginPlay()
 {
-
-	PrimaryActorTick.bCanEverTick = true;
 	Super::BeginPlay();
-
 
 	if (bIsHammer && ActorToSpawn)
 	{
-		auto Hammer = GetWorld()->SpawnActor<AHammer>(ActorToSpawn, GetActorLocation(), GetActorRotation());
+		GetWorld()->SpawnActor<AHammer>(ActorToSpawn, GetActorLocation(), GetActorRotation());
 	}
 }
 
@@ -23,9 +27,9 @@ void ASpawnPoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!SpawnUntillDestroyed || !SpawnedActor) { return; }
+	if (!SpawnedActor || !bSpawnUntilFracturedWall) { return; }
 
-	if (!SpawnUntillDestroyed->IsActorBeingDestroyed())
+	if(!bWallIsFractured)
 	{
 		if (SpawnedActor->IsActorBeingDestroyed())
 		{
