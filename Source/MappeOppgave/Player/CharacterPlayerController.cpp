@@ -171,10 +171,13 @@ void ACharacterPlayerController::ToggleHammer()
 
 void ACharacterPlayerController::RegularAttack()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Ran Function"))
 	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
+	UE_LOG(LogTemp, Warning, TEXT("Didnt return"))
 
 	if(Player->getIsHoldingHammer())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Found hammer"))
 		Player->SetIsAttacking(true);
 	}
 }
