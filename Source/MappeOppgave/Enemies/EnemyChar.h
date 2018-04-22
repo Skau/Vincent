@@ -18,6 +18,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void MoveEnemyToSpawnLocation() { SetActorLocation(SpawnLocation); }
+
 protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Knockback(AActor* DamageCauser);
@@ -26,4 +29,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	float Health;
+
+private:
+	FVector SpawnLocation;
 };

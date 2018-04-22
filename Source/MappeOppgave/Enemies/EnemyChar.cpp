@@ -7,7 +7,7 @@
 #include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Player/PlayerCharacter.h"
-
+#include "Gamemodes/MappeOppgaveGameModeBase.h"
 // Sets default values
 AEnemyChar::AEnemyChar()
 {
@@ -20,7 +20,12 @@ void AEnemyChar::BeginPlay()
 {
 	Super::BeginPlay();
 
+	auto GameMode = Cast<AMappeOppgaveGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	GameMode->AddEnemyToAllEnemies(this);
+
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	SpawnLocation = GetActorLocation();
 }
 
 // Called every frame
@@ -28,3 +33,4 @@ void AEnemyChar::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
+

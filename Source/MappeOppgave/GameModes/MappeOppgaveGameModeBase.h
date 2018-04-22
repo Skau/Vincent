@@ -6,6 +6,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "MappeOppgaveGameModeBase.generated.h"
 
+// Forward declarations
+class AEnemyChar;
+
 /**
  * 
  */
@@ -20,9 +23,17 @@ public:
 
 	void IncreaseCrystalsDestroyed() { CrystalsDestroyed++; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	TArray<AEnemyChar*>& GetAllEnemies() { return AllEnemies; }
+
+	void AddEnemyToAllEnemies(AEnemyChar* Enemy) { AllEnemies.Add(Enemy); }
+
+	void RemoveEnemyFromAllEnemies(AEnemyChar* Enemy) { AllEnemies.Remove(Enemy); }
+
 private:
 	int CrystalsDestroyed = 0;
 
+	TArray<AEnemyChar*> AllEnemies;
 	
 	
 };

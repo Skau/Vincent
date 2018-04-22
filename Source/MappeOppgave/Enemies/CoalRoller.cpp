@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "Player/PlayerCharacter.h"
+#include "Gamemodes/MappeOppgaveGameModeBase.h"
 
 ACoalRoller::ACoalRoller()
 {
@@ -58,6 +59,11 @@ float ACoalRoller::TakeDamage(float DamageAmount, struct FDamageEvent const & Da
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
 		}
+
+		auto GameMode = Cast<AMappeOppgaveGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+		GameMode->RemoveEnemyFromAllEnemies(this);
+
 		Destroy();
 	}
 	

@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TargetPoint.h"
-
 #include "SpawnPoint.generated.h"
+
+// Forward declarations
+class AMappeOppgaveGameModeBase;
 
 UCLASS()
 class MAPPEOPPGAVE_API ASpawnPoint : public ATargetPoint
@@ -41,4 +43,6 @@ private:
 	FTimerHandle SpawnAgain;
 
 	AActor* SpawnedActor = nullptr;
+
+	AMappeOppgaveGameModeBase* GameMode;
 };

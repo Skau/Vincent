@@ -5,6 +5,7 @@
 #include "PhysicsEngine/RadialForceComponent.h"
 #include "Engine/World.h"
 #include "TimerManager.h"
+#include "Gamemodes/MappeOppgaveGameModeBase.h"
 
 ABombRoller::ABombRoller()
 {
@@ -36,6 +37,10 @@ void ABombRoller::Explode()
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation(), FVector(2));
 	}
+
+	auto GameMode = Cast<AMappeOppgaveGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+
+	GameMode->RemoveEnemyFromAllEnemies(this);
 
 	Destroy();
 }

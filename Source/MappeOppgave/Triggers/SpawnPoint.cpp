@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Player/Hammer.h"
 #include "TimerManager.h"
+#include "GameModes/MappeOppgaveGameModeBase.h"
 
 ASpawnPoint::ASpawnPoint()
 {
@@ -16,6 +17,8 @@ ASpawnPoint::ASpawnPoint()
 void ASpawnPoint::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GameMode = Cast<AMappeOppgaveGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	if (bIsHammer && ActorToSpawn)
 	{
@@ -36,7 +39,9 @@ void ASpawnPoint::Tick(float DeltaTime)
 			if (!bIsTimerStarted)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Spawned Actor Being Destroyed"));
+
 				GetWorld()->GetTimerManager().SetTimer(SpawnAgain, this, &ASpawnPoint::Spawn, 1.f);
+
 				UE_LOG(LogTemp, Warning, TEXT("Started Timer"));
 				bIsTimerStarted = true;
 			}
