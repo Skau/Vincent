@@ -16,9 +16,8 @@ ACharacterPlayerController::ACharacterPlayerController(const FObjectInitializer 
 void ACharacterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SetInputMode(FInputModeUIOnly());
 	Player = Cast<APlayerCharacter>(GetPawn());
-	SetInputMode(FInputModeGameOnly());
 	bShowMouseCursor = true;
 }
 
@@ -38,7 +37,7 @@ void ACharacterPlayerController::SetupInputComponent()
 		InputComponent->BindAction("Crouch", IE_Pressed, this, &ACharacterPlayerController::ToggleCrouch);
 		InputComponent->BindAction("Crouch", IE_Pressed, this, &ACharacterPlayerController::ToggleCrouch);
 		InputComponent->BindAction("ToggleHammer", IE_Pressed, this, &ACharacterPlayerController::ToggleHammer);
-		InputComponent->BindAction("RegularAttack", IE_Released, this, &ACharacterPlayerController::RegularAttack);
+		InputComponent->BindAction("RegularAttack", IE_Pressed, this, &ACharacterPlayerController::RegularAttack);
 		InputComponent->BindAction("Pause", IE_Pressed, this, &ACharacterPlayerController::PauseGame);
 		InputComponent->BindAction("Sprint", IE_Pressed, this, &ACharacterPlayerController::SprintOn);
 		InputComponent->BindAction("Sprint", IE_Released, this, &ACharacterPlayerController::SprintOff);

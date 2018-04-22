@@ -85,6 +85,15 @@ void APlayerCharacter::Tick(float DeltaTime)
 		WhenDroppingHammer();
 	}
 
+	if (bIsHoldingHammer)
+	{
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI());
+	}
+	else
+	{
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameOnly());
+	}
+
 	if (GetActorLocation().Z < -2000)
 	{
 		SetActorLocation(SpawnLocation);
