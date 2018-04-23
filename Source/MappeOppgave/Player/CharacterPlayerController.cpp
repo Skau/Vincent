@@ -16,7 +16,7 @@ ACharacterPlayerController::ACharacterPlayerController(const FObjectInitializer 
 void ACharacterPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	SetInputMode(FInputModeUIOnly());
+	SetInputMode(FInputModeGameOnly());
 	Player = Cast<APlayerCharacter>(GetPawn());
 	bShowMouseCursor = true;
 }

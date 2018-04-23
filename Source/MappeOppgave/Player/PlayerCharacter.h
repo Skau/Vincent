@@ -64,6 +64,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetSpawnLocation() { return SpawnLocation; }
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	AHammer* GetHammer() { return Hammer; }
+
 	void SetEnemyHitForwardVector(FVector ForwardVector) { EnemyHitForwardVector = ForwardVector; }
 
 private:

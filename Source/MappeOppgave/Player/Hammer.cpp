@@ -35,6 +35,8 @@ void AHammer::BeginPlay()
 	CollisionCapsule->OnComponentBeginOverlap.AddDynamic(this, &AHammer::OnOverlapBegin);		
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	SpawnLocation = GetActorLocation();
 }
 
 // Called every frame
@@ -84,5 +86,14 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 				);
 			}
 		}
+	}
+}
+
+void AHammer::MoveToSpawnLocation()
+{
+	if (!GetActorLocation().Equals(SpawnLocation, 50))
+	{
+		SetActorLocation(SpawnLocation); 
+		SetActorRotation(FRotator(0));
 	}
 }
