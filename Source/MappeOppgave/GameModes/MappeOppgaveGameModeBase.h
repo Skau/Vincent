@@ -26,9 +26,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	TArray<AEnemyChar*>& GetAllEnemies() { return AllEnemies; }
 
-	void AddEnemyToAllEnemies(AEnemyChar* Enemy) { AllEnemies.Add(Enemy); }
+	void AddEnemyToAllEnemies(AEnemyChar* Enemy) { if (Enemy) { AllEnemies.Add(Enemy); } }
 
-	void RemoveEnemyFromAllEnemies(AEnemyChar* Enemy) { AllEnemies.Remove(Enemy); }
+	void RemoveEnemyFromAllEnemies(AEnemyChar* Enemy) { if (Enemy) { AllEnemies.Remove(Enemy); } }
 
 private:
 	int CrystalsDestroyed = 0;

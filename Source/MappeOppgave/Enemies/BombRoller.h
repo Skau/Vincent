@@ -46,4 +46,7 @@ private:
 	bool bHasTakenDamageRecently = false;
 
 	void ResetHasTakenDamageTimer() { bHasTakenDamageRecently = false; }
+
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* ExplosionSound = nullptr;
 };

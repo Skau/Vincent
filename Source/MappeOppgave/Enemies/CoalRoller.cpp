@@ -59,7 +59,10 @@ float ACoalRoller::TakeDamage(float DamageAmount, struct FDamageEvent const & Da
 		{
 			UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
 		}
-
+		if (ExplosionSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+		}
 		auto GameMode = Cast<AMappeOppgaveGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
 		GameMode->RemoveEnemyFromAllEnemies(this);

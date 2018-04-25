@@ -38,6 +38,11 @@ void ABombRoller::Explode()
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionParticle, GetActorLocation(), GetActorRotation(), FVector(2));
 	}
 
+	if (ExplosionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+	}
+
 	auto GameMode = Cast<AMappeOppgaveGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
 
 	GameMode->RemoveEnemyFromAllEnemies(this);

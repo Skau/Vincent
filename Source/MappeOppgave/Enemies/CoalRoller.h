@@ -37,4 +37,7 @@ private:
 
 	UFUNCTION(BlueprintCallable)
 	void ResetHasBeenKnockedBack() { bHasBeenKnockedbackRecently = false; }
+
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* ExplosionSound = nullptr;
 };
