@@ -51,7 +51,7 @@ void ASpawnPoint::Tick(float DeltaTime)
 
 void ASpawnPoint::Spawn()
 {
-	if (ActorToSpawn)
+	if (ActorToSpawn && !bWallIsFractured)
 	{
 		SpawnedActor = GetWorld()->SpawnActor<AActor>(ActorToSpawn, GetActorLocation(), GetActorRotation());
 		UE_LOG(LogTemp, Warning, TEXT("Spawned Actor"));

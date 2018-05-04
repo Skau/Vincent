@@ -73,10 +73,12 @@ void AMovingPlatform::Move(float DeltaTime)
 	FVector Location = GetActorLocation();
 	FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
 
-	if (FVector::DotProduct((GlobalTargetLocation - Location), Direction) < 0.0f)
+	auto DistanceLeftToTravel = FVector::DotProduct((GlobalTargetLocation - Location), Direction);
+	if (DistanceLeftToTravel < 0.3f)
 	{
 		if (!bTimerSet)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("Timer started"))
 			GetWorld()->GetTimerManager().SetTimer(TH_SwapDelay, this, &AMovingPlatform::SwapDirection, ReturnDelay);
 			bTimerSet = true;
 		}
@@ -90,7 +92,6 @@ void AMovingPlatform::Move(float DeltaTime)
 
 void AMovingPlatform::SwapDirection()
 {
-	FVector Location = GetActorLocation();
 	FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();
 
 	FVector Swap = GlobalStartLocation;
@@ -98,6 +99,7 @@ void AMovingPlatform::SwapDirection()
 	GlobalTargetLocation = Swap;
 
 	TotalDistanceToTravel = FVector::DotProduct((GlobalTargetLocation - GetActorLocation()), (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal());
+	UE_LOG(LogTemp, Warning, TEXT("Timer Ended"))
 }
 
 void AMovingPlatform::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
