@@ -56,29 +56,6 @@ void APlayerCharacter::BeginPlay()
 	// set up a notification for when this component is no longer overlapping something  
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
-<<<<<<< HEAD
-	//finds the hammer in map so the player can pick it up
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHammer::StaticClass(), FoundActors);
-
-
-
-	if (FoundActors[0])
-	{
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("0.01. PlayerCharacter (BeginPlay): Found Hammer in world"));
-		Hammer = Cast<AHammer>(FoundActors[0]);
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("0.02. PlayerCharacter (BeginPlay): Did not find hammer in world"));
-		Hammer = nullptr;
-=======
-	if (!Hammer)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No hammer found"))
->>>>>>> Kristoffer
-	}
-
 	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	SprintSpeed = GetCharacterMovement()->MaxCustomMovementSpeed;
 
@@ -191,7 +168,7 @@ void APlayerCharacter::WhenDroppingHammer()
 void APlayerCharacter::WhenPickingUpHammer()
 {
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("4.02. PlayerCharacter (WhenPickingUpHammer): Ran Function"));
-	if (!Hammer) { return; }
+	if (!Hammer) { UE_LOG(LogTemp, Warning, TEXT("Hammer not found")) return; }
 
 	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("5.02. PlayerCharacter (WhenPickingUpHammer): Found Hammerptr"));
 

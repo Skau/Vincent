@@ -39,6 +39,8 @@ void AHammer::BeginPlay()
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
+	Player->SetHammer(this);
+
 	SpawnLocation = GetActorLocation();
 }
 
