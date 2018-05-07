@@ -69,6 +69,9 @@ public:
 
 	void SetEnemyHitForwardVector(FVector ForwardVector) { EnemyHitForwardVector = ForwardVector; }
 
+	UFUNCTION(BlueprintCallable)
+	void SetHammer(AHammer* HammerIn) { Hammer = HammerIn; }
+
 private:
 	APlayerCharacter();
 	// Sets default values for this character's properties

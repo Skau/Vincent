@@ -55,17 +55,9 @@ void APlayerCharacter::BeginPlay()
 	// set up a notification for when this component is no longer overlapping something  
 	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &APlayerCharacter::OnOverlapEnd);
 
-	//finds the hammer in map so the player can pick it up
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHammer::StaticClass(), FoundActors);
-
-	if (FoundActors.Num())
+	if (!Hammer)
 	{
-		Hammer = Cast<AHammer>(FoundActors[0]);
-	}
-	else
-	{
-		Hammer = nullptr;
+		UE_LOG(LogTemp, Warning, TEXT("No hammer found"))
 	}
 
 	NormalSpeed = GetCharacterMovement()->MaxWalkSpeed;
