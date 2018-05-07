@@ -6,6 +6,8 @@
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
+
 #include "PlayerCharacter.h"
 
 ACharacterPlayerController::ACharacterPlayerController(const FObjectInitializer & ObjectInitializer)
@@ -156,14 +158,18 @@ void ACharacterPlayerController::ToggleCrouch()
 
 void ACharacterPlayerController::ToggleHammer()
 {
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("1. PlayerController (ToggleHammer): Function start"));
 	if (bIsSequencePlaying || Player->GetIsDead()) { return; }
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("2. PlayerController (ToggleHammer): Sequence is not playing, player isnt dead"));
 
 	if (Player->getIsHoldingHammer())
 	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("3.01. PlayerController (ToggleHammer): Player is holding hammer"));
 		Player->WhenDroppingHammer();
 	}
 	else
 	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("3.02. PlayerController (ToggleHammer): Player is not holding hammer"));
 		Player->WhenPickingUpHammer();
 	}
 }

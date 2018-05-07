@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
 #include "TimerManager.h"
 
 
@@ -49,6 +50,8 @@ void AHammer::Tick(float DeltaTime)
 
 void AHammer::OnDropped()
 {
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("7.01 Hammer (OnDropped): Ran Function"));
+
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 	SetPhysics(true);
 	//HammerMesh->SetWorldScale3D(FVector(1));
@@ -56,6 +59,7 @@ void AHammer::OnDropped()
 
 void AHammer::OnPickedUp()
 {
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("7.02 Hammer (OnPickedUp): Ran Function"));
 	HammerMesh->SetWorldScale3D(FVector(1));
 	SetActorRotation(FRotator(0,90,0));
 	SetPhysics(false);

@@ -12,6 +12,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Engine/World.h"
+#include "Engine/Engine.h"
 #include "TimerManager.h"
 #include "Hammer.h"
 #include "Enemies/CoalRoller.h"
@@ -59,12 +60,16 @@ void APlayerCharacter::BeginPlay()
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AHammer::StaticClass(), FoundActors);
 
-	if (FoundActors.Num())
+
+
+	if (FoundActors[0])
 	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("0.01. PlayerCharacter (BeginPlay): Found Hammer in world"));
 		Hammer = Cast<AHammer>(FoundActors[0]);
 	}
 	else
 	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 5.f, FColor::Red, TEXT("0.02. PlayerCharacter (BeginPlay): Did not find hammer in world"));
 		Hammer = nullptr;
 	}
 
@@ -165,11 +170,13 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 
 void APlayerCharacter::WhenDroppingHammer()
 {
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("4.01. PlayerCharacter (WhenDroppingHammer): Ran Function"));
 	if (!Hammer) { return; }
-
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("5.01. PlayerCharacter (WhenDroppingHammer): Found Hammerptr"));
 
 	if (bIsHoldingHammer && !GetCharacterMovement()->IsFalling()) 
 	{ 
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("5.01. PlayerCharacter (WhenDroppingHammer): Player is not holding hammer and not falling"));
 		Hammer->OnDropped();
 		bIsHoldingHammer = false;
 	}
@@ -177,10 +184,15 @@ void APlayerCharacter::WhenDroppingHammer()
 
 void APlayerCharacter::WhenPickingUpHammer()
 {
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("4.02. PlayerCharacter (WhenPickingUpHammer): Ran Function"));
 	if (!Hammer) { return; }
+
+	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("5.02. PlayerCharacter (WhenPickingUpHammer): Found Hammerptr"));
 
 	if (bIsCloseEnough && !bIsHoldingHammer)
 	{
+		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("6.02. PlayerCharacter (WhenPickingUpHammer): Player is close enough and not holding hammer"));
+
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		Hammer->OnPickedUp();
 		Hammer->SetActorRelativeRotation(FRotator(0));
