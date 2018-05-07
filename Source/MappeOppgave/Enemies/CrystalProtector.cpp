@@ -52,6 +52,16 @@ void ACrystalProtector::Tick(float DeltaTime)
 	}
 }
 
+float ACrystalProtector::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetActorLocation(), GetActorRotation(), FVector(2));
+
+	Destroy();
+
+	return DamageAmount;
+}
+
 void ACrystalProtector::Move(float DeltaTime, float DotProduct)
 {
 	FVector CurrentLocation = GetActorLocation();

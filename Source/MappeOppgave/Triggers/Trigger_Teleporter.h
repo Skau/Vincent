@@ -6,6 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "Trigger_Teleporter.generated.h"
 
+UENUM()
+enum class ETeleportToMap
+{
+	Hub,
+	Port,
+	Mines
+};
+
 UCLASS()
 class MAPPEOPPGAVE_API ATrigger_Teleporter : public AActor
 {
@@ -23,7 +31,6 @@ public:
 
 	UFUNCTION()
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
@@ -41,9 +48,6 @@ protected:
 	void TeleportPlayer();
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bIsTeleporter;
-
-	UPROPERTY(BlueprintReadWrite)
 	bool bPlayerIsInside;
 
 	UPROPERTY(VisibleAnywhere)
@@ -56,7 +60,7 @@ protected:
 	UStaticMeshComponent* DoorMesh;
 
 	UPROPERTY(EditAnywhere)
-	ATrigger_Teleporter* ConnectedTeleporter;
+	ETeleportToMap TeleportToMap;
 
 	class APlayerCharacter* Player = nullptr;
 };

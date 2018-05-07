@@ -46,69 +46,50 @@ void ATrigger_Teleporter::Tick(float DeltaTime)
 
 void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
-	if (ConnectedTeleporter)
+	
+	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
-		{
+		UE_LOG(LogTemp, Warning, TEXT("OnBeginOverlap"))
 
-			bPlayerIsInside = true;
+		bPlayerIsInside = true;
 
-			if (Player->GetIsBeingTeleported())
-			{
-				bIsTeleporter = true;
-			}
-			else if (!Player->GetIsBeingTeleported())
-			{
-				OpenDoor();
-				bIsTeleporter = false;
-			}
-
-			if (bIsTeleporter)
-			{
-				CloseDoor();
-
-				ConnectedTeleporter->CloseDoor();
-			}
-		}
+		CloseDoor();
+		
 	}
+	
 }
 
-void ATrigger_Teleporter::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+void ATrigger_Teleporter::OnEndOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex)
 {
-	if (ConnectedTeleporter)
+	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		if (OtherActor->IsA(APlayerCharacter::StaticClass()))
-		{
-			// FOR DEBUGGING PURPOSES
-			// UE_LOG(LogTemp, Warning,
-			// TEXT("bIsTeleporter = %s, Player->IsBeingTeleported = %s"),
-			// bIsTeleporter ? TEXT("true") : TEXT("false"),
-			// Player->GetIsBeingTeleported() ? TEXT("true") : TEXT("false"))
+		UE_LOG(LogTemp, Warning, TEXT("OnEndOverlap"))
 
-			bPlayerIsInside = false;
+		bPlayerIsInside = false;
 
-			if (Player->GetIsBeingTeleported())
-			{
-				bIsTeleporter = false;
-
-				Player->SetIsBeingTeleported(false);
-			}
-			else if (!Player->GetIsBeingTeleported())
-			{
-				bIsTeleporter = false;
-
-				Player->SetIsBeingTeleported(true);
-
-				ConnectedTeleporter->OpenDoor();
-			}
-		}
+		OpenDoor();
 	}
 }
 
 void ATrigger_Teleporter::TeleportPlayer()
 {
-	if (Player->GetIsBeingTeleported() && bIsTeleporter)
+	if (Player->GetIsBeingTeleported() && bPlayerIsInside)
 	{
-		Player->TeleportTo(ConnectedTeleporter->GetActorLocation() + FVector(0, 0, 30), GetActorRotation(), false, true);
+		UE_LOG(LogTemp, Warning, TEXT("TeleportPlayer"))
+
+		switch (TeleportToMap)	
+		{
+		case ETeleportToMap::Hub:
+			UGameplayStatics::OpenLevel(GetWorld(), TEXT(""));
+			break;
+		case ETeleportToMap::Port:
+			UGameplayStatics::OpenLevel(GetWorld(), TEXT("TutorialMap"));
+			break;
+		case ETeleportToMap::Mines:
+			UGameplayStatics::OpenLevel(GetWorld(), TEXT("Mines3"));
+			break;
+		default:
+			break;
+		}
 	}
 }

@@ -38,6 +38,8 @@ protected:
 	bool bUseRecoilEffect = true;
 
 private:
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const & DamageEvent, class AController * EventInstigator, AActor * DamageCauser) override;
+
 	void Move(float DeltaTime, float DotProduct);
 
 	void Shoot();
@@ -55,6 +57,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AProjectile> Projectile_BP;
+
+	UPROPERTY(EditDefaultsOnly)
+	UParticleSystem* DeathParticle;
 
 	class APlayerCharacter* Player;
 

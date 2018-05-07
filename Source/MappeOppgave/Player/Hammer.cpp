@@ -11,6 +11,7 @@
 
 #include "Enemies/EnemyChar.h"
 #include "PlayerCharacter.h"
+#include "Enemies/CrystalProtector.h"
 #include "WorldActors/DestructibleProp.h"
 
 // Sets default values
@@ -81,7 +82,6 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			FHitResult CastHit;
 			if (EnemyHit)
 			{
-
 				UGameplayStatics::ApplyPointDamage(
 					EnemyHit,
 					1.f,
@@ -91,7 +91,7 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 					UDamageType::StaticClass()
 				);
 			}
-			else
+			else 
 			{
 				UE_LOG(LogTemp, Warning, TEXT("No enemy!"))
 				auto PropHit = Cast<ADestructibleProp>(OtherActor);
@@ -108,6 +108,21 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 						Player,
 						UDamageType::StaticClass()
 					);
+				}
+				else
+				{
+					auto CrystalProtectorHit = Cast<ACrystalProtector>(OtherActor);
+					if (CrystalProtectorHit)
+					{
+						UGameplayStatics::ApplyPointDamage(
+							CrystalProtectorHit,
+							1.f,
+							GetActorForwardVector(),
+							CastHit, UGameplayStatics::GetPlayerController(GetWorld(), 0),
+							Player,
+							UDamageType::StaticClass()
+						);
+					}
 				}
 			}
 		}
