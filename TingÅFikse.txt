@@ -1,0 +1,7 @@
+- Destructable mesh
+- Transparent walls når kamera blocker
+- Checkpoint widgets
+- Ikke kunne teleporte før krystallen er knust
+- Lage eget tutorialmap og egen hub map
+- Reworke teleportere til å funke ordentlig mellom maps
+- Legge til unrealdamagesystem til crystalprotectors
