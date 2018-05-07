@@ -7,8 +7,10 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 
+
 #include "Enemies/EnemyChar.h"
 #include "PlayerCharacter.h"
+#include "WorldActors/DestructibleProp.h"
 
 // Sets default values
 AHammer::AHammer()
@@ -69,6 +71,7 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Overlapped!"))
 		if (Player->GetIsAttacking())
 		{
 			auto EnemyHit = Cast<AEnemyChar>(OtherActor);
@@ -79,11 +82,30 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 				UGameplayStatics::ApplyPointDamage(
 					EnemyHit,
 					1.f,
-					GetActorForwardVector(),
+					GetActorForwardVector()*100,
 					CastHit, UGameplayStatics::GetPlayerController(GetWorld(), 0),
 					Player,
 					UDamageType::StaticClass()
 				);
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("No enemy!"))
+				auto PropHit = Cast<ADestructibleProp>(OtherActor);
+
+				if (PropHit)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Found prop!"))
+					FHitResult CastHit;
+
+					UGameplayStatics::ApplyDamage(
+						PropHit,
+						10.f,
+						UGameplayStatics::GetPlayerController(GetWorld(), 0),
+						Player,
+						UDamageType::StaticClass()
+					);
+				}
 			}
 		}
 	}
