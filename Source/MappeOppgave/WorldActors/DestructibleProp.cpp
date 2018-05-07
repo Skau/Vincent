@@ -6,5 +6,5 @@ float ADestructibleProp::TakeDamage(float DamageAmount, FDamageEvent const & Dam
 {
 	Super::TakeDamage( DamageAmount,DamageEvent,EventInstigator,DamageCauser);
 	UE_LOG(LogTemp, Warning, TEXT("prop took damage!"))
-	return 0.0f;
+	return DamageAmount;
 }

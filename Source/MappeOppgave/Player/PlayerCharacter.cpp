@@ -153,13 +153,10 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 
 void APlayerCharacter::WhenDroppingHammer()
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("4.01. PlayerCharacter (WhenDroppingHammer): Ran Function"));
 	if (!Hammer) { return; }
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("5.01. PlayerCharacter (WhenDroppingHammer): Found Hammerptr"));
 
 	if (bIsHoldingHammer && !GetCharacterMovement()->IsFalling()) 
 	{ 
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("5.01. PlayerCharacter (WhenDroppingHammer): Player is not holding hammer and not falling"));
 		Hammer->OnDropped();
 		bIsHoldingHammer = false;
 	}
@@ -167,15 +164,11 @@ void APlayerCharacter::WhenDroppingHammer()
 
 void APlayerCharacter::WhenPickingUpHammer()
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("4.02. PlayerCharacter (WhenPickingUpHammer): Ran Function"));
-	if (!Hammer) { UE_LOG(LogTemp, Warning, TEXT("Hammer not found")) return; }
 
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("5.02. PlayerCharacter (WhenPickingUpHammer): Found Hammerptr"));
+	if (!Hammer) { UE_LOG(LogTemp, Warning, TEXT("Hammer not found")) return; }
 
 	if (bIsCloseEnough && !bIsHoldingHammer)
 	{
-		GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("6.02. PlayerCharacter (WhenPickingUpHammer): Player is close enough and not holding hammer"));
-
 		Hammer->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("GripPoint"));
 		Hammer->OnPickedUp();
 		Hammer->SetActorRelativeRotation(FRotator(0));

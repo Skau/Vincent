@@ -52,8 +52,6 @@ void AHammer::Tick(float DeltaTime)
 
 void AHammer::OnDropped()
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("7.01 Hammer (OnDropped): Ran Function"));
-
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 	SetPhysics(true);
 	//HammerMesh->SetWorldScale3D(FVector(1));
@@ -61,7 +59,6 @@ void AHammer::OnDropped()
 
 void AHammer::OnPickedUp()
 {
-	GEngine->AddOnScreenDebugMessage(INDEX_NONE, 10.f, FColor::Red, TEXT("7.02 Hammer (OnPickedUp): Ran Function"));
 	HammerMesh->SetWorldScale3D(FVector(1));
 	SetActorRotation(FRotator(0,90,0));
 	SetPhysics(false);
@@ -81,14 +78,14 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		if (Player->GetIsAttacking())
 		{
 			auto EnemyHit = Cast<AEnemyChar>(OtherActor);
+			FHitResult CastHit;
 			if (EnemyHit)
 			{
-				FHitResult CastHit;
 
 				UGameplayStatics::ApplyPointDamage(
 					EnemyHit,
 					1.f,
-					GetActorForwardVector()*100,
+					GetActorForwardVector(),
 					CastHit, UGameplayStatics::GetPlayerController(GetWorld(), 0),
 					Player,
 					UDamageType::StaticClass()
@@ -102,12 +99,12 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 				if (PropHit)
 				{
 					UE_LOG(LogTemp, Warning, TEXT("Found prop!"))
-					FHitResult CastHit;
 
-					UGameplayStatics::ApplyDamage(
+					UGameplayStatics::ApplyPointDamage(
 						PropHit,
-						10.f,
-						UGameplayStatics::GetPlayerController(GetWorld(), 0),
+						2.f,
+						GetActorForwardVector(),
+						CastHit, UGameplayStatics::GetPlayerController(GetWorld(), 0),
 						Player,
 						UDamageType::StaticClass()
 					);
