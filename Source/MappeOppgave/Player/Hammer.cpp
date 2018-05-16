@@ -93,37 +93,19 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 			}
 			else 
 			{
-				UE_LOG(LogTemp, Warning, TEXT("No enemy!"))
-				auto PropHit = Cast<ADestructibleProp>(OtherActor);
-
-				if (PropHit)
+				auto CrystalProtectorHit = Cast<ACrystalProtector>(OtherActor);
+				if (CrystalProtectorHit)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Found prop!"))
-
 					UGameplayStatics::ApplyPointDamage(
-						PropHit,
-						2.f,
+						CrystalProtectorHit,
+						1.f,
 						GetActorForwardVector(),
 						CastHit, UGameplayStatics::GetPlayerController(GetWorld(), 0),
 						Player,
 						UDamageType::StaticClass()
 					);
 				}
-				else
-				{
-					auto CrystalProtectorHit = Cast<ACrystalProtector>(OtherActor);
-					if (CrystalProtectorHit)
-					{
-						UGameplayStatics::ApplyPointDamage(
-							CrystalProtectorHit,
-							1.f,
-							GetActorForwardVector(),
-							CastHit, UGameplayStatics::GetPlayerController(GetWorld(), 0),
-							Player,
-							UDamageType::StaticClass()
-						);
-					}
-				}
+				
 			}
 		}
 	}
