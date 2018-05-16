@@ -5,15 +5,15 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Player/Hammer.h"
 #include "Player/PlayerCharacter.h"
+#include "Enemies/CrystalProtector.h"
 
 // Sets default values
 AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>("SphereCollision");
 	RootComponent = CollisionSphere;
@@ -30,6 +30,8 @@ void AProjectile::BeginPlay()
 	Super::BeginPlay();
 
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AProjectile::OnBeginOverlap);
+
+	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 }
 
 // Called every frame
@@ -45,10 +47,23 @@ void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * 
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		auto Player = Cast<APlayerCharacter>(OtherActor);
-		if (Player)
+		Player->SetEnemyHitForwardVector(GetActorForwardVector());
+		FHitResult CastHit;
+		UGameplayStatics::ApplyPointDamage(
+			OtherActor,
+			Damage,
+			GetActorForwardVector(),
+			CastHit, Player->GetController(),
+			this,
+			UDamageType::StaticClass()
+		);
+		
+		Destroy();
+	}
+	else if (OtherActor->IsA(ACrystalProtector::StaticClass()))
+	{
+		if (bHasChangedDirection)
 		{
-			Player->SetEnemyHitForwardVector(GetActorForwardVector());
 			FHitResult CastHit;
 			UGameplayStatics::ApplyPointDamage(
 				OtherActor,
@@ -58,8 +73,18 @@ void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * 
 				this,
 				UDamageType::StaticClass()
 			);
+			Destroy();
 		}
 	}
-	Destroy();
+	else if (OtherActor->IsA(AHammer::StaticClass()))
+	{
+		auto Hammer = Cast<AHammer>(OtherActor);
+		if (Player->GetIsAttacking() && !bHasChangedDirection)
+		{
+			MoveDirection = -MoveDirection;
+			Speed *= 2;
+			bHasChangedDirection = true;
+		}
+	}
 }
 

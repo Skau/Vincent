@@ -75,7 +75,6 @@ void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Overlapped!"))
 		if (Player->GetIsAttacking())
 		{
 			auto EnemyHit = Cast<AEnemyChar>(OtherActor);

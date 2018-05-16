@@ -27,7 +27,6 @@ public:
 	void SetMoveDirection(FVector Direction) { MoveDirection = Direction; }
 
 private:
-
 	UPROPERTY(EditAnywhere)
 	float Speed = 700;
 
@@ -40,5 +39,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* StaticMesh;
 	
+	class APlayerCharacter* Player;
+
 	FVector MoveDirection = FVector(0);
+
+	bool bHasChangedDirection = false;
 };
