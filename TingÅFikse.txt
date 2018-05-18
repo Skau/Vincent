@@ -1,6 +1,4 @@
 - Destructable mesh
 - Transparent walls når kamera blocker
 - Ikke kunne teleporte før krystallen er knust
-- Lage eget og reworke tutorialmap
-- Lage eget hubmap
-- Reworke teleportere til å funke ordentlig mellom maps
+- Reworke tutorialmap
