@@ -35,6 +35,18 @@ void ATrigger_Teleporter::BeginPlay()
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ATrigger_Teleporter::OnBeginOverlap);
 	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ATrigger_Teleporter::OnEndOverlap);
+
+	if (bPlayerStartsInside)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Starts Inside"))
+		OpenDoorFirstTime();
+	}
+	else
+	{
+		UE_LOG(LogTemp,Warning, TEXT("Player Does not start Inside"))
+		if (DoorMesh)
+			DoorMesh->SetRelativeRotation(FRotator(0, 180, 0));
+	}
 }
 
 // Called every frame

@@ -39,6 +39,9 @@ protected:
 	UStaticMeshComponent* GetDoorMesh() { return DoorMesh; }
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void OpenDoorFirstTime();
+
+	UFUNCTION(BlueprintImplementableEvent)
 	void OpenDoor();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -46,6 +49,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void TeleportPlayer();
+
+	UPROPERTY(EditAnywhere)
+	bool bPlayerStartsInside;
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bPlayerIsInside;
