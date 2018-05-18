@@ -1,4 +1,3 @@
 - Destructable mesh
 - Transparent walls når kamera blocker
 - Ikke kunne teleporte før krystallen er knust
-- Reworke tutorialmap
