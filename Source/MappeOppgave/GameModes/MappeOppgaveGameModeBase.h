@@ -18,6 +18,9 @@ class MAPPEOPPGAVE_API AMappeOppgaveGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
+
+	virtual void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable)
 	int GetCrystalsDestroyed() { return CrystalsDestroyed; }
 
@@ -29,6 +32,10 @@ public:
 	void AddEnemyToAllEnemies(AEnemyChar* Enemy) { if (Enemy) { AllEnemies.Add(Enemy); } }
 
 	void RemoveEnemyFromAllEnemies(AEnemyChar* Enemy) { if (Enemy) { AllEnemies.Remove(Enemy); } }
+
+protected:
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* MusicSound;
 
 private:
 	int CrystalsDestroyed = 0;

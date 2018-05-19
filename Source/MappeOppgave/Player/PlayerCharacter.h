@@ -114,6 +114,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	AHammer* Hammer = nullptr;
 
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* OnDamageTakenSound;
+
 	FVector SpawnLocation = FVector(0);
 
 	FVector EnemyHitForwardVector = FVector(0);

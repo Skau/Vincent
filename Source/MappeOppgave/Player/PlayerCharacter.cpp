@@ -130,6 +130,8 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 	{
 		Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OnDamageTakenSound, GetActorLocation());
+
 		Health -= DamageAmount;
 
 		if (Health > 0)
