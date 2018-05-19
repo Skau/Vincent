@@ -42,16 +42,20 @@ void ATrigger_Checkpoint::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
 		Player->SetBIsCloseEnough(true);
+		if (!bIsWidgetPlaying)
+		{
+			bIsWidgetPlaying = true;
 
-		if (IsCurrentSpawn)
-		{
-			CreateCheckpointTakenWidget();
-		}
-		else
-		{
-			Player->SetNewSpawnPoint(GetActorLocation() + FVector(-100, 0, 0));
-			IsCurrentSpawn = true;
-			CreateCheckpointPromptWidget();
+			if (IsCurrentSpawn)
+			{
+				CreateCheckpointTakenWidget();
+			}
+			else
+			{
+				Player->SetNewSpawnPoint(GetActorLocation() + FVector(-100, 0, 0));
+				IsCurrentSpawn = true;
+				CreateCheckpointPromptWidget();
+			}
 		}
 	}
 }

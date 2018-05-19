@@ -38,12 +38,10 @@ void ATrigger_Teleporter::BeginPlay()
 
 	if (bPlayerStartsInside)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Starts Inside"))
 		OpenDoorFirstTime();
 	}
 	else
 	{
-		UE_LOG(LogTemp,Warning, TEXT("Player Does not start Inside"))
 		if (DoorMesh)
 			DoorMesh->SetRelativeRotation(FRotator(0, 180, 0));
 	}

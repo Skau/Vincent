@@ -35,6 +35,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void CreateCheckpointPromptWidget();
 
+	UFUNCTION(BlueprintCallable)
+	void SetIsWidgetPlaying(bool value) { bIsWidgetPlaying= value; }
+
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* Mesh;
 
@@ -42,6 +45,8 @@ protected:
 	class UBoxComponent* TriggerVolume;
 
 	class APlayerCharacter* Player;
+
+	bool bIsWidgetPlaying = false;
 
 	bool IsCurrentSpawn;
 };
