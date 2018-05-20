@@ -48,7 +48,8 @@ void ACrystal::BeginPlay()
 void ACrystal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (Indicator->GetIsCrystalActive())
+
+	if (bIsActive)
 	{
 		InnerRing->AddWorldRotation(FQuat(FRotator(1.5)));
 		OuterRing->AddWorldRotation(FQuat(FRotator(-1.5)));
@@ -79,6 +80,7 @@ void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 				{
 					Indicator->SetIsCrystalActive(false);
 				}
+				bIsActive = false;
 				CrystalMesh->SetVisibility(false);
 				TriggerVolume->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 				InnerRing->SetSimulatePhysics(true);

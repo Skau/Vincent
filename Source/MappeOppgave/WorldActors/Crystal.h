@@ -46,4 +46,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class ACrystalIndicator* Indicator = nullptr;
+
+	bool bIsActive = true;
 };
