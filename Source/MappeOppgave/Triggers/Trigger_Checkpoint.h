@@ -38,8 +38,14 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void SetIsWidgetPlaying(bool value) { bIsWidgetPlaying= value; }
 
+	void ActivateMesh(UStaticMeshComponent* Mesh);
+	void DeactivateMesh(UStaticMeshComponent* Mesh);
+
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Mesh;
+	UStaticMeshComponent* MeshWhenHoldingHammer;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* MeshWhenNoHammer;
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume;
