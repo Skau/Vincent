@@ -16,11 +16,11 @@ ATrigger_Checkpoint::ATrigger_Checkpoint()
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>("TriggerVolume");
 	RootComponent = TriggerVolume;
 
-	MeshWhenHoldingHammer = CreateDefaultSubobject<UStaticMeshComponent>("MeshWhenHoldingHammer");
-	MeshWhenHoldingHammer->SetupAttachment(RootComponent);
+	CheckpointStand = CreateDefaultSubobject<UStaticMeshComponent>("CheckpointStand");
+	CheckpointStand->SetupAttachment(RootComponent);
 
-	MeshWhenNoHammer = CreateDefaultSubobject<UStaticMeshComponent>("MeshWhenNoHammer");
-	MeshWhenNoHammer->SetupAttachment(RootComponent);
+	CheckpointHandle = CreateDefaultSubobject<UStaticMeshComponent>("CheckpointHandle");
+	CheckpointHandle->SetupAttachment(RootComponent);
 
 }
 
@@ -32,8 +32,6 @@ void ATrigger_Checkpoint::BeginPlay()
 	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ATrigger_Checkpoint::OnEndOverlap);
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
-	DeactivateMesh(MeshWhenHoldingHammer);
 }
 
 // Called every frame
@@ -43,18 +41,16 @@ void ATrigger_Checkpoint::Tick(float DeltaTime)
 	
 	if (Player->getIsHoldingHammer())
 	{
-		if (!MeshWhenHoldingHammer->IsActive())
+		if (CheckpointHandle->IsActive())
 		{
-			DeactivateMesh(MeshWhenNoHammer);
-			ActivateMesh(MeshWhenHoldingHammer);
+			DeactivateMesh(CheckpointHandle);
 		}
 	}
 	else
 	{
-		if (!MeshWhenNoHammer->IsActive())
+		if (!CheckpointHandle->IsActive())
 		{
-			DeactivateMesh(MeshWhenHoldingHammer);
-			ActivateMesh(MeshWhenNoHammer);
+			ActivateMesh(CheckpointHandle);
 		}
 	}
 }

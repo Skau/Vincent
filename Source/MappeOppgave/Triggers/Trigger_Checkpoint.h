@@ -42,10 +42,10 @@ protected:
 	void DeactivateMesh(UStaticMeshComponent* Mesh);
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* MeshWhenHoldingHammer;
+	UStaticMeshComponent* CheckpointStand;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* MeshWhenNoHammer;
+	UStaticMeshComponent* CheckpointHandle;
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume;
