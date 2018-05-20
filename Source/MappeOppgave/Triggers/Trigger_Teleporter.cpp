@@ -90,13 +90,13 @@ void ATrigger_Teleporter::TeleportPlayer()
 		switch (TeleportToMap)	
 		{
 		case ETeleportToMap::Hub:
-			UGameplayStatics::OpenLevel(GetWorld(), TEXT("Hub"));
+			OpenNewMapWithLoading("Hub");
 			break;
 		case ETeleportToMap::Port:
-			UGameplayStatics::OpenLevel(GetWorld(), TEXT("Port"));
+			OpenNewMapWithLoading("Port");
 			break;
 		case ETeleportToMap::Mines:
-			UGameplayStatics::OpenLevel(GetWorld(), TEXT("Mines3"));
+			OpenNewMapWithLoading("Mines3");
 			break;
 		default:
 			break;
