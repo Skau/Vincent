@@ -21,6 +21,15 @@ ACrystal::ACrystal()
 
 	CrystalMesh = CreateDefaultSubobject<UStaticMeshComponent>("CrystalMesh");
 	CrystalMesh->SetupAttachment(RootComponent);
+
+	InnerRing = CreateDefaultSubobject<UStaticMeshComponent>("InnerRing");
+	InnerRing->SetupAttachment(CrystalMesh);
+
+	OuterRing = CreateDefaultSubobject<UStaticMeshComponent>("OuterRing");
+	OuterRing->SetupAttachment(CrystalMesh);
+	
+	Pedestal = CreateDefaultSubobject<UStaticMeshComponent>("Pedestal");
+	Pedestal->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -39,7 +48,11 @@ void ACrystal::BeginPlay()
 void ACrystal::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	CrystalMesh->AddWorldRotation(FQuat(FRotator(0,1,0)));
+	if (Indicator->GetIsCrystalActive())
+	{
+		InnerRing->AddWorldRotation(FQuat(FRotator(1.5)));
+		OuterRing->AddWorldRotation(FQuat(FRotator(-1.5)));
+	}
 }
 
 void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -67,6 +80,9 @@ void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 					Indicator->SetIsCrystalActive(false);
 				}
 				CrystalMesh->SetVisibility(false);
+				TriggerVolume->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+				InnerRing->SetSimulatePhysics(true);
+				OuterRing->SetSimulatePhysics(true);
 			}
 		}
 	}

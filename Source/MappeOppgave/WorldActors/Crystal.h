@@ -32,6 +32,15 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CrystalMesh;
 
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* InnerRing;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* OuterRing;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* Pedestal;
+
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* DeathParticle;
 

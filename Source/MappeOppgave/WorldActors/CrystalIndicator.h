@@ -21,6 +21,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	bool GetIsCrystalActive() { return bIsCrystalActive; }
+
 	void SetIsCrystalActive(bool Value) { bIsCrystalActive = Value; }
 
 private:	
