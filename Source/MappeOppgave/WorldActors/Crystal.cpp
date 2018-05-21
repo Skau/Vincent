@@ -84,6 +84,11 @@ void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 				TriggerVolume->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 				InnerRing->SetSimulatePhysics(true);
 				OuterRing->SetSimulatePhysics(true);
+
+				if (ShatterSound)
+				{
+					UGameplayStatics::PlaySoundAtLocation(GetWorld(), ShatterSound, GetActorLocation());
+				}
 			}
 		}
 	}

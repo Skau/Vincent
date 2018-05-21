@@ -136,6 +136,8 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 
 		if (Health > 0)
 		{
+
+
 			// Runs BP timeline
 			Knockback(DamageCauser, EnemyHitForwardVector);
 

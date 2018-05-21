@@ -35,7 +35,17 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly)
-	class USoundBase* MusicSound;
+	class USoundBase* HubAndPortMusic;
+
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* MinesMusic;
+
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* PortAmbient;
+
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* MinesAmbient;
+
 
 private:
 	int CrystalsDestroyed = 0;

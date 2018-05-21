@@ -70,10 +70,15 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* DoorMesh;
 
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* TeleportSound = nullptr;
+
 	UPROPERTY(EditAnywhere)
 	ETeleportToMap TeleportToMap = ETeleportToMap::None;
 
 	class APlayerCharacter* Player = nullptr;
 
 	class UCustomGameInstance* GameInstance = nullptr;
+
+
 };

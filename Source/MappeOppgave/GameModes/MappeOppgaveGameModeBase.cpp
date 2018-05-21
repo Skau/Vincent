@@ -10,7 +10,20 @@ void AMappeOppgaveGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UGameplayStatics::PlaySound2D(GetWorld(), MusicSound);
+	if (UGameplayStatics::GetCurrentLevelName(GetWorld(), true) == "Port")
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), HubAndPortMusic);
+		UGameplayStatics::PlaySound2D(GetWorld(), PortAmbient);
+	}
+	else if (UGameplayStatics::GetCurrentLevelName(GetWorld(), true) == "Mines3")
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), MinesMusic);
+		UGameplayStatics::PlaySound2D(GetWorld(), MinesAmbient);
+	}
+	else
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), HubAndPortMusic);
+	}
 
 	if (GameInstance == nullptr)
 	{

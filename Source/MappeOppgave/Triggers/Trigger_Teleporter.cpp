@@ -86,11 +86,9 @@ void ATrigger_Teleporter::TeleportPlayer()
 {
 	if (Player->GetIsBeingTeleported() && bPlayerIsInside)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TeleportPlayer"))
-
-		if (UGameplayStatics::GetCurrentLevelName(GetWorld(), true) == "TutorialMap")
+		if (TeleportSound)
 		{
-
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), TeleportSound, GetActorLocation());
 		}
 
 		switch (TeleportToMap)	
