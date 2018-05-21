@@ -97,6 +97,8 @@ void ATrigger_Teleporter::TeleportPlayer()
 			break;
 		case ETeleportToMap::Mines:
 			OpenNewMapWithLoading("Mines3");
+		case ETeleportToMap::Tutorial:
+			OpenNewMapWithLoading("TutorialMap");
 			break;
 		default:
 			break;

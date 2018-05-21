@@ -13,6 +13,7 @@ enum class ETeleportToMap
 	Hub,
 	Port,
 	Mines,
+	Tutorial
 };
 
 UCLASS()
