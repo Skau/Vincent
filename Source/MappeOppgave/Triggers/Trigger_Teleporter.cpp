@@ -7,7 +7,7 @@
 #include "Engine/World.h"
 #include "TimerManager.h"
 #include "Math/UnrealMathUtility.h"
-
+#include "CustomGameInstance.h"
 #include "Player/PlayerCharacter.h"
 
 // Sets default values
@@ -33,6 +33,7 @@ void ATrigger_Teleporter::BeginPlay()
 	Super::BeginPlay();
 
 	Player = Cast<APlayerCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	GameInstance = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ATrigger_Teleporter::OnBeginOverlap);
 	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ATrigger_Teleporter::OnEndOverlap);
 
@@ -97,6 +98,7 @@ void ATrigger_Teleporter::TeleportPlayer()
 			break;
 		case ETeleportToMap::Mines:
 			OpenNewMapWithLoading("Mines3");
+			break;
 		case ETeleportToMap::Tutorial:
 			OpenNewMapWithLoading("TutorialMap");
 			break;

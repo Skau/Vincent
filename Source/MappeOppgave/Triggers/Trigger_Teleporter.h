@@ -74,4 +74,6 @@ protected:
 	ETeleportToMap TeleportToMap = ETeleportToMap::None;
 
 	class APlayerCharacter* Player = nullptr;
+
+	class UCustomGameInstance* GameInstance = nullptr;
 };

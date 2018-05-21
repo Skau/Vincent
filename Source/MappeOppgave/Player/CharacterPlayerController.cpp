@@ -7,7 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
-
+#include "CustomGameInstance.h"
 #include "PlayerCharacter.h"
 
 ACharacterPlayerController::ACharacterPlayerController(const FObjectInitializer & ObjectInitializer)
@@ -21,6 +21,9 @@ void ACharacterPlayerController::BeginPlay()
 	SetInputMode(FInputModeGameOnly());
 	Player = Cast<APlayerCharacter>(GetPawn());
 	bShowMouseCursor = true;
+	GameInstance = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	GameInstance->SetLastMap(FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true)));
+	UE_LOG(LogTemp, Warning, TEXT("CurrentMap: %s"), *GameInstance->GetLastMap().ToString())
 }
 
 void ACharacterPlayerController::SetupInputComponent()

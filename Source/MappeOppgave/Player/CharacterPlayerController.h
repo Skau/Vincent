@@ -47,7 +47,10 @@ private:
 
 	class APlayerCharacter* Player = nullptr;
 
+	class UCustomGameInstance* GameInstance = nullptr;
+
 	bool bIsSequencePlaying = false;
+
 
 public:
 	UFUNCTION(BlueprintCallable)
