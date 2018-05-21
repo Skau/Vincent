@@ -6,6 +6,9 @@
 #include "Engine/GameInstance.h"
 #include "CustomGameInstance.generated.h"
 
+// Forward declarations
+class ACrystalIndicator;
+
 /**
  * 
  */
@@ -20,8 +23,15 @@ public:
 
 	UFUNCTION(BlueprintPure)
 	FName GetLastMap() { return LastMap; }
-	
-private:
 
+	bool GetMinesMapFinished() { return bMinesMapNotFinished; }
+	bool GetPortMapFinished() { return bPortMapNotFinished; }
+	void SetMinesMapFinished() { bMinesMapNotFinished = false; }
+	void SetPortMapFinished() { bPortMapNotFinished = false; }
+
+private:
 	FName LastMap = "";
+
+	bool bMinesMapNotFinished = true;
+	bool bPortMapNotFinished = true;
 };

@@ -6,6 +6,15 @@
 #include "GameFramework/Actor.h"
 #include "CrystalIndicator.generated.h"
 
+UENUM()
+enum class EConnectedMap
+{
+	None,
+	Port,
+	Mines,
+	Tutorial
+};
+
 UCLASS()
 class MAPPEOPPGAVE_API ACrystalIndicator : public AActor
 {
@@ -25,8 +34,12 @@ public:
 
 	void SetIsCrystalActive(bool Value) { bIsCrystalActive = Value; }
 
+	EConnectedMap GetConnectedMap() { return ConnectedMap; }
+
 private:	
-	
+	UPROPERTY(EditAnywhere)
+	EConnectedMap ConnectedMap = EConnectedMap::None;
+
 	UPROPERTY(VisibleAnywhere)
 	class UMeshComponent* MeshComponent;
 
@@ -35,6 +48,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class UMaterialInterface* MaterialWhenInactive;
-	
-	bool bIsCrystalActive = false;
+
+	bool bIsCrystalActive = true;
 };

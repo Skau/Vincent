@@ -42,5 +42,6 @@ private:
 
 	TArray<AEnemyChar*> AllEnemies;
 	
+	class UCustomGameInstance* GameInstance = nullptr;
 	
 };

@@ -9,6 +9,7 @@
 #include "Player/PlayerCharacter.h"
 #include "GameModes/MappeOppgaveGameModeBase.h"
 #include "CrystalIndicator.h"
+#include "CustomGameInstance.h"
 
 // Sets default values
 ACrystal::ACrystal()
@@ -37,11 +38,6 @@ void ACrystal::BeginPlay()
 {
 	Super::BeginPlay();
 	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ACrystal::OnBeginOverlap);
-
-	if (Indicator)
-	{
-		Indicator->SetIsCrystalActive(true);
-	}
 }
 
 // Called every frame
@@ -70,15 +66,18 @@ void ACrystal::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Other
 				{
 					UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DeathParticle, GetTargetLocation());
 				}
-				auto temp = GetWorld()->GetAuthGameMode();
-				AMappeOppgaveGameModeBase* GameMode = Cast<AMappeOppgaveGameModeBase>(temp);
-				if (GameMode)
+				UCustomGameInstance* GameInstance = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+				if (GameInstance)
 				{
-					GameMode->IncreaseCrystalsDestroyed();
-				}
-				if (Indicator)
-				{
-					Indicator->SetIsCrystalActive(false);
+					FString CurrentMap = UGameplayStatics::GetCurrentLevelName(GetWorld(), true);
+					if (CurrentMap == "Port")
+					{
+						GameInstance->SetPortMapFinished();
+					}
+					else
+					{
+						GameInstance->SetMinesMapFinished();
+					}
 				}
 				bIsActive = false;
 				CrystalMesh->SetVisibility(false);

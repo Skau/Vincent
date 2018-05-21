@@ -44,8 +44,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* DeathParticle;
 
-	UPROPERTY(EditAnywhere)
-	class ACrystalIndicator* Indicator = nullptr;
-
 	bool bIsActive = true;
+
+
 };

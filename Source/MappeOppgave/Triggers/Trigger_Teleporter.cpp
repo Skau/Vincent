@@ -88,6 +88,11 @@ void ATrigger_Teleporter::TeleportPlayer()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("TeleportPlayer"))
 
+		if (UGameplayStatics::GetCurrentLevelName(GetWorld(), true) == "TutorialMap")
+		{
+
+		}
+
 		switch (TeleportToMap)	
 		{
 		case ETeleportToMap::Hub:
