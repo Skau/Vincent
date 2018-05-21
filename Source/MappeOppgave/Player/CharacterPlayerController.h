@@ -45,15 +45,14 @@ private:
 
 	void PauseGame();
 
-	class APlayerCharacter* Player;
+	class APlayerCharacter* Player = nullptr;
 
-	bool bIsSequencePlaying;
-	
+	bool bIsSequencePlaying = false;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	bool GetIsSequencePlaying() { return bIsSequencePlaying; }
 
 	UFUNCTION(BlueprintCallable)
 	void SetIsSequencePlaying(bool Value) { bIsSequencePlaying = Value; }
-	
 };
