@@ -32,6 +32,7 @@ void ASpawnPoint::Tick(float DeltaTime)
 
 	if (!SpawnedActor || !bSpawnUntilFracturedWall) { return; }
 
+	// Spawn new if the wall is not destroyed and the enemy spawned is dead
 	if(!bWallIsFractured)
 	{
 		if (SpawnedActor->IsActorBeingDestroyed())

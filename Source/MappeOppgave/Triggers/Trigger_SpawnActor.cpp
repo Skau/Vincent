@@ -15,8 +15,6 @@ ATrigger_SpawnActor::ATrigger_SpawnActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(FName("TriggerVolume"));
-	if (TriggerVolume == nullptr) { return; }
-
 	RootComponent = TriggerVolume;
 
 	bHasSpawned = false;

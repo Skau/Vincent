@@ -44,7 +44,9 @@ void ATrigger_Teleporter::BeginPlay()
 	else
 	{
 		if (DoorMesh)
+		{
 			DoorMesh->SetRelativeRotation(FRotator(0, 180, 0));
+		}
 	}
 }
 

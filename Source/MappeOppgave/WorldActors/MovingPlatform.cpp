@@ -51,6 +51,7 @@ void AMovingPlatform::Tick(float DeltaTime)
 	}
 }
 
+// Dynamic lerping, if two platforms use the same SpeedConstant they will never go out of sync.
 void AMovingPlatform::LerpMove(float DeltaTime)
 {
 	FVector Location = GetActorLocation();
@@ -68,6 +69,7 @@ void AMovingPlatform::LerpMove(float DeltaTime)
 	}
 }
 
+// Regular moving (no lerping)
 void AMovingPlatform::Move(float DeltaTime)
 {
 	FVector Location = GetActorLocation();
@@ -90,6 +92,7 @@ void AMovingPlatform::Move(float DeltaTime)
 	}
 }
 
+// When they reach the target, swap targetlocation and startlocation
 void AMovingPlatform::SwapDirection()
 {
 	FVector Direction = (GlobalTargetLocation - GlobalStartLocation).GetSafeNormal();

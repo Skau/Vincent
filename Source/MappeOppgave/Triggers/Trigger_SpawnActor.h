@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Trigger_SpawnActor.generated.h"
 
+// Trigger used for spawning actors through connected spawnpoints
 UCLASS()
 class MAPPEOPPGAVE_API ATrigger_SpawnActor : public AActor
 {

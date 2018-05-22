@@ -38,7 +38,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	bool bSpawnUntilFracturedWall;
 
-	bool bIsTimerStarted;
+	bool bIsTimerStarted = false;
 	
 	FTimerHandle SpawnAgain;
 

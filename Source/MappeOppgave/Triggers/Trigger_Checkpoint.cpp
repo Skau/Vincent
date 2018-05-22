@@ -39,6 +39,7 @@ void ATrigger_Checkpoint::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
+	// Updates mesh depending on if the player is holding the hammer or not
 	if (Player->getIsHoldingHammer())
 	{
 		if (CheckpointHandle->IsActive())
@@ -57,6 +58,7 @@ void ATrigger_Checkpoint::Tick(float DeltaTime)
 
 void ATrigger_Checkpoint::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	// Updates spawnlocation and displays appropriate checkpoint widget
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
 		Player->SetBIsCloseEnough(true);
