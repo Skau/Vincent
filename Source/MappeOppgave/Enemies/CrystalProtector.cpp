@@ -96,6 +96,8 @@ void ACrystalProtector::Shoot()
 			RecoilEffect();
 		}
 
+		PlayShootSound();
+
 		GetWorld()->GetTimerManager().SetTimer(TH_ShootTimer, this, &ACrystalProtector::ResetShootTimer, ShootRate);
 		bCanShoot = false;
 	}

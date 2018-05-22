@@ -28,6 +28,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void RecoilEffect();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayShootSound();
+
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume;
 
@@ -56,14 +59,14 @@ private:
 	float ShootRate = 2.f;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AProjectile> Projectile_BP;
+	TSubclassOf<AProjectile> Projectile_BP = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
-	UParticleSystem* DeathParticle;
+	UParticleSystem* DeathParticle = nullptr;
 
-	class APlayerCharacter* Player;
+	class APlayerCharacter* Player = nullptr;
 
-	bool bCanShoot;
+	bool bCanShoot = true;
 
 	FTimerHandle TH_ShootTimer;
 
