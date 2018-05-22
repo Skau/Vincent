@@ -74,6 +74,10 @@ void ATrigger_Checkpoint::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 			{
 				Player->SetNewSpawnPoint(GetActorLocation() + FVector(-100, 0, 0));
 				IsCurrentSpawn = true;
+				if (NewCheckpointSound)
+				{
+					UGameplayStatics::PlaySoundAtLocation(GetWorld(), NewCheckpointSound, GetActorLocation());
+				}
 				CreateCheckpointPromptWidget();
 			}
 		}

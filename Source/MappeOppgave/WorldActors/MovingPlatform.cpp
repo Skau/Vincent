@@ -80,7 +80,6 @@ void AMovingPlatform::Move(float DeltaTime)
 	{
 		if (!bTimerSet)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Timer started"))
 			GetWorld()->GetTimerManager().SetTimer(TH_SwapDelay, this, &AMovingPlatform::SwapDirection, ReturnDelay);
 			bTimerSet = true;
 		}

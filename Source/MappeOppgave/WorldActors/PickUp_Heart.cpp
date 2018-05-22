@@ -2,7 +2,9 @@
 
 #include "PickUp_Heart.h"
 #include "Components/BoxComponent.h"
+#include "Engine/World.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/PlayerCharacter.h"
 
 // Sets default values
@@ -46,6 +48,11 @@ void APickUp_Heart::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor 
 		if (Player->GetHealth() < 3)
 		{
 			Player->IncrementHealth();
+			if (PickupSound)
+			{
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
+			}
+
 			Destroy();
 		}
 	}

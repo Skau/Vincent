@@ -49,6 +49,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* TriggerVolume = nullptr;
 
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* NewCheckpointSound = nullptr;
+
 	class APlayerCharacter* Player = nullptr;
 
 	bool bIsWidgetPlaying = false;

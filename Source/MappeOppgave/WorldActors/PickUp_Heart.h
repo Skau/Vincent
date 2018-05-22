@@ -29,4 +29,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* StaticMesh = nullptr;
+
+	UPROPERTY(EditDefaultsOnly)
+	class USoundBase* PickupSound = nullptr;
 };

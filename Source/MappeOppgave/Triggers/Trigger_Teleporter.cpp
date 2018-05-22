@@ -62,12 +62,9 @@ void ATrigger_Teleporter::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, A
 	
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnBeginOverlap"))
-
 		bPlayerIsInside = true;
 
 		CloseDoor();
-		
 	}
 	
 }
@@ -76,8 +73,6 @@ void ATrigger_Teleporter::OnEndOverlap(UPrimitiveComponent * OverlappedComp, AAc
 {
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("OnEndOverlap"))
-
 		bPlayerIsInside = false;
 
 		OpenDoor();
