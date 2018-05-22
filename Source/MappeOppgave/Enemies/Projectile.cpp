@@ -45,6 +45,7 @@ void AProjectile::Tick(float DeltaTime)
 
 void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * OtherActor, UPrimitiveComponent * OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult)
 {
+	// Applies damage to PlayerCharacter
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
 		Player->SetEnemyHitForwardVector(GetActorForwardVector());
@@ -60,6 +61,7 @@ void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * 
 		
 		Destroy();
 	}
+	// Applies damage to CrystalProtector
 	else if (OtherActor->IsA(ACrystalProtector::StaticClass()))
 	{
 		if (bHasChangedDirection)
@@ -76,6 +78,7 @@ void AProjectile::OnBeginOverlap(UPrimitiveComponent * OverlappedComp, AActor * 
 			Destroy();
 		}
 	}
+	// Knocksbacks if hit by hammer
 	else if (OtherActor->IsA(AHammer::StaticClass()))
 	{
 		auto Hammer = Cast<AHammer>(OtherActor);

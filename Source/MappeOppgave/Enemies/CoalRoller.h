@@ -28,7 +28,7 @@ public:
 
 private:
 	UPROPERTY(EditDefaultsOnly)
-	UParticleSystem * DeathParticle;
+	UParticleSystem * DeathParticle = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
 	int Damage = 1;

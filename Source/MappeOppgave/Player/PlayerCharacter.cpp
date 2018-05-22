@@ -10,7 +10,6 @@
 #include "GameFramework/Pawn.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
-#include "UObject/ConstructorHelpers.h"
 #include "Engine/World.h"
 #include "Engine/Engine.h"
 #include "TimerManager.h"
@@ -67,12 +66,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Health <= 0)
-	{
-		bIsDead = true;
-		WhenDroppingHammer();
-	}
-
 	if (bIsHoldingHammer)
 	{
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetInputMode(FInputModeGameAndUI());
@@ -86,7 +79,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		SetActorLocation(SpawnLocation);
 	}
-	// If sprinting and the player picks up hammer, stop sprinting
+
 	if (bIsSprinting)
 	{
 		if (bIsHoldingHammer)
@@ -97,6 +90,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	}
 }
 
+// Dependent on if player is holding hammer or not
 void APlayerCharacter::SetMovementSpeed(int Value)
 {
 	GetCharacterMovement()->MaxWalkSpeed = Value;
@@ -136,8 +130,6 @@ float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const & Dama
 
 		if (Health > 0)
 		{
-
-
 			// Runs BP timeline
 			Knockback(DamageCauser, EnemyHitForwardVector);
 
@@ -168,8 +160,7 @@ void APlayerCharacter::WhenDroppingHammer()
 
 void APlayerCharacter::WhenPickingUpHammer()
 {
-
-	if (!Hammer) { UE_LOG(LogTemp, Warning, TEXT("Hammer not found")) return; }
+	if (!Hammer) { return; }
 
 	if (bIsCloseEnough && !bIsHoldingHammer)
 	{

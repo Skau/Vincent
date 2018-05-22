@@ -41,9 +41,9 @@ void ACrystalProtector::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	// Moves crystal protector relative to the player
 	FVector CurrentLocation = GetActorLocation();
 	FVector PlayerLocation = Player->GetActorLocation();
-
 	if (GetDistanceTo(Player) < ActiveRange)
 	{
 		auto DotProduct = FVector::DotProduct((PlayerLocation - CurrentLocation).GetSafeNormal(), GetActorRightVector());

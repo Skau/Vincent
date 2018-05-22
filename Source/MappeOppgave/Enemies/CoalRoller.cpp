@@ -29,6 +29,7 @@ void ACoalRoller::Tick(float DeltaTime)
 
 void ACoalRoller::OnHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
+	// Apply damage to the player if hit
 	if (OtherActor->IsA(APlayerCharacter::StaticClass()))
 	{
 		Player->SetEnemyHitForwardVector(GetActorForwardVector());

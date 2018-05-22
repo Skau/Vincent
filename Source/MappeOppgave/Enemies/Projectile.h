@@ -34,12 +34,12 @@ private:
 	float Damage = 1.f;
 
 	UPROPERTY(VisibleAnywhere)
-	class USphereComponent* CollisionSphere;
+	class USphereComponent* CollisionSphere = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	UStaticMeshComponent* StaticMesh = nullptr;
 	
-	class APlayerCharacter* Player;
+	class APlayerCharacter* Player = nullptr;
 
 	FVector MoveDirection = FVector(0);
 

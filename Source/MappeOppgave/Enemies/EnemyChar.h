@@ -25,11 +25,11 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void Knockback(AActor* DamageCauser);
 
-	class APlayerCharacter* Player;
+	class APlayerCharacter* Player = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
-	float Health;
+	float Health = 0;
 
 private:
-	FVector SpawnLocation;
+	FVector SpawnLocation = FVector(0);
 };

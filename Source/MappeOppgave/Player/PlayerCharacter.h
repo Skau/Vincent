@@ -13,6 +13,9 @@ class AHammer;
 class USkeletalMeshComponent;
 class UDecalComponent;
 
+// Intellisense screwed up this class. All functions defined in the .cpp file have green squigglies. They still work and compile,
+// but the intellisense can't find the definitons.
+
 UCLASS()
 class MAPPEOPPGAVE_API APlayerCharacter : public ACharacter
 {
@@ -72,8 +75,8 @@ public:
 	void SetHammer(AHammer* HammerIn) { Hammer = HammerIn; }
 
 private:
-	APlayerCharacter();
 	// Sets default values for this character's properties
+	APlayerCharacter();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -106,10 +109,10 @@ private:
 	int Health = 3;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* CameraComponent;
+	UCameraComponent* CameraComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* CameraBoom;
+	USpringArmComponent* CameraBoom = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
 	AHammer* Hammer = nullptr;
@@ -121,9 +124,9 @@ private:
 
 	FVector EnemyHitForwardVector = FVector(0);
 
-	float NormalSpeed;
+	float NormalSpeed = 0.f;
 
-	float SprintSpeed;
+	float SprintSpeed = 0.f;
 
 	bool bJumpButtonPressed = false;
 
