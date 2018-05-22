@@ -42,17 +42,17 @@ protected:
 	void DeactivateMesh(UStaticMeshComponent* Mesh);
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* CheckpointStand;
+	UStaticMeshComponent* CheckpointStand = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* CheckpointHandle;
+	UStaticMeshComponent* CheckpointHandle = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerVolume;
+	class UBoxComponent* TriggerVolume = nullptr;
 
-	class APlayerCharacter* Player;
+	class APlayerCharacter* Player = nullptr;
 
 	bool bIsWidgetPlaying = false;
 
-	bool IsCurrentSpawn;
+	bool IsCurrentSpawn = false;
 };

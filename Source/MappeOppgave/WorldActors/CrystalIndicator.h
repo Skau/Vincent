@@ -41,13 +41,13 @@ private:
 	EConnectedMap ConnectedMap = EConnectedMap::None;
 
 	UPROPERTY(VisibleAnywhere)
-	class UMeshComponent* MeshComponent;
+	class UMeshComponent* MeshComponent = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	class UMaterialInterface* MaterialWhenActive;
+	class UMaterialInterface* MaterialWhenActive = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	class UMaterialInterface* MaterialWhenInactive;
+	class UMaterialInterface* MaterialWhenInactive = nullptr;
 
 	bool bIsCrystalActive = true;
 };

@@ -25,8 +25,8 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerVolume;
+	class UBoxComponent* TriggerVolume = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent* StaticMesh;
+	class UStaticMeshComponent* StaticMesh = nullptr;
 };

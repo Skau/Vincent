@@ -30,10 +30,10 @@ private:
 	bool bWallIsFractured = false;
 	
 	UPROPERTY(EditAnywhere)
-	UClass* ActorToSpawn;
+	UClass* ActorToSpawn = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	bool bIsHammer;
+	bool bIsHammer = false;
 
 	UPROPERTY(EditAnywhere)
 	bool bSpawnUntilFracturedWall;
@@ -44,5 +44,5 @@ private:
 
 	AActor* SpawnedActor = nullptr;
 
-	AMappeOppgaveGameModeBase* GameMode;
+	AMappeOppgaveGameModeBase* GameMode = nullptr;
 };

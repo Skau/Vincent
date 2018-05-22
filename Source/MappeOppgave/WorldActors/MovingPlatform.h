@@ -26,13 +26,13 @@ public:
 
 private: 
 	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerVolume;
+	class UBoxComponent* TriggerVolume = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent* Mesh;
+	class UStaticMeshComponent* Mesh = nullptr;
 
 	UPROPERTY(EditAnywhere, Meta = (MakeEditWidget = true))
-	FVector TargetLocation;
+	FVector TargetLocation = FVector(0);
 
 	UPROPERTY(EditAnywhere)
 	bool bIsActive = true;
@@ -58,9 +58,9 @@ private:
 
 	FTimerHandle TH_SwapDelay;
 
-	FVector GlobalStartLocation;
-	FVector GlobalTargetLocation;
+	FVector GlobalStartLocation = FVector(0);
+	FVector GlobalTargetLocation = FVector(0);
 
-	float TotalDistanceToTravel;
+	float TotalDistanceToTravel = 0;
 	
 };

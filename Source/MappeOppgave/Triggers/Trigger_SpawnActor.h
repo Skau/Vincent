@@ -31,7 +31,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Setup")
 	TArray<class ASpawnPoint*> Spawnpoints;
 
-	bool bHasSpawned;
+	bool bHasSpawned = false;
 
 	void ActivateSpawnpoints();
 

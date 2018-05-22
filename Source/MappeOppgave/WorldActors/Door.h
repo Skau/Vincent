@@ -23,6 +23,6 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	class UStaticMeshComponent* StaticMesh;
+	class UStaticMeshComponent* StaticMesh = nullptr;
 	
 };

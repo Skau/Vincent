@@ -56,19 +56,19 @@ protected:
 	void TeleportPlayer();
 
 	UPROPERTY(EditAnywhere)
-	bool bPlayerStartsInside;
+	bool bPlayerStartsInside = false;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bPlayerIsInside;
+	bool bPlayerIsInside = false;
 
 	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerVolume;
+	class UBoxComponent* TriggerVolume = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	UStaticMeshComponent* StaticMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* DoorMesh;
+	UStaticMeshComponent* DoorMesh = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
 	class USoundBase* TeleportSound = nullptr;

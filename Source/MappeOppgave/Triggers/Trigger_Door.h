@@ -33,7 +33,7 @@ private:
 	class UBoxComponent* TriggerVolume = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh;
+	UStaticMeshComponent* StaticMesh = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	class ADoor* Door = nullptr;

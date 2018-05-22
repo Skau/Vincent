@@ -30,22 +30,22 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	class UBoxComponent* TriggerVolume;
+	class UBoxComponent* TriggerVolume = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* CrystalMesh;
+	UStaticMeshComponent* CrystalMesh = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* InnerRing;
+	UStaticMeshComponent* InnerRing = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* OuterRing;
+	UStaticMeshComponent* OuterRing = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* Pedestal;
+	UStaticMeshComponent* Pedestal = nullptr;
 
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* DeathParticle;
+	UParticleSystem* DeathParticle = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
 	class USoundBase* ShatterSound = nullptr;
