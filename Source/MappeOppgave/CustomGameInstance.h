@@ -24,14 +24,27 @@ public:
 	UFUNCTION(BlueprintPure)
 	FName GetLastMap() { return LastMap; }
 
+	UFUNCTION(BlueprintPure)
 	bool GetMinesMapFinished() { return bMinesMapNotFinished; }
+	UFUNCTION(BlueprintPure)
 	bool GetPortMapFinished() { return bPortMapNotFinished; }
 	void SetMinesMapFinished() { bMinesMapNotFinished = false; }
 	void SetPortMapFinished() { bPortMapNotFinished = false; }
+
+	UFUNCTION(BlueprintPure)
+	bool GetIntroVideoHasPlayed() { return bIntroVideoHasPlayed; }
+	UFUNCTION(BlueprintPure)
+	bool GetEndVideoHasPlayed() { return bEndVideoHasPlayed; }
+	UFUNCTION(BlueprintCallable)
+	void SetIntroVideoHasPlayed() { bIntroVideoHasPlayed = true; }
+	UFUNCTION(BlueprintCallable)
+	void SetEndVideoHasPlayed() { bEndVideoHasPlayed = true; }
 
 private:
 	FName LastMap = "";
 
 	bool bMinesMapNotFinished = true;
 	bool bPortMapNotFinished = true;
+	bool bIntroVideoHasPlayed = false;
+	bool bEndVideoHasPlayed = false;
 };
