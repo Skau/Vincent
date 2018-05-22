@@ -35,16 +35,16 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly)
-	class USoundBase* HubAndPortMusic;
+	class USoundBase* HubAndPortMusic = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
-	class USoundBase* MinesMusic;
+	class USoundBase* MinesMusic = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
-	class USoundBase* PortAmbient;
+	class USoundBase* PortAmbient = nullptr;
 
 	UPROPERTY(EditDefaultsOnly)
-	class USoundBase* MinesAmbient;
+	class USoundBase* MinesAmbient = nullptr;
 
 
 private:

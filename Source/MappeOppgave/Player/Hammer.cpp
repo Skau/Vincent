@@ -55,7 +55,6 @@ void AHammer::OnDropped()
 {
 	DetachFromActor(FDetachmentTransformRules(EDetachmentRule::KeepWorld, false));
 	SetPhysics(true);
-	//HammerMesh->SetWorldScale3D(FVector(1));
 }
 
 void AHammer::OnPickedUp()
@@ -72,7 +71,6 @@ void AHammer::SetPhysics(bool Value)
 
 void AHammer::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	// Other Actor is the actor that triggered the event. Check that is not ourself.  
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
 		if (Player->GetIsAttacking())

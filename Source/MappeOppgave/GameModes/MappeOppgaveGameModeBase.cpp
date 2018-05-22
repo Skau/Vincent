@@ -10,6 +10,7 @@ void AMappeOppgaveGameModeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Plays correct music depending on current level
 	if (UGameplayStatics::GetCurrentLevelName(GetWorld(), true) == "Port")
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), HubAndPortMusic);
@@ -30,6 +31,7 @@ void AMappeOppgaveGameModeBase::BeginPlay()
 		GameInstance = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	}
 
+	// If player enters the Hub, updates the crystal indicators regards to the corresponding map they are connected to
 	if (UGameplayStatics::GetCurrentLevelName(GetWorld(), true) == "Hub")
 	{
 		TArray<AActor*> OutActors;

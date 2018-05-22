@@ -38,16 +38,14 @@ private:
 	void SetPhysics(bool Value);
 
 	UPROPERTY(VisibleAnywhere)
-	UBoxComponent* CollisionCapsule;
+	UBoxComponent* CollisionCapsule = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* HammerMesh = nullptr;
 
-	APlayerCharacter* Player;
+	APlayerCharacter* Player = nullptr;
 
-	FVector SpawnLocation;
-
-	bool bIsDropped;
+	FVector SpawnLocation = FVector(0);
 
 	friend class APlayerCharacter;
 };

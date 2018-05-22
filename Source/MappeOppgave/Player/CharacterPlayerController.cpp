@@ -23,7 +23,6 @@ void ACharacterPlayerController::BeginPlay()
 	bShowMouseCursor = true;
 	GameInstance = Cast<UCustomGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	GameInstance->SetLastMap(FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true)));
-	UE_LOG(LogTemp, Warning, TEXT("CurrentMap: %s"), *GameInstance->GetLastMap().ToString())
 }
 
 void ACharacterPlayerController::SetupInputComponent()

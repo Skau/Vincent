@@ -29,6 +29,7 @@ void ABombRoller::Tick(float DeltaTime)
 
 }
 
+// Called from AIBT when it should explode
 void ABombRoller::Explode()
 {
 	UGameplayStatics::ApplyRadialDamage(GetWorld(), Damage, GetActorLocation(), ExplosionForce->Radius, UDamageType::StaticClass(),TArray<AActor*>());
@@ -56,6 +57,8 @@ float ABombRoller::TakeDamage(float DamageAmount, struct FDamageEvent const & Da
 	{
 		Health -= DamageAmount;
 
+		// Knockbacks the bombroller if possible.
+		// Done via timer so it doesn't happen multiple times per second because of overlap.
 		if (!bHasBeenKnockedbackRecently)
 		{
 			Knockback(DamageCauser);

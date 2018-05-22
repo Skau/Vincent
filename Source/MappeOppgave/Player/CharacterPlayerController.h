@@ -14,6 +14,13 @@ class MAPPEOPPGAVE_API ACharacterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION(BlueprintCallable)
+	bool GetIsSequencePlaying() { return bIsSequencePlaying; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsSequencePlaying(bool Value) { bIsSequencePlaying = Value; }
+
 private:
 	ACharacterPlayerController(const FObjectInitializer& ObjectInitializer);
 
@@ -50,12 +57,4 @@ private:
 	class UCustomGameInstance* GameInstance = nullptr;
 
 	bool bIsSequencePlaying = false;
-
-
-public:
-	UFUNCTION(BlueprintCallable)
-	bool GetIsSequencePlaying() { return bIsSequencePlaying; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetIsSequencePlaying(bool Value) { bIsSequencePlaying = Value; }
 };
