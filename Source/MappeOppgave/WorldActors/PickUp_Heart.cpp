@@ -16,7 +16,7 @@ APickUp_Heart::APickUp_Heart()
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(FName("TriggerVolume"));
 	RootComponent = TriggerVolume;
 
-	TriggerVolume->bGenerateOverlapEvents = true;
+	TriggerVolume->SetGenerateOverlapEvents(true);
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMesh"));
 	StaticMesh->SetupAttachment(RootComponent);

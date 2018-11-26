@@ -22,7 +22,7 @@ AHammer::AHammer()
 	HammerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HammerMesh"));
 	RootComponent = HammerMesh;
 
-	HammerMesh->bGenerateOverlapEvents = false;
+	HammerMesh->SetGenerateOverlapEvents(false);
 	HammerMesh->WakeRigidBody();
 	HammerMesh->SetSimulatePhysics(true);
 

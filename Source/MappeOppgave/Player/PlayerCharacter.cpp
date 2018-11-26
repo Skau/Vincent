@@ -25,7 +25,7 @@ APlayerCharacter::APlayerCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// To enable overlap events
-	GetCapsuleComponent()->bGenerateOverlapEvents = true;
+	GetCapsuleComponent()->SetGenerateOverlapEvents(true);
 
 	// Creates the camera boom
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));

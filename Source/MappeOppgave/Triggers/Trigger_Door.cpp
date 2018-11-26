@@ -19,7 +19,7 @@ ATrigger_Door::ATrigger_Door()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>(FName("TriggerVolume"));
-	TriggerVolume->bGenerateOverlapEvents = true;
+	TriggerVolume->SetGenerateOverlapEvents(true);
 	RootComponent = TriggerVolume;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMesh"));

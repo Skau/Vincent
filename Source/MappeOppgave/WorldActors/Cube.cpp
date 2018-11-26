@@ -15,7 +15,7 @@ ACube::ACube()
 
 	TriggerVolume = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
 	TriggerVolume->SetupAttachment(RootComponent);
-	TriggerVolume->bGenerateOverlapEvents = true;
+	TriggerVolume->SetGenerateOverlapEvents(true);
 }
 
 // Called when the game starts or when spawned
